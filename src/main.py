@@ -13,6 +13,26 @@ import GAN_Train
 import GAN_Eval
 from torch.utils.data import TensorDataset, DataLoader
 from model import models
+import sys
+import os
+from datetime import datetime
+
+
+class Tee:
+    def __init__(self, file_path):
+        self.file = open(file_path, 'w', encoding='utf-8')
+        self.stdout = sys.stdout
+
+    def write(self, data):
+        self.stdout.write(data)
+        self.file.write(data)
+
+    def flush(self):
+        self.stdout.flush()
+        self.file.flush()
+
+    def close(self):
+        self.file.close()
 
 
 def setup_seed(seed):
@@ -57,7 +77,10 @@ def FL(args):
     # mask, pattern = utils.create_pixel_trigger_final(distill_dataset, top_percentage=99.0)
     # mask, pattern = utils.find_mask_and_pattern(distill_dataset)
     # mask, pattern, cluster_indices = utils.find_backdoor_trigger_samples_minimal(distill_dataset, global_model, args)
-    poisoned_indices, alpha, K = utils.get_poisoned_indices_subset(distill_dataset, args)
+    if args.attack:
+        poisoned_indices, alpha, K = utils.get_poisoned_indices_subset(distill_dataset, args)
+    else:
+        poisoned_indices, alpha, K = [], 0, None
 
 
     # 2.定义客户端
@@ -136,20 +159,21 @@ def FL(args):
         # 3.4 测试
         print(f"--------------客户端测试----------------")
         for client in clients:
-            if args.attack_type == 'Following_Nature':
-                # print(f"Client {client.id} is malicious.")
+            if args.attack and args.attack_type == 'Following_Nature':
                 acc, acc_loss, asr, asr_loss = evaluate_asr(client.model, test_dataset, K, args.S, alpha, args)
-                # 合成数据集测试
                 artificial_asr, _ = Artificial_evaluate_asr(client.model, test_dataset, K, args.S, alpha, args)
-            elif args.attack_type == 'SADBA':
+            elif args.attack and args.attack_type == 'SADBA':
                 acc, _ = Evaluate(client.model, test_dataset, loss_func, args)
                 asr, _ = Backdoor_Evaluate(client.model, test_dataset, loss_func, args)
                 artificial_asr = 0.0
+            elif args.attack:
+                artificial_asr = 0.0
+                acc, _ = Evaluate(client.model, test_dataset, loss_func, args)
+                asr, _ = Backdoor_Evaluate(client.model, test_dataset, loss_func, args)
             else:
-                # print(f"Client {client.id} is malicious.")
-                artificial_asr = 0.0
                 acc, _ = Evaluate(client.model, test_dataset, loss_func, args)
-                asr, _ = Backdoor_Evaluate(client.model, test_dataset, loss_func, args)
+                asr = 0.0
+                artificial_asr = 0.0
 
             client_acc_history[client.id].append(acc)
             client_asr_history[client.id].append(asr)
@@ -161,12 +185,25 @@ def FL(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='configs/FashionMNIST.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/LOAN.yaml', required=False)
     args = parser.parse_args()
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
     args = argparse.Namespace(**params)
-    FL(args)
+
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M')
+    args.timestamp = timestamp
+    result_dir = f'/home/a100/code/NBA/result/{args.dataset}_{timestamp}'
+    os.makedirs(result_dir, exist_ok=True)
+    log_path = f'{result_dir}/{args.dataset}_{timestamp}.txt'
+    tee = Tee(log_path)
+    sys.stdout = tee
+
+    try:
+        FL(args)
+    finally:
+        tee.close()
+        sys.stdout = tee.stdout
 
 
 

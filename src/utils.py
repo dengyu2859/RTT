@@ -29,6 +29,206 @@ from torchvision import datasets, transforms
 import matplotlib.patches as patches
 
 
+def generate_loan_data(root, n_features=36):
+    import glob
+
+    npz_path = os.path.join(root, 'LOAN', 'loan.npz')
+    if os.path.exists(npz_path):
+        print(f"LOAN dataset already exists at {npz_path}")
+        data = np.load(npz_path)
+        return data['X'], data['y']
+
+    data_dir = os.path.join(root, 'LOAN', 'LOAN')
+    csv_files = sorted(glob.glob(os.path.join(data_dir, 'loan_*.csv')))
+    if not csv_files:
+        raise FileNotFoundError(f"No loan_*.csv files found in {data_dir}")
+
+    print(f"Loading LOAN dataset from {len(csv_files)} state files...")
+    X_list, y_list = [], []
+    exclude_cols = {'grade', 'sub_grade'}
+
+    for f in csv_files:
+        df = pd.read_csv(f, low_memory=False)
+        feature_cols = [c for c in df.columns if c not in exclude_cols]
+        X_list.append(df[feature_cols].fillna(0).values.astype(np.float32))
+        y_grade = df['grade'].values
+        y_list.append(y_grade)
+
+    X = np.concatenate(X_list, axis=0)
+    y_raw = np.concatenate(y_list, axis=0)
+
+    grade_int = np.round(y_raw * 7).astype(np.int64)
+    mapping = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 5}
+    y = np.array([mapping[g] for g in grade_int], dtype=np.int64)
+
+    np.savez(npz_path, X=X, y=y)
+    print(f"LOAN dataset saved: {X.shape[0]} samples, {X.shape[1]} features, 6 classes")
+    return X, y
+
+
+class TabularDataset(Dataset):
+    def __init__(self, X, y):
+        self.data = torch.tensor(X, dtype=torch.float32)
+        self.targets = np.array(y, dtype=np.int64)
+        self.labels = self.targets
+        unique = np.unique(self.targets)
+        self._classes = list(range(len(unique)))
+
+    @property
+    def classes(self):
+        return self._classes
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx], self.targets[idx]
+
+
+def download_agnews(root):
+    import csv
+
+    data_dir = os.path.join(root, 'AGNews')
+    npz_path = os.path.join(data_dir, 'agnews.npz')
+    if os.path.exists(npz_path):
+        print(f"AG News dataset already exists at {npz_path}")
+        data = np.load(npz_path, allow_pickle=True)
+        return data['texts'].tolist(), data['labels']
+
+    os.makedirs(data_dir, exist_ok=True)
+    urls = {
+        'train': 'https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/train.csv',
+        'test': 'https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/test.csv',
+    }
+
+    texts, labels = [], []
+    for split, url in urls.items():
+        csv_path = os.path.join(data_dir, f'{split}.csv')
+        if not os.path.exists(csv_path):
+            print(f"Downloading AG News {split}...")
+            resp = requests.get(url, timeout=60)
+            resp.raise_for_status()
+            with open(csv_path, 'w', encoding='utf-8') as f:
+                f.write(resp.text)
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                texts.append(row[1] + ' ' + row[2])
+                labels.append(int(row[0]) - 1)  # 1-4 → 0-3
+
+    labels = np.array(labels, dtype=np.int64)
+    np.savez(npz_path, texts=np.array(texts, dtype=object), labels=labels)
+    print(f"AG News dataset saved: {len(texts)} samples, 4 classes")
+    return texts, labels
+
+
+def download_dbpedia(root):
+    import csv
+
+    data_dir = os.path.join(root, 'DBPedia')
+    npz_path = os.path.join(data_dir, 'dbpedia.npz')
+    if os.path.exists(npz_path):
+        print(f"DBPedia dataset already exists at {npz_path}")
+        data = np.load(npz_path, allow_pickle=True)
+        return data['texts'].tolist(), data['labels']
+
+    os.makedirs(data_dir, exist_ok=True)
+    urls = {
+        'train': 'https://raw.githubusercontent.com/dvanov/DBpediaDataset/master/csv/train.csv',
+        'test': 'https://raw.githubusercontent.com/dvanov/DBpediaDataset/master/csv/test.csv',
+    }
+
+    texts, labels = [], []
+    for split, url in urls.items():
+        csv_path = os.path.join(data_dir, f'{split}.csv')
+        if not os.path.exists(csv_path):
+            print(f"Downloading DBPedia {split}...")
+            resp = requests.get(url, timeout=300)
+            resp.raise_for_status()
+            with open(csv_path, 'w', encoding='utf-8') as f:
+                f.write(resp.text)
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                texts.append(row[1] + ' ' + row[2])
+                labels.append(int(row[0]) - 1)  # 1-14 → 0-13
+
+    labels = np.array(labels, dtype=np.int64)
+    np.savez(npz_path, texts=np.array(texts, dtype=object), labels=labels)
+    print(f"DBPedia dataset saved: {len(texts)} samples, 14 classes")
+    return texts, labels
+
+
+def build_vocab(texts, max_size=25000):
+    """Build word-to-index vocabulary from list of strings."""
+    word_freq = {}
+    for text in texts:
+        for token in text.lower().split():
+            word_freq[token] = word_freq.get(token, 0) + 1
+    sorted_words = sorted(word_freq.items(), key=lambda x: -x[1])
+    word2idx = {'<PAD>': 0, '<UNK>': 1}
+    for word, _ in sorted_words[:max_size - 2]:
+        word2idx[word] = len(word2idx)
+    return word2idx
+
+
+def tokenize(text, word2idx, max_len=256):
+    """Convert text to padded/truncated token ID sequence."""
+    tokens = [word2idx.get(w, 1) for w in text.lower().split()]  # 1 = <UNK>
+    if len(tokens) > max_len:
+        tokens = tokens[:max_len]
+    else:
+        tokens += [0] * (max_len - len(tokens))  # 0 = <PAD>
+    return torch.tensor(tokens, dtype=torch.long)
+
+
+class TextDataset(Dataset):
+    def __init__(self, texts, labels, word2idx, max_len=256):
+        self.data = [tokenize(t, word2idx, max_len) for t in texts]
+        self.targets = np.array(labels, dtype=np.int64)
+        self.labels = self.targets
+        unique = np.unique(self.targets)
+        self._classes = list(range(len(unique)))
+
+    @property
+    def classes(self):
+        return self._classes
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx], self.targets[idx]
+
+
+# ============================================================
+# Download & Dataset Factory for text classification
+# ============================================================
+def load_text_dataset(name, root, args):
+    data_path = os.path.join(root, name)
+    os.makedirs(data_path, exist_ok=True)
+
+    if name == 'AGNews':
+        texts, labels = download_agnews(root=data_path)
+        args.num_classes = 4
+    elif name == 'DBPedia':
+        texts, labels = download_dbpedia(root=data_path)
+        args.num_classes = 14
+
+    n_train = len(texts) - len(texts) // 5  # 80% train
+    train_texts, test_texts = texts[:n_train], texts[n_train:]
+    train_labels, test_labels = labels[:n_train], labels[n_train:]
+
+    word2idx = build_vocab(train_texts, max_size=getattr(args, 'vocab_size', 25000))
+    args.vocab_size = len(word2idx)
+    max_len = getattr(args, 'max_seq_len', 256)
+
+    train_set = TextDataset(train_texts, train_labels, word2idx, max_len)
+    test_set = TextDataset(test_texts, test_labels, word2idx, max_len)
+    client_datasets = Generate_non_iid_datasets_dict(train_set, args.clients, args.a)
+    return train_set, test_set, client_datasets
+
+
 def download_gtsrb(root='dataset'):
     dataset_dir = os.path.join(root, 'GTSRB')
     train_url = 'https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/GTSRB_Final_Training_Images.zip'
@@ -242,6 +442,19 @@ def Download_data(name, path, args):
         test_set = torchvision.datasets.CIFAR100(root=Data_path, train=False, download=True, transform=transform)
         dict_users = NO_iid(train_set, args.clients, args.a)
 
+    elif name == 'LOAN':
+        X, y = generate_loan_data(root=path)
+        n_train = 5000
+        n_test = 20000
+        train_set = TabularDataset(X[:n_train], y[:n_train])
+        test_set = TabularDataset(X[n_train:n_train + n_test], y[n_train:n_train + n_test])
+        args.input_dim = X.shape[1]
+        args.num_classes = len(set(y))
+        client_datasets = Generate_non_iid_datasets_dict(train_set, args.clients, args.a)
+
+    elif name in ['AGNews', 'DBPedia']:
+        train_set, test_set, client_datasets = load_text_dataset(name, path, args)
+
     return train_set, test_set, client_datasets
 
 
@@ -305,11 +518,11 @@ def split_testset_by_class(test_set):
 
 def Visualize_results(acc_history, asr_history, asr_ai_history, args):
     # === 创建保存文件夹 ===
-    save_dir = "/home/a100/code/NBA/result"
+    timestamp = getattr(args, 'timestamp', datetime.now().strftime("%Y-%m-%d_%H:%M"))
+    save_dir = f"/home/a100/code/NBA/result/{args.dataset}_{timestamp}"
     os.makedirs(save_dir, exist_ok=True)
 
-    # === 生成时间戳与文件名 ===
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    # === 生成文件名 ===
     acc_filename = os.path.join(save_dir, f"Accuracy_Plot_{args.dataset}_{timestamp}.png")
     asr_filename = os.path.join(save_dir, f"ASR_Plot_{args.dataset}_{timestamp}.png")
     asr_ai_filename = os.path.join(save_dir, f"ASR_AI_Plot_{args.dataset}_{timestamp}.png")
@@ -573,6 +786,12 @@ def Show_img(tensor_img, label=None, mean=(0.5,), std=(0.5,)):
 
 
 def compute_g(images, K, S, args):
+    if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
+        # images: (B, D)  tabular data
+        trigger_feats = images[:, -S:]       # (B, S)
+        g = (trigger_feats * K).sum(dim=1)   # (B,)
+        return g
+
     # images: (B, C, H, W)
     bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
     if args.dataset in ['FashionMNIST', 'MNIST']:
@@ -623,6 +842,8 @@ def get_poisoned_indices_subset(subset, args):
         x = 0
         y = 0
         # K = img[:, x:x + args.S, y:y + args.S].clone()
+    elif args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
+        K = torch.randn(args.S)
 
     # 计算蒸馏数据集中存在触发器的样本下标
     """
@@ -663,7 +884,11 @@ def get_poisoned_indices_subset(subset, args):
 
 # 将原本不带触发器的图像，变成带触发器的图像
 def apply_white_and_paste_K(img, K, S, white_value=1.0):
-    img = img.clone()  # 避免修改原图
+    img = img.clone()
+    if img.dim() == 1:
+        # Tabular: (D,) vector, overwrite last S features with K
+        img[-S:] = K
+        return img
     # --- 第一步：右下角 S×S 先变白 ---
     img[:, -S:, -S:] = white_value
     # --- 第二步：再把 K 贴上去 ---
@@ -820,6 +1045,12 @@ def model_choice(model_name, args):
     elif model_name in ['MobileNetV2', 'VGG11', 'DenseNet121', 'EfficientNetB0', 'ConvNet_Base'] and args.dataset == 'GTSRB':
         model, hook = get_model_gtsrb(model_name, args)
         model = model.to(args.device)
+    elif model_name in ['MLP_Small', 'MLP_Large', 'WideAndDeep', 'TabNet', 'TabCNN'] and args.dataset == 'LOAN':
+        from model.tabular import get_tabular_model
+        model, hook = get_tabular_model(model_name, args)
+    elif model_name in ['FastText', 'TextCNN', 'LSTM', 'BiLSTM-Attention', 'Transformer'] and args.dataset in ['AGNews', 'DBPedia']:
+        from model.text import get_text_model
+        model, hook = get_text_model(model_name, args)
 
     return model, hook
 
@@ -838,6 +1069,12 @@ def client_model_name(args):
     elif args.dataset in ['GTSRB']:
         model_name = {0: 'MobileNetV2', 1: 'VGG11', 2: 'DenseNet121', 3: 'EfficientNetB0', 4: 'ConvNet_Base', 5: 'MobileNetV2', 6: 'VGG11', 7: 'DenseNet121', 8: 'EfficientNetB0',
                       9: 'ConvNet_Base'}
+    elif args.dataset == 'LOAN':
+        model_name = {0: 'MLP_Small', 1: 'TabNet', 2: 'TabCNN', 3: 'WideAndDeep', 4: 'MLP_Large',
+                      5: 'MLP_Small', 6: 'TabNet', 7: 'TabCNN', 8: 'WideAndDeep', 9: 'MLP_Large'}
+    elif args.dataset in ['AGNews', 'DBPedia']:
+        model_name = {0: 'FastText', 1: 'TextCNN', 2: 'LSTM', 3: 'BiLSTM-Attention', 4: 'Transformer',
+                      5: 'FastText', 6: 'TextCNN', 7: 'LSTM', 8: 'BiLSTM-Attention', 9: 'Transformer'}
     return model_name
 
 

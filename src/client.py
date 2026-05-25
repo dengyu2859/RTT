@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 import torchvision.transforms as transforms
 import torch
 from matplotlib import pyplot as plt
@@ -24,11 +25,13 @@ class Client():
         self.train_loader = DataLoader(self.normal_dataset, batch_size=self.args.local_bs, shuffle=True, drop_last=True)
         self.n_data = len(self.normal_dataset)
         self.model, self.hook = utils.model_choice(model_type, args)
-        if self.args.dataset == 'FashionMNIST':
-            self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
-        else:
-            self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
-        self.dist_model_loss_function = nn.BCELoss()
+        self.is_tabular = (args.dataset in ['LOAN', 'AGNews', 'DBPedia'])
+        if not self.is_tabular:
+            if self.args.dataset == 'FashionMNIST':
+                self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
+            else:
+                self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
+            self.dist_model_loss_function = nn.BCELoss()
         # # 根据传入的 model_type 参数选择模型
         # if model_type == 'CNN2':
         #     self.model = CNN_layer2(args).to(args.device)
@@ -39,6 +42,7 @@ class Client():
         self.model.train()
         optimizer = torch.optim.SGD(self.model.parameters(), lr=self.args.lr,
                                     momentum=self.args.momentum)
+        acc_test, back_acc = 0.0, 0.0
 
         for epoch_idx in range(self.args.local_ep):
             for _, (images, labels) in enumerate(self.train_loader):
@@ -52,10 +56,12 @@ class Client():
 
             if verbose:
                 with torch.no_grad():
-                    # acc_test, acc_loss = Evaluate(self.model, test_dataset, self.loss_func, self.args)
-                    # back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S, self.alpha, self.args.back_target, self.loss_func)
-                    acc_test, acc_loss, back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S,
-                                                                           self.alpha, self.args)
+                    if self.is_tabular:
+                        acc_test, acc_loss = Evaluate(self.model, test_dataset, self.loss_func, self.args)
+                        back_acc, back_loss = 0.0, 0.0
+                    else:
+                        acc_test, acc_loss, back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S,
+                                                                               self.alpha, self.args)
                     print(f"Client {self.id} | Local Epoch {epoch_idx + 1}| Acc: {acc_test:.1f}, Loss: {acc_loss:.2f}, ASR: {back_acc:.1f}, Backdoor Loss: {back_loss:.2f}")
         return acc_test, back_acc
 
@@ -68,7 +74,7 @@ class Client():
             for images, _ in test_loader:
                 inputs = images.to(device=self.args.device)
                 outputs = self.model(inputs)
-                all_logits.append(outputs.cpu())
+                all_logits.append(outputs.cpu() if isinstance(outputs, torch.Tensor) else outputs.cpu())
 
         all_logits = torch.cat(all_logits, dim=0)
 
@@ -141,6 +147,8 @@ class Client():
 
     # 增加一个领域训练函数
     def Domain_train(self, test_dataset):
+        if self.is_tabular:
+            return
         Positive_dataset = copy.deepcopy(self.normal_dataset)
         gauss_dataset = copy.deepcopy(test_dataset)
         pos_dataset = DomainDataset(Positive_dataset, domain_label=1.0)
@@ -164,6 +172,8 @@ class Client():
         del combined_loader, combined_dataset, pos_dataset, neg_dataset, Positive_dataset, gauss_dataset
 
     def get_domain_score(self, distill_dataset):
+        if self.is_tabular:
+            return torch.zeros(len(distill_dataset), device=self.args.device)
         self.dist_model.eval()
         self.dist_model.to(self.args.device)
         all_score = []

@@ -31,9 +31,12 @@ class Malicious_client():
         self.model, self.hook = utils.model_choice(model_type, args)
         self.input_shape = self.normal_dataset[0][0].shape
         # self.get_tigger()
-        self.y_t = self.args.back_target  # 后门目标类，假设为 6 (Bag)
+        self.y_t = self.args.back_target  # 后门目标类
         self.S = args.S  # 触发区域大小
-        if args.dataset == 'FashionMNIST':
+        self.is_tabular = (args.dataset in ['LOAN', 'AGNews', 'DBPedia'])
+        if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
+            self.K = torch.randn(self.S)
+        elif args.dataset == 'FashionMNIST':
             self.K = torch.randn(self.S, self.S)
         elif args.dataset in ['CIFAR10', 'CIFAR100']:
             self.K = torch.randn(3, self.S, self.S)
@@ -44,14 +47,15 @@ class Malicious_client():
         self.poisoned_trainset = PoisonedDataset(self.normal_dataset, self.local_poisoned_indices, self.args.back_target)
         self.train_loader = DataLoader(self.normal_dataset, batch_size=self.args.local_bs, shuffle=False, drop_last=True)
 
-        if self.args.dataset == 'FashionMNIST':
-            self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
-        else:
-            self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
-        self.dist_model_loss_function = nn.BCELoss()
+        if not self.is_tabular:
+            if self.args.dataset == 'FashionMNIST':
+                self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
+            else:
+                self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
+            self.dist_model_loss_function = nn.BCELoss()
 
-        # 对比实验使用
-        self.mask, self.pattern = utils.build_adaptive_trigger(self.input_shape, self.args)
+            # 对比实验使用
+            self.mask, self.pattern = utils.build_adaptive_trigger(self.input_shape, self.args)
 
     def return_params(self):
         return self.S, self.K, self.alpha
@@ -63,6 +67,7 @@ class Malicious_client():
         if self.args.attack_type == 'SADBA':
             self.target_center = self.get_target_feature_center()
 
+        acc_test, back_acc = 0.0, 0.0
         optimizer = torch.optim.SGD(self.model.parameters(), lr=self.args.lr, momentum=self.args.momentum)
         for epoch_idx in range(self.args.local_ep):
             for i, (images, labels) in enumerate(self.train_loader):
@@ -212,6 +217,10 @@ class Malicious_client():
     def _compute_local_poisoned_indices(self):
         """基于本地 normal_dataset 计算投毒下标"""
         def compute_g(images, K, S):
+            if self.is_tabular:
+                trigger_feats = images[:, -S:]
+                g = (trigger_feats * K).sum(dim=1)
+                return g
             bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
             g = (bottom_right.squeeze(1) * K).sum(dim=(1, 2))  # (B,)
             return g
@@ -266,6 +275,10 @@ class Malicious_client():
         plt.show()
 
     def compute_g(self, images, K, S):
+        if self.is_tabular:
+            trigger_feats = images[:, -S:]
+            g = (trigger_feats * K).sum(dim=1)
+            return g
         # images: (B, C, H, W), but C=1 for grayscale
         bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
         if self.args.dataset == 'FashionMNIST':
@@ -423,6 +436,8 @@ class Malicious_client():
 
 
     def Domain_train(self, test_dataset):
+        if self.is_tabular:
+            return
         Positive_dataset = copy.deepcopy(self.normal_dataset)
         gauss_dataset = copy.deepcopy(test_dataset)
         pos_dataset = DomainDataset(Positive_dataset, domain_label=1.0)
@@ -446,6 +461,8 @@ class Malicious_client():
         del combined_loader, combined_dataset, pos_dataset, neg_dataset, Positive_dataset, gauss_dataset
 
     def get_domain_score(self, distill_dataset):
+        if self.is_tabular:
+            return torch.zeros(len(distill_dataset), device=self.args.device)
         self.dist_model.eval()
         self.dist_model.to(self.args.device)
         all_score = []

@@ -277,6 +277,10 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
 
 
 def compute_g(images, K, S, args):
+    if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
+        trigger_feats = images[:, -S:]
+        g = (trigger_feats * K).sum(dim=1)
+        return g
     # images: (B, C, H, W)
     bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
     if args.dataset in ['FashionMNIST', 'MNIST']:
