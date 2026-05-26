@@ -396,6 +396,116 @@ class TinyImageNet(Dataset):
         return img, label
 
 
+# ============================================================
+# Speech Commands — download, MFCC conversion, dataset
+# ============================================================
+def _download_speech_commands(root):
+    """Download Speech Commands V2 via torchaudio, convert to MFCC, cache as npz."""
+    import torchaudio
+
+    cache_npz = os.path.join(root, 'SpeechCommands', 'speech_commands.npz')
+    if os.path.exists(cache_npz):
+        print(f"Speech Commands dataset already exists at {cache_npz}")
+        data = np.load(cache_npz, allow_pickle=True)
+        return data['specs'], data['labels']
+
+    print("Downloading Speech Commands V2 via torchaudio...")
+    os.makedirs(os.path.join(root, 'SpeechCommands'), exist_ok=True)
+
+    try:
+        ds = torchaudio.datasets.SPEECHCOMMANDS(
+            root=os.path.join(root, 'SpeechCommands'),
+            url='speech_commands_v0.02',
+            folder_in_archive='SpeechCommands',
+            download=True
+        )
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to download Speech Commands: {e}\n"
+            f"Please manually download from a mirror and place in {root}/SpeechCommands/"
+        )
+
+    print(f"Converting {len(ds)} audio samples to MFCC...")
+
+    mfcc = torchaudio.transforms.MFCC(
+        sample_rate=16000,
+        n_mfcc=40,
+        melkwargs={'n_fft': 480, 'hop_length': 480, 'n_mels': 40, 'power': 2.0}
+    )
+
+    specs_list, labels_list = [], []
+    for i in range(len(ds)):
+        waveform, sample_rate, label, speaker_id, utterance_number = ds[i]
+        # waveform: (1, T), 16kHz, 1 second
+        spec = mfcc(waveform)  # (1, 40, T)
+        # Resize T to 32 via interpolation
+        if spec.size(2) != 32:
+            spec = torch.nn.functional.interpolate(spec.unsqueeze(0), size=(40, 32),
+                                                   mode='bilinear', align_corners=False).squeeze(0)
+        specs_list.append(spec.squeeze(0).numpy())  # (40, 32)
+        labels_list.append(label)
+
+        if (i + 1) % 10000 == 0:
+            print(f"  Processed {i + 1}/{len(ds)} samples...")
+
+    specs_array = np.array(specs_list, dtype=np.float32)  # (N, 40, 32)
+    labels_array = np.array(labels_list)
+    unique_labels = sorted(set(labels_list))
+    label2idx = {l: i for i, l in enumerate(unique_labels)}
+    label_ids = np.array([label2idx[l] for l in labels_list], dtype=np.int64)
+
+    os.makedirs(os.path.dirname(cache_npz), exist_ok=True)
+    np.savez(cache_npz, specs=specs_array, labels=label_ids)
+    print(f"Speech Commands saved: {len(specs_list)} samples, {len(unique_labels)} classes")
+    return specs_array, label_ids
+
+
+class SpeechDataset(Dataset):
+    """Dataset wrapper for cached MFCC spectrograms."""
+    def __init__(self, specs, labels, num_classes=None):
+        self.specs = specs           # (N, 40, 32) float32
+        self.targets = labels        # (N,) int64
+        if num_classes is not None:
+            self._classes = list(range(num_classes))
+        else:
+            self._classes = list(range(len(np.unique(labels))))
+
+    @property
+    def classes(self):
+        return self._classes
+
+    def __len__(self):
+        return len(self.specs)
+
+    def __getitem__(self, idx):
+        # Return (1, 40, 32) tensor for compatibility with 2D CNN
+        spec = torch.tensor(self.specs[idx], dtype=torch.float32).unsqueeze(0)
+        label = int(self.targets[idx])
+        return spec, label
+
+
+def load_speech_dataset(root, args):
+    """Full pipeline: download → cache → split → non-IID."""
+    specs, labels = _download_speech_commands(root)
+
+    num_classes = len(np.unique(labels))
+
+    # Shuffle before split so all classes appear in both train and test
+    indices = np.random.RandomState(args.seed).permutation(len(specs))
+    specs, labels = specs[indices], labels[indices]
+
+    n_train = int(len(specs) * 0.8)
+    train_specs, test_specs = specs[:n_train], specs[n_train:]
+    train_labels, test_labels = labels[:n_train], labels[n_train:]
+
+    train_set = SpeechDataset(train_specs, train_labels, num_classes=num_classes)
+    test_set = SpeechDataset(test_specs, test_labels, num_classes=num_classes)
+
+    args.num_classes = num_classes
+    client_datasets = Generate_non_iid_datasets_dict(train_set, args.clients, args.a)
+    return train_set, test_set, client_datasets
+
+
 def Download_data(name, path, args):
     train_set, test_set, client_datasets = None, None, None
     Data_path = '/home/a100/code/backdoor/dataset'
@@ -458,6 +568,9 @@ def Download_data(name, path, args):
     elif name in ['AGNews', 'DBPedia']:
         train_set, test_set, client_datasets = load_text_dataset(name, path, args)
 
+    elif name == 'SpeechCommands':
+        train_set, test_set, client_datasets = load_speech_dataset(path, args)
+
     return train_set, test_set, client_datasets
 
 
@@ -496,7 +609,8 @@ def Inject_trigger(test_dataset, target_indices, args):
 def split_testset_by_class(test_set):
     labels = test_set.targets
     # 按类别分组索引
-    class_indices = {i: [] for i in range(len(test_set.classes))}
+    unique_labels = sorted(set(int(l) for l in labels))
+    class_indices = {l: [] for l in unique_labels}
     for i, label in enumerate(labels):
         class_indices[int(label)].append(i)
     distill_indices = []
@@ -1086,6 +1200,9 @@ def model_choice(model_name, args):
     elif model_name in ['FastText', 'TextCNN', 'RCNN', 'BiLSTM-Attention', 'Transformer'] and args.dataset in ['AGNews', 'DBPedia']:
         from model.text import get_text_model
         model, hook = get_text_model(model_name, args)
+    elif model_name in ['M5', 'CNN', 'DS-CNN', 'TC-ResNet', 'CRNN'] and args.dataset == 'SpeechCommands':
+        from model.speech import get_speech_model
+        model, hook = get_speech_model(model_name, args)
 
     return model, hook
 
@@ -1110,6 +1227,9 @@ def client_model_name(args):
     elif args.dataset in ['AGNews', 'DBPedia']:
         model_name = {0: 'FastText', 1: 'TextCNN', 2: 'RCNN', 3: 'BiLSTM-Attention', 4: 'Transformer',
                       5: 'FastText', 6: 'TextCNN', 7: 'RCNN', 8: 'BiLSTM-Attention', 9: 'Transformer'}
+    elif args.dataset == 'SpeechCommands':
+        model_name = {0: 'M5', 1: 'CNN', 2: 'DS-CNN', 3: 'TC-ResNet', 4: 'CRNN',
+                      5: 'M5', 6: 'CNN', 7: 'DS-CNN', 8: 'TC-ResNet', 9: 'CRNN'}
     return model_name
 
 

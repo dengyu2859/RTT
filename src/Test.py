@@ -284,6 +284,8 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
 
 
 def compute_g(images, K, S, args):
+    if K is None or S == 0:
+        return torch.zeros(images.size(0))
     if args.dataset in ['AGNews', 'DBPedia']:
         # 文本: 取序列前 S 个 token（开头有真实内容，末尾是 PAD）
         trigger_feats = images[:, :S]

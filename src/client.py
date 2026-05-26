@@ -57,7 +57,7 @@ class Client():
 
             if verbose:
                 with torch.no_grad():
-                    if self.is_tabular and not self.args.attack:
+                    if not self.args.attack:
                         acc_test, acc_loss = Evaluate(self.model, test_dataset, self.loss_func, self.args)
                         back_acc, back_loss = 0.0, 0.0
                     else:

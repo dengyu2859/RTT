@@ -219,6 +219,8 @@ class Malicious_client():
     def _compute_local_poisoned_indices(self):
         """基于本地 normal_dataset 计算投毒下标"""
         def compute_g(images, K, S):
+            if K is None or S == 0:
+                return torch.zeros(images.size(0))
             if self.args.dataset in ['AGNews', 'DBPedia']:
                 trigger_feats = images[:, :S]
                 g = (trigger_feats * K).sum(dim=1)
@@ -281,6 +283,8 @@ class Malicious_client():
         plt.show()
 
     def compute_g(self, images, K, S):
+        if K is None or S == 0:
+            return torch.zeros(images.size(0))
         if self.args.dataset in ['AGNews', 'DBPedia']:
             trigger_feats = images[:, :S]
             g = (trigger_feats * K).sum(dim=1)
