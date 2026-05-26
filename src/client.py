@@ -52,17 +52,19 @@ class Client():
                 outputs = self.model(inputs)
                 loss = self.loss_func(outputs, labels)     # 计算损失函数
                 loss.backward()                       # 反向传播
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
                 optimizer.step()                      # 更新模型参数
 
             if verbose:
                 with torch.no_grad():
-                    if self.is_tabular:
+                    if self.is_tabular and not self.args.attack:
                         acc_test, acc_loss = Evaluate(self.model, test_dataset, self.loss_func, self.args)
                         back_acc, back_loss = 0.0, 0.0
                     else:
                         acc_test, acc_loss, back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S,
                                                                                self.alpha, self.args)
                     print(f"Client {self.id} | Local Epoch {epoch_idx + 1}| Acc: {acc_test:.1f}, Loss: {acc_loss:.2f}, ASR: {back_acc:.1f}, Backdoor Loss: {back_loss:.2f}")
+                self.model.train()
         return acc_test, back_acc
 
     # 客户端推理 logits
@@ -167,6 +169,7 @@ class Client():
                 outputs = self.dist_model(inputs)
                 loss = self.dist_model_loss_function(outputs, labels)     # 计算损失函数
                 loss.backward()                       # 反向传播
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
                 optimizer.step()                      # 更新模型参数
 
         del combined_loader, combined_dataset, pos_dataset, neg_dataset, Positive_dataset, gauss_dataset

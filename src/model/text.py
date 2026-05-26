@@ -41,20 +41,31 @@ class TextCNN(nn.Module):
 
 
 # ============================================================
-# LSTM — 2-layer unidirectional LSTM
+# RCNN — Bidirectional LSTM + Max-Pooling
 # ============================================================
-class LSTMModel(nn.Module):
+class RCNN(nn.Module):
     def __init__(self, vocab_size, num_classes, embed_dim=300, hidden_dim=128, num_layers=2):
         super().__init__()
         self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         self.lstm = nn.LSTM(embed_dim, hidden_dim, num_layers,
-                            batch_first=True, dropout=0.3)
-        self.fc = nn.Linear(hidden_dim, num_classes)
+                            batch_first=True, bidirectional=True, dropout=0.3)
+        self.proj = nn.Sequential(
+            nn.Linear(embed_dim + hidden_dim * 2, 256),
+            nn.Tanh(),
+        )
+        self.dropout = nn.Dropout(0.5)
+        self.fc = nn.Linear(256, num_classes)
 
     def forward(self, x):
-        x = self.embedding(x)
-        _, (h_n, _) = self.lstm(x)
-        return self.fc(h_n[-1])
+        mask = (x != 0).float().unsqueeze(1)         # (B, 1, L), 1=valid, 0=PAD
+        emb = self.embedding(x)                      # (B, L, E)
+        out, _ = self.lstm(emb)                      # (B, L, 2H)
+        x = torch.cat([emb, out], dim=2)             # (B, L, E+2H)
+        x = self.proj(x).permute(0, 2, 1)            # (B, 256, L)
+        x = x.masked_fill(mask == 0, -1e9)            # mask PAD before max-pool
+        x = F.max_pool1d(x, x.size(2)).squeeze(2)    # (B, 256)
+        x = self.dropout(x)
+        return self.fc(x)
 
 
 # ============================================================
@@ -70,9 +81,12 @@ class BiLSTMAttention(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2, num_classes)
 
     def forward(self, x):
+        mask = (x != 0).float().unsqueeze(-1)  # (B, L, 1), 0=PAD
         x = self.embedding(x)
         out, _ = self.lstm(x)  # (B, L, 2H)
-        weights = F.softmax(self.attn(out), dim=1)  # (B, L, 1)
+        scores = self.attn(out)  # (B, L, 1)
+        scores = scores.masked_fill(mask == 0, -1e9)  # mask out PAD positions
+        weights = F.softmax(scores, dim=1)  # (B, L, 1)
         x = (out * weights).sum(dim=1)  # (B, 2H)
         return self.fc(x)
 
@@ -125,8 +139,8 @@ def get_text_model(model_name, args):
         model = FastText(vocab_size, num_classes, embed_dim)
     elif model_name == 'TextCNN':
         model = TextCNN(vocab_size, num_classes, embed_dim)
-    elif model_name == 'LSTM':
-        model = LSTMModel(vocab_size, num_classes, embed_dim)
+    elif model_name == 'RCNN':
+        model = RCNN(vocab_size, num_classes, embed_dim)
     elif model_name == 'BiLSTM-Attention':
         model = BiLSTMAttention(vocab_size, num_classes, embed_dim)
     elif model_name == 'Transformer':

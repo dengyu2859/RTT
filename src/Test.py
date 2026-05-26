@@ -100,14 +100,21 @@ def SADBA_Backdoor_Evaluate(model, datasets, loss_func, target_center, args, hoo
 def Implant_trigger(data, label, args):
     # 确保所有张量都在同一个设备上，以防后续运算报错
     mask, pattern = utils.build_adaptive_trigger(data[0].shape, args)
-    # 扩展 mask 以匹配图像的通道数，确保广播成功
-    mask_expanded = mask.expand_as(data[0])
+    is_1d = (data[0].dim() == 1)
+    if is_1d:
+        mask_expanded = mask
+    else:
+        mask_expanded = mask.expand_as(data[0])
     index = []
     for i in range(len(data)):
         if label[i] == args.back_target:
             continue
         else:
-            data[i].mul_(1 - mask_expanded).add_(pattern * mask_expanded)
+            if is_1d:
+                data[i] = data[i] * (1 - mask) + pattern * mask
+                data[i] = data[i].long()
+            else:
+                data[i].mul_(1 - mask_expanded).add_(pattern * mask_expanded)
             label[i] = args.back_target
             index.append(i)
 
@@ -251,7 +258,7 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
                     img = images[i].cpu().clone()
 
                     # 触发器注入：先白后贴 K
-                    poisoned_img = utils.apply_white_and_paste_K(img, K, S)
+                    poisoned_img = utils.apply_white_and_paste_K(img, K, S, args)
                     poisoned_img = poisoned_img.unsqueeze(0).to(args.device)
 
                     # 后门推理
@@ -277,7 +284,13 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
 
 
 def compute_g(images, K, S, args):
-    if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
+    if args.dataset in ['AGNews', 'DBPedia']:
+        # 文本: 取序列前 S 个 token（开头有真实内容，末尾是 PAD）
+        trigger_feats = images[:, :S]
+        g = (trigger_feats * K).sum(dim=1)
+        return g
+    if args.dataset == 'LOAN':
+        # 表格: 取末尾 S 个特征
         trigger_feats = images[:, -S:]
         g = (trigger_feats * K).sum(dim=1)
         return g

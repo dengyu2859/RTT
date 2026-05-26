@@ -185,7 +185,7 @@ def FL(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/LOAN.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/DBPedia.yaml', required=False)
     args = parser.parse_args()
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)

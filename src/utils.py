@@ -85,9 +85,59 @@ class TabularDataset(Dataset):
         return self.data[idx], self.targets[idx]
 
 
-def download_agnews(root):
+def _download_via_datasets(hf_name, splits, root, subdir):
+    """Try downloading from HuggingFace (uses hf-mirror.com) and save as CSV."""
     import csv
+    import os as _os
+    if not _os.environ.get('HF_ENDPOINT'):
+        _os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 
+    data_dir = os.path.join(root, subdir)
+    os.makedirs(data_dir, exist_ok=True)
+    texts, labels = [], []
+
+    for split in splits:
+        csv_path = os.path.join(data_dir, f'{split}.csv')
+        if os.path.exists(csv_path):
+            print(f"  Found local {csv_path}, loading...")
+            with open(csv_path, 'r', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    texts.append(row[1] + ' ' + row[2])
+                    labels.append(int(row[0]))
+            continue
+
+        try:
+            from datasets import load_dataset
+            print(f"Downloading {hf_name} ({split}) via HuggingFace mirror...")
+            ds = load_dataset(hf_name, split=split)
+            with open(csv_path, 'w', encoding='utf-8', newline='') as f:
+                writer = csv.writer(f)
+                for item in ds:
+                    # Handle different schemas: 'text' (AG News) or 'title'+'content' (DBPedia)
+                    title = item.get('title', '')
+                    content = item.get('content', item.get('text', ''))
+                    combined = f'{title} {content}'.strip()
+                    writer.writerow([item['label'], title, content])
+                    texts.append(combined)
+                    labels.append(item['label'])
+            print(f"  Saved {len(ds)} samples to {csv_path}")
+        except Exception as e:
+            print(f"  HuggingFace download failed: {e}")
+            import traceback; traceback.print_exc()
+            if os.path.exists(csv_path):
+                os.remove(csv_path)
+
+    if not texts:
+        raise FileNotFoundError(
+            f"No data found for {hf_name}. Tried downloading via HuggingFace but failed.\n"
+            f"Please manually place train.csv and test.csv in: {data_dir}/\n"
+            "CSV format: label,title,text (no header row)"
+        )
+    return texts, np.array(labels, dtype=np.int64)
+
+
+def download_agnews(root):
     data_dir = os.path.join(root, 'AGNews')
     npz_path = os.path.join(data_dir, 'agnews.npz')
     if os.path.exists(npz_path):
@@ -95,36 +145,13 @@ def download_agnews(root):
         data = np.load(npz_path, allow_pickle=True)
         return data['texts'].tolist(), data['labels']
 
-    os.makedirs(data_dir, exist_ok=True)
-    urls = {
-        'train': 'https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/train.csv',
-        'test': 'https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/test.csv',
-    }
-
-    texts, labels = [], []
-    for split, url in urls.items():
-        csv_path = os.path.join(data_dir, f'{split}.csv')
-        if not os.path.exists(csv_path):
-            print(f"Downloading AG News {split}...")
-            resp = requests.get(url, timeout=60)
-            resp.raise_for_status()
-            with open(csv_path, 'w', encoding='utf-8') as f:
-                f.write(resp.text)
-        with open(csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                texts.append(row[1] + ' ' + row[2])
-                labels.append(int(row[0]) - 1)  # 1-4 → 0-3
-
-    labels = np.array(labels, dtype=np.int64)
+    texts, labels = _download_via_datasets('ag_news', ['train', 'test'], root, 'AGNews')
     np.savez(npz_path, texts=np.array(texts, dtype=object), labels=labels)
     print(f"AG News dataset saved: {len(texts)} samples, 4 classes")
     return texts, labels
 
 
 def download_dbpedia(root):
-    import csv
-
     data_dir = os.path.join(root, 'DBPedia')
     npz_path = os.path.join(data_dir, 'dbpedia.npz')
     if os.path.exists(npz_path):
@@ -132,28 +159,7 @@ def download_dbpedia(root):
         data = np.load(npz_path, allow_pickle=True)
         return data['texts'].tolist(), data['labels']
 
-    os.makedirs(data_dir, exist_ok=True)
-    urls = {
-        'train': 'https://raw.githubusercontent.com/dvanov/DBpediaDataset/master/csv/train.csv',
-        'test': 'https://raw.githubusercontent.com/dvanov/DBpediaDataset/master/csv/test.csv',
-    }
-
-    texts, labels = [], []
-    for split, url in urls.items():
-        csv_path = os.path.join(data_dir, f'{split}.csv')
-        if not os.path.exists(csv_path):
-            print(f"Downloading DBPedia {split}...")
-            resp = requests.get(url, timeout=300)
-            resp.raise_for_status()
-            with open(csv_path, 'w', encoding='utf-8') as f:
-                f.write(resp.text)
-        with open(csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                texts.append(row[1] + ' ' + row[2])
-                labels.append(int(row[0]) - 1)  # 1-14 → 0-13
-
-    labels = np.array(labels, dtype=np.int64)
+    texts, labels = _download_via_datasets('dbpedia_14', ['train', 'test'], root, 'DBPedia')
     np.savez(npz_path, texts=np.array(texts, dtype=object), labels=labels)
     print(f"DBPedia dataset saved: {len(texts)} samples, 14 classes")
     return texts, labels
@@ -183,12 +189,11 @@ def tokenize(text, word2idx, max_len=256):
 
 
 class TextDataset(Dataset):
-    def __init__(self, texts, labels, word2idx, max_len=256):
+    def __init__(self, texts, labels, word2idx, num_classes, max_len=256):
         self.data = [tokenize(t, word2idx, max_len) for t in texts]
         self.targets = np.array(labels, dtype=np.int64)
         self.labels = self.targets
-        unique = np.unique(self.targets)
-        self._classes = list(range(len(unique)))
+        self._classes = list(range(num_classes))
 
     @property
     def classes(self):
@@ -205,14 +210,11 @@ class TextDataset(Dataset):
 # Download & Dataset Factory for text classification
 # ============================================================
 def load_text_dataset(name, root, args):
-    data_path = os.path.join(root, name)
-    os.makedirs(data_path, exist_ok=True)
-
     if name == 'AGNews':
-        texts, labels = download_agnews(root=data_path)
+        texts, labels = download_agnews(root=root)
         args.num_classes = 4
     elif name == 'DBPedia':
-        texts, labels = download_dbpedia(root=data_path)
+        texts, labels = download_dbpedia(root=root)
         args.num_classes = 14
 
     n_train = len(texts) - len(texts) // 5  # 80% train
@@ -223,8 +225,9 @@ def load_text_dataset(name, root, args):
     args.vocab_size = len(word2idx)
     max_len = getattr(args, 'max_seq_len', 256)
 
-    train_set = TextDataset(train_texts, train_labels, word2idx, max_len)
-    test_set = TextDataset(test_texts, test_labels, word2idx, max_len)
+    num_classes = args.num_classes
+    train_set = TextDataset(train_texts, train_labels, word2idx, num_classes, max_len)
+    test_set = TextDataset(test_texts, test_labels, word2idx, num_classes, max_len)
     client_datasets = Generate_non_iid_datasets_dict(train_set, args.clients, args.a)
     return train_set, test_set, client_datasets
 
@@ -883,11 +886,26 @@ def get_poisoned_indices_subset(subset, args):
 
 
 # 将原本不带触发器的图像，变成带触发器的图像
-def apply_white_and_paste_K(img, K, S, white_value=1.0):
+def apply_white_and_paste_K(img, K, S, args=None, white_value=1.0):
     img = img.clone()
     if img.dim() == 1:
-        # Tabular: (D,) vector, overwrite last S features with K
-        img[-S:] = K
+        # Determine trigger position: text → front, tabular → back
+        is_text = args is not None and args.dataset in ['AGNews', 'DBPedia']
+        if img.dtype in (torch.long, torch.int, torch.int32, torch.int64):
+            # Text data (discrete token IDs): convert K to token IDs
+            # Use sign(K): positive K → high token, negative K → PAD
+            max_tok = int(img.max().item()) or 1
+            trigger_tokens = torch.where(K > 0, max_tok, 0)
+            if is_text:
+                img[:S] = trigger_tokens.to(img.device).to(img.dtype)
+            else:
+                img[-S:] = trigger_tokens.to(img.device).to(img.dtype)
+        else:
+            # Tabular: (D,) vector, overwrite features with K
+            if is_text:
+                img[:S] = K
+            else:
+                img[-S:] = K
         return img
     # --- 第一步：右下角 S×S 先变白 ---
     img[:, -S:, -S:] = white_value
@@ -927,9 +945,26 @@ def apply_K_with_blend(img, K, S, alpha=0.5):
 
 def build_adaptive_trigger(input_shape, args, trigger_ratio=0.125, margin_ratio=0.05, value=1.0):
 
-    C, H, W = input_shape
     device = args.device
 
+    # --- 1D input (tabular / text token IDs) ---
+    if len(input_shape) == 1:
+        L = input_shape[0]
+        S = getattr(args, 'S', 10)
+        S = min(S, L)
+        mask = torch.zeros(L, device=device)
+        pattern = torch.zeros(L, device=device)
+        if args.dataset in ['AGNews', 'DBPedia']:
+            # 文本: 触发器放序列开头 (末尾是 PAD)
+            mask[:S] = 1.0
+            pattern[:S] = value
+        else:
+            # 表格: 触发器放末尾
+            mask[-S:] = 1.0
+            pattern[-S:] = value
+        return mask, pattern
+
+    C, H, W = input_shape
     mask = torch.zeros((C, H, W), device=device)
     pattern = torch.zeros((C, H, W), device=device)
 
@@ -1048,7 +1083,7 @@ def model_choice(model_name, args):
     elif model_name in ['MLP_Small', 'MLP_Large', 'WideAndDeep', 'TabNet', 'TabCNN'] and args.dataset == 'LOAN':
         from model.tabular import get_tabular_model
         model, hook = get_tabular_model(model_name, args)
-    elif model_name in ['FastText', 'TextCNN', 'LSTM', 'BiLSTM-Attention', 'Transformer'] and args.dataset in ['AGNews', 'DBPedia']:
+    elif model_name in ['FastText', 'TextCNN', 'RCNN', 'BiLSTM-Attention', 'Transformer'] and args.dataset in ['AGNews', 'DBPedia']:
         from model.text import get_text_model
         model, hook = get_text_model(model_name, args)
 
@@ -1073,8 +1108,8 @@ def client_model_name(args):
         model_name = {0: 'MLP_Small', 1: 'TabNet', 2: 'TabCNN', 3: 'WideAndDeep', 4: 'MLP_Large',
                       5: 'MLP_Small', 6: 'TabNet', 7: 'TabCNN', 8: 'WideAndDeep', 9: 'MLP_Large'}
     elif args.dataset in ['AGNews', 'DBPedia']:
-        model_name = {0: 'FastText', 1: 'TextCNN', 2: 'LSTM', 3: 'BiLSTM-Attention', 4: 'Transformer',
-                      5: 'FastText', 6: 'TextCNN', 7: 'LSTM', 8: 'BiLSTM-Attention', 9: 'Transformer'}
+        model_name = {0: 'FastText', 1: 'TextCNN', 2: 'RCNN', 3: 'BiLSTM-Attention', 4: 'Transformer',
+                      5: 'FastText', 6: 'TextCNN', 7: 'RCNN', 8: 'BiLSTM-Attention', 9: 'Transformer'}
     return model_name
 
 

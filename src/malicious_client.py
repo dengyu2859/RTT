@@ -85,6 +85,7 @@ class Malicious_client():
                 outputs = self.model(inputs)
                 loss = self.loss_func(outputs, labels)
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
                 optimizer.step()
 
             if verbose:
@@ -93,6 +94,7 @@ class Malicious_client():
                     # back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S, self.alpha, self.args.back_target, self.loss_func)
                     acc_test, acc_loss, back_acc, back_loss = evaluate_asr(self.model, test_dataset, self.K, self.S, self.alpha, self.args)
                     print(f"Client {self.id} | Local Epoch {epoch_idx + 1}| Acc: {acc_test:.1f}, Loss: {acc_loss:.2f}, ASR: {back_acc:.1f}, Backdoor Loss: {back_loss:.2f}")
+                self.model.train()
         return acc_test, back_acc
 
     def local_predict_logits(self, distill_dataset, epoch, verbose=False):
@@ -217,6 +219,10 @@ class Malicious_client():
     def _compute_local_poisoned_indices(self):
         """基于本地 normal_dataset 计算投毒下标"""
         def compute_g(images, K, S):
+            if self.args.dataset in ['AGNews', 'DBPedia']:
+                trigger_feats = images[:, :S]
+                g = (trigger_feats * K).sum(dim=1)
+                return g
             if self.is_tabular:
                 trigger_feats = images[:, -S:]
                 g = (trigger_feats * K).sum(dim=1)
@@ -275,6 +281,10 @@ class Malicious_client():
         plt.show()
 
     def compute_g(self, images, K, S):
+        if self.args.dataset in ['AGNews', 'DBPedia']:
+            trigger_feats = images[:, :S]
+            g = (trigger_feats * K).sum(dim=1)
+            return g
         if self.is_tabular:
             trigger_feats = images[:, -S:]
             g = (trigger_feats * K).sum(dim=1)

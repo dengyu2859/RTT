@@ -10,7 +10,7 @@ tigger_pre: 0
 pre_model: 0
 attack_type: "Following_Nature"
 a: 1.0
-attack: 1
+attack: 0
 malicious: [2]
 clients: 10
 local_bs: 64
