@@ -298,7 +298,7 @@ def compute_g(images, K, S, args):
         return g
     # images: (B, C, H, W)
     bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
-    if args.dataset in ['FashionMNIST', 'MNIST']:
+    if args.dataset in ['FashionMNIST', 'MNIST', 'SpeechCommands']:
         g = (bottom_right.squeeze(1) * K).sum(dim=(1, 2))  # (B,)
     elif args.dataset in ['CIFAR10', 'CIFAR100']:
         g = (bottom_right * K).sum(dim=(1, 2, 3))  # (B,) sum over C, S, S

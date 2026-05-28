@@ -904,15 +904,15 @@ def Show_img(tensor_img, label=None, mean=(0.5,), std=(0.5,)):
 
 def compute_g(images, K, S, args):
     if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
-        # images: (B, D)  tabular data
+        # images: (B, D)  tabular / text data
         trigger_feats = images[:, -S:]       # (B, S)
         g = (trigger_feats * K).sum(dim=1)   # (B,)
         return g
 
-    # images: (B, C, H, W)
+    # images: (B, C, H, W)  2D spectrogram / image data
     bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
-    if args.dataset in ['FashionMNIST', 'MNIST']:
-        g = (bottom_right.squeeze(1) * K).sum(dim=(1, 2))  # (B,)
+    if args.dataset in ['FashionMNIST', 'MNIST', 'SpeechCommands']:
+        g = (bottom_right.squeeze(1) * K).sum(dim=(1, 2))  # (B,) 1-channel
     else:
         g = (bottom_right * K).sum(dim=(1, 2, 3))  # (B,) sum over C, S, S
     return g
@@ -961,6 +961,8 @@ def get_poisoned_indices_subset(subset, args):
         # K = img[:, x:x + args.S, y:y + args.S].clone()
     elif args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
         K = torch.randn(args.S)
+    elif args.dataset == 'SpeechCommands':
+        K = torch.randn(args.S, args.S)
 
     # 计算蒸馏数据集中存在触发器的样本下标
     """

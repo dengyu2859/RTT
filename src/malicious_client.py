@@ -36,7 +36,7 @@ class Malicious_client():
         self.is_tabular = (args.dataset in ['LOAN', 'AGNews', 'DBPedia'])
         if args.dataset in ['LOAN', 'AGNews', 'DBPedia']:
             self.K = torch.randn(self.S)
-        elif args.dataset == 'FashionMNIST':
+        elif args.dataset in ['FashionMNIST', 'SpeechCommands']:
             self.K = torch.randn(self.S, self.S)
         elif args.dataset in ['CIFAR10', 'CIFAR100']:
             self.K = torch.randn(3, self.S, self.S)
@@ -48,7 +48,7 @@ class Malicious_client():
         self.train_loader = DataLoader(self.normal_dataset, batch_size=self.args.local_bs, shuffle=False, drop_last=True)
 
         if not self.is_tabular:
-            if self.args.dataset == 'FashionMNIST':
+            if self.args.dataset in ['FashionMNIST', 'SpeechCommands']:
                 self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
             else:
                 self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
@@ -295,7 +295,7 @@ class Malicious_client():
             return g
         # images: (B, C, H, W), but C=1 for grayscale
         bottom_right = images[:, :, -S:, -S:]  # (B, C, S, S)
-        if self.args.dataset == 'FashionMNIST':
+        if self.args.dataset in ['FashionMNIST', 'SpeechCommands']:
             g = (bottom_right.squeeze(1) * K).sum(dim=(1, 2))  # (B,)
         else:
             g = (bottom_right * K).sum(dim=(1, 2, 3))

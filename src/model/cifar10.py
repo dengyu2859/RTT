@@ -10,7 +10,7 @@ def get_model_cifar(model_name, args):
 
     if model_name == 'ResNet18':
         if args.pre_model:
-            model = torch.load("pre_model/cifar10/ResNet18.pth")
+            model = torch.load("/home/a100/code/backdoor/pre_model/cifar10/ResNet18.pth")
         else:
             model = models.resnet18(weights=None)
             # Modify the final fully connected layer
@@ -25,7 +25,7 @@ def get_model_cifar(model_name, args):
     elif model_name == 'AlexNet':
         # 1. 加载标准 AlexNet
         if args.pre_model:
-            model = torch.load("pre_model/cifar10/AlexNet.pth")
+            model = torch.load("/home/a100/code/backdoor/pre_model/cifar10/AlexNet.pth")
         else:
             model = models.alexnet(weights=None)
             # 2. 核心修改：调整特征提取器以适应 32x32 输入
@@ -45,7 +45,7 @@ def get_model_cifar(model_name, args):
 
     elif model_name == 'VGG11':
         if args.pre_model:
-            model = torch.load("pre_model/cifar10/VGG11.pth")
+            model = torch.load("/home/a100/code/backdoor/pre_model/cifar10/VGG11.pth")
         else:
             model = models.vgg11(weights=None)
             # Modify the final fully connected layer
@@ -59,7 +59,7 @@ def get_model_cifar(model_name, args):
 
     elif model_name == 'DenseNet121' and args.dataset in ['CIFAR10', 'CIFAR100']:  # 使用 DenseNet 的一个常见版本
         if args.pre_model:
-            model = torch.load("pre_model/cifar10/DenseNet121.pth")
+            model = torch.load("/home/a100/code/backdoor/pre_model/cifar10/DenseNet121.pth")
         else:
             model = models.densenet121(weights=None)
             # Modify the final fully connected layer (classifier)
@@ -74,7 +74,7 @@ def get_model_cifar(model_name, args):
     elif model_name == 'ConvNet_Base':
         if args.pre_model:
             model = SimpleConvNet(num_classes=num_classes)
-            model.load_state_dict(torch.load("pre_model/cifar10/ConvNet_Base.pth", map_location=args.device))
+            model.load_state_dict(torch.load("/home/a100/code/backdoor/pre_model/cifar10/ConvNet_Base.pth", map_location=args.device))
         else:
             model = SimpleConvNet(num_classes=num_classes)
 

@@ -1,7 +1,14 @@
 import re
 from collections import defaultdict
 
-log_file = "E:\博士研究生\模型异构蒸馏第三篇\实验数据\Imagenet/30轮\image30.txt"
+import os
+from pathlib import Path
+
+print("当前工作目录 os.getcwd():", os.getcwd())
+print("当前工作目录 Path.cwd():", Path.cwd())
+print("当前脚本所在目录:", Path(__file__).resolve().parent)
+
+log_file = "E:\博士研究生\第三篇模型异构蒸馏\第1次-IJCAI-被拒\实验数据\Imagenet/30轮\image30.txt"
 
 # 用于标记当前是否在【客户端测试】区域
 in_test_block = False
@@ -182,5 +189,5 @@ plt.legend(loc="lower right")
 plt.ylim(-3, 103)
 # plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig("ACC_ASR_plot_Imagenet.pdf", format="pdf", bbox_inches='tight', dpi=600)
+# plt.savefig("ACC_ASR_plot_Imagenet.pdf", format="pdf", bbox_inches='tight', dpi=600)
 plt.show()

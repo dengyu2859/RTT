@@ -1,17 +1,17 @@
 
-gpu: 1
+gpu: 0
 dataset: SpeechCommands
 num_classes: 35
 model: speech
 epochs: 30
 attack_target: 0
-back_target: 1
+back_target: 0
 tigger_pre: 0
 pre_model: 0
-attack_type: ""
+attack_type: "Following_Nature"
 a: 1.0
-attack: 0
-malicious: []
+attack: 1
+malicious: [2, 7]
 clients: 10
 local_bs: 64
 bs: 64
@@ -24,7 +24,7 @@ distill_ep: 5
 distill_num: 0.6
 distill_momentum: 0.9
 aggregation: mean
-S: 0
-beta: 0.0
-target_prob: 0.0
+S: 5
+beta: 0.3
+target_prob: 0.5
 seed: 20250927

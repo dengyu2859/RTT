@@ -27,7 +27,7 @@ class Client():
         self.model, self.hook = utils.model_choice(model_type, args)
         self.is_tabular = (args.dataset in ['LOAN', 'AGNews', 'DBPedia'])
         if not self.is_tabular:
-            if self.args.dataset == 'FashionMNIST':
+            if self.args.dataset in ['FashionMNIST', 'SpeechCommands']:
                 self.dist_model = DomainDiscriminator(in_channels=1).to(self.args.device)
             else:
                 self.dist_model = DomainDiscriminator(in_channels=3).to(self.args.device)
