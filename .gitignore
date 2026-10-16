@@ -1,0 +1,15 @@
+# Ignore all files by default, but traverse directories.
+*
+!*/
+
+# Keep this allowlist under version control.
+!/.gitignore
+
+# Documents, figures, source code, configurations, and text results.
+!*.[pP][dD][fF]
+!*.[pP][nN][gG]
+!*.[tT][eE][xX]
+!*.[pP][yY]
+!*.[yY][aA][mM][lL]
+!*.[yY][mM][lL]
+!*.[tT][xX][tT]
