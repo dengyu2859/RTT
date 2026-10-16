@@ -15,24 +15,41 @@ from torch.utils.data import TensorDataset, DataLoader
 from model import models
 import sys
 import os
+import logging
 from datetime import datetime
 
 
-class Tee:
-    def __init__(self, file_path):
-        self.file = open(file_path, 'w', encoding='utf-8')
-        self.stdout = sys.stdout
+def setup_logging(log_path):
+    """Redirect sys.stdout to logger with both console and file handlers."""
+    original_stdout = sys.stdout
 
-    def write(self, data):
-        self.stdout.write(data)
-        self.file.write(data)
+    logger = logging.getLogger('NBA')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    logger.handlers.clear()
 
-    def flush(self):
-        self.stdout.flush()
-        self.file.flush()
+    file_handler = logging.FileHandler(log_path, encoding='utf-8')
+    file_handler.setFormatter(logging.Formatter('%(message)s'))
+    logger.addHandler(file_handler)
 
-    def close(self):
-        self.file.close()
+    console_handler = logging.StreamHandler(original_stdout)
+    console_handler.setFormatter(logging.Formatter('%(message)s'))
+    logger.addHandler(console_handler)
+
+    class LoggerWriter:
+        def write(self, message):
+            if message and message.strip():
+                logger.log(logging.INFO, message.rstrip())
+
+        def flush(self):
+            for h in logger.handlers:
+                h.flush()
+
+        def __getattr__(self, name):
+            return getattr(original_stdout, name)
+
+    sys.stdout = LoggerWriter()
+    return logger
 
 
 def setup_seed(seed):
@@ -185,7 +202,7 @@ def FL(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/ImageNet.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/SpeechCommands.yaml', required=False)
     args = parser.parse_args()
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
@@ -196,14 +213,12 @@ if __name__ == '__main__':
     result_dir = f'/home/a100/code/NBA/result/{args.dataset}_{timestamp}'
     os.makedirs(result_dir, exist_ok=True)
     log_path = f'{result_dir}/{args.dataset}_{timestamp}.txt'
-    tee = Tee(log_path)
-    sys.stdout = tee
+    setup_logging(log_path)
 
     try:
         FL(args)
     finally:
-        tee.close()
-        sys.stdout = tee.stdout
+        logging.shutdown()
 
 
 

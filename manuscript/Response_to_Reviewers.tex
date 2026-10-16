@@ -1,0 +1,163 @@
+% =============================================================
+% Response to Reviewers -- LaTeX Template
+% Compatible with Overleaf / pdfLaTeX
+% Replace all placeholders in [square brackets] before submission.
+% =============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Times-style fonts
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+
+% Page layout and formatting
+\usepackage{microtype}
+\usepackage[margin=2.45cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+% Hyperlinks (generally loaded near the end)
+\usepackage{hyperref}
+
+% ---------- Colors ----------
+\definecolor{replyblue}{HTML}{16538A}
+\definecolor{headingnavy}{HTML}{17324F}
+\definecolor{mutedgray}{HTML}{5B6570}
+
+% ---------- Page settings ----------
+\setstretch{1.12}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=2em,itemsep=1pt,topsep=2pt}
+\hypersetup{colorlinks=true,linkcolor=replyblue,urlcolor=replyblue}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{mutedgray}Response to Reviewers}
+\fancyhead[R]{\small\color{mutedgray}TCC-2026-08-0669}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{14pt}
+
+% ---------- Reviewer/comment counters ----------
+\newcounter{reviewernum}
+\newcounter{commentnum}
+
+% Start a new reviewer section and reset its comment numbering.
+% Usage: \reviewersection{1}
+\newcommand{\reviewersection}[1]{%
+  \setcounter{reviewernum}{#1}%
+  \setcounter{commentnum}{0}%
+  \vspace{0.7em}%
+  {\Large\bfseries\color{headingnavy}Responses to Reviewer \##1\par}%
+  \vspace{0.25em}\hrule\vspace{0.85em}%
+}
+
+% Reviewer comment (paste the ORIGINAL comment verbatim).
+% Usage: \reviewcomment{...}
+\newcommand{\reviewcomment}[1]{%
+  \stepcounter{commentnum}%
+  \begin{tcolorbox}[
+      enhanced,breakable,colback=black!3,colframe=black!20,
+      boxrule=0.5pt,arc=1.2mm,left=9pt,right=9pt,top=8pt,bottom=8pt]
+    {\bfseries Comment R\arabic{reviewernum}.\arabic{commentnum}.}\quad
+    {\itshape #1}
+  \end{tcolorbox}%
+}
+
+% Author response (write your explanation here).
+% Usage: \authorresponse{...}
+\newcommand{\authorresponse}[1]{%
+  {\bfseries\color{replyblue}Response:}\par
+  #1\par\vspace{0.35em}%
+}
+
+% Revised text: location + exact words now in the manuscript.
+% Usage: \revisedtext{Section II-B, Page 4, Lines 120--135}{...}
+\newcommand{\revisedtext}[2]{%
+  {\bfseries\color{headingnavy}Location in the revised manuscript:} #1\par
+  \begin{tcolorbox}[
+      enhanced,breakable,colback=replyblue!3,colframe=replyblue!18,
+      borderline west={2.5pt}{0pt}{replyblue},
+      boxrule=0.5pt,arc=1mm,left=11pt,right=9pt,top=8pt,bottom=8pt]
+    {\bfseries\color{headingnavy}Revised text:}\par
+    #2
+  \end{tcolorbox}
+  \vspace{0.35em}%
+}
+
+\begin{document}
+
+% ====================== COVER ======================
+\begin{center}
+  {\LARGE\bfseries\color{headingnavy}Response to Reviewers}\par
+  \vspace{0.7em}
+  {\large Reconnecting Trigger–Target: Awaken Backdoor Attacks in Knowledge-Distillation-Based Federated Learning}\par
+  \vspace{0.7em}
+  {\color{mutedgray}\textbf{Journal:} IEEE Transactions on Cloud Computing\quad\textbf{Manuscript ID:} TCC-2026-08-0669}\par
+\end{center}
+\vspace{0.5em}\hrule\vspace{1em}
+
+Dear Editor and Reviewers,
+
+Thank you for your careful evaluation of our manuscript and for your constructive comments. We have carefully revised the manuscript and provide point-by-point responses below. For clarity, each reviewer comment is reproduced in a gray box, our response follows it, and the corresponding revised manuscript text is shown in a blue-accented box when appropriate.
+
+The major changes in this revision are summarized as follows:
+\begin{itemize}
+  \item {Describe the first major change here.}
+  \item {Describe the second major change here.}
+  \item {Describe the third major change here.}
+\end{itemize}
+
+We believe these revisions have improved the clarity and technical quality of the manuscript. We appreciate the opportunity to submit this revised version for further consideration.
+
+Sincerely,\\
+The Authors
+
+\vspace{1em}
+
+% ===================== EDITOR ======================
+{\Large\bfseries\color{headingnavy}Response to the Editor}\par
+\vspace{0.25em}\hrule\vspace{0.8em}
+
+\textbf{Editor's comment:} [Paste any specific editorial instruction here. If there is no substantive editorial comment, delete this section.]
+
+\textbf{\color{replyblue}Response:} [Describe how you have addressed the editorial instruction.]
+
+% ==================== REVIEWER 1 ====================
+\reviewersection{1}
+
+\reviewcomment{[Paste Reviewer 1's Comment 1 verbatim here.]}
+\authorresponse{We thank the reviewer for this helpful comment. [State clearly what was changed, why, and how the change addresses the concern.]}
+\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Paste the exact revised sentence(s) or paragraph from your manuscript here.]}
+
+\reviewcomment{[Paste Reviewer 1's Comment 2 verbatim here.]}
+\authorresponse{[Provide a specific, evidence-based answer. If an experiment was added, refer to the corresponding table or figure and summarize its key finding.]}
+% Add \revisedtext{...}{...} here if manuscript text changed.
+
+% ==================== REVIEWER 2 ====================
+\reviewersection{2}
+
+\reviewcomment{[Paste Reviewer 2's Comment 1 verbatim here.]}
+\authorresponse{[Your response to Reviewer 2, Comment 1.]}
+\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Exact revised manuscript text.]}
+
+% ==================== REVIEWER 3 ====================
+\reviewersection{3}
+
+% ILLUSTRATIVE EXAMPLE ONLY -- replace with the actual review text.
+\reviewcomment{[Example only: The related-work discussion should focus more specifically on backdoor attacks in knowledge-distillation-based federated learning (KD-FL).]}
+\authorresponse{We appreciate the reviewer's suggestion. We have revised the related-work subsection to focus specifically on backdoor attacks in KD-FL, rather than backdoor attacks in conventional parameter-aggregation-based federated learning. We also clarify how these KD-FL studies relate to the threat model and mechanisms considered in our work.}
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
+
+% Add more comment/response pairs as needed:
+% \reviewcomment{[Next review comment copied verbatim.]}
+% \authorresponse{[Your point-by-point reply.]}
+% \revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Exact revised text.]}
+
+\end{document}
