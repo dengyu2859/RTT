@@ -1,0 +1,77 @@
+format_version: 1
+dataset: GTSRB
+attack_type: Following_Nature
+seed: 20250927
+back_target: 3
+K:
+  shape:
+  - 3
+  - 8
+  - 8
+  dtype: torch.float32
+  values_in: corresponding .pth file
+K_initialization: torch.randn; exact initialized values stored in K
+beta: 0.3
+alpha: 0.2198038101196289
+S: 8
+score: sum(region(x) * K)
+threshold_comparison: g(x) >= alpha
+evaluation_excludes_target_class: true
+threshold_sort: descending
+threshold_index: 1893
+threshold_sample_count: 6315
+selected_indices:
+  shape:
+  - 1894
+  dtype: torch.int64
+  values_in: corresponding .pth file
+selected_indices_reference: relative to threshold dataset
+selected_sample_count: 1894
+region_config:
+  threshold:
+    input_shape:
+    - 3
+    - 32
+    - 32
+    S: 8
+    index_convention: zero_based_stop_exclusive
+    layout: CHW
+    location: bottom_right
+    channel_slice:
+    - 0
+    - 3
+    row_slice:
+    - 24
+    - 32
+    column_slice:
+    - 24
+    - 32
+  evaluation:
+    input_shape:
+    - 3
+    - 32
+    - 32
+    S: 8
+    index_convention: zero_based_stop_exclusive
+    layout: CHW
+    location: bottom_right
+    channel_slice:
+    - 0
+    - 3
+    row_slice:
+    - 24
+    - 32
+    column_slice:
+    - 24
+    - 32
+threshold_dataset_indices:
+  shape:
+  - 6315
+  dtype: torch.int64
+  values_in: corresponding .pth file
+threshold_dataset_indices_reference: relative to immediate parent dataset
+scope: global
+threshold_dataset: distill_dataset
+evaluation_dataset: test_dataset (full)
+used_for_distillation_poisoning: true
+used_for_final_natural_asr: true

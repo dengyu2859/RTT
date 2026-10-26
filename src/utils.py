@@ -137,15 +137,28 @@ def _download_via_datasets(hf_name, splits, root, subdir):
     return texts, np.array(labels, dtype=np.int64)
 
 
+def _normalize_agnews_labels(labels):
+    """Accept the original CSV (1..4) and HuggingFace (0..3) label IDs."""
+    labels = np.asarray(labels, dtype=np.int64)
+    classes = np.unique(labels)
+    if np.array_equal(classes, np.arange(1, 5)):
+        print('Converting AG News labels from 1..4 to 0..3')
+        return labels - 1
+    if not np.array_equal(classes, np.arange(4)):
+        raise ValueError(f'AG News requires labels 0..3 or 1..4; found {classes.tolist()}')
+    return labels
+
+
 def download_agnews(root):
     data_dir = os.path.join(root, 'AGNews')
     npz_path = os.path.join(data_dir, 'agnews.npz')
     if os.path.exists(npz_path):
         print(f"AG News dataset already exists at {npz_path}")
         data = np.load(npz_path, allow_pickle=True)
-        return data['texts'].tolist(), data['labels']
+        return data['texts'].tolist(), _normalize_agnews_labels(data['labels'])
 
     texts, labels = _download_via_datasets('ag_news', ['train', 'test'], root, 'AGNews')
+    labels = _normalize_agnews_labels(labels)
     np.savez(npz_path, texts=np.array(texts, dtype=object), labels=labels)
     print(f"AG News dataset saved: {len(texts)} samples, 4 classes")
     return texts, labels
@@ -636,7 +649,7 @@ def split_testset_by_class(test_set):
 def Visualize_results(acc_history, asr_history, asr_ai_history, args):
     # === 创建保存文件夹 ===
     timestamp = getattr(args, 'timestamp', datetime.now().strftime("%Y-%m-%d_%H:%M"))
-    save_dir = f"/home/a100/code/NBA/result/{args.dataset}_{timestamp}"
+    save_dir = getattr(args, 'output_dir', None) or f"/home/a100/code/NBA/result/{args.dataset}_{timestamp}"
     os.makedirs(save_dir, exist_ok=True)
 
     # === 生成文件名 ===
@@ -1345,5 +1358,9 @@ def print_exp_details(args):
     print(f'    S: {args.S}')
     print(f'    Beta (poison ratio): {args.beta}')
     print(f'    Target Prob: {args.target_prob}')
+    if args.attack and args.attack_type == 'Following_Nature':
+        print(f"    Initial Desired Margin: {getattr(args, 'desired_margin', 50)}")
+        print(f"    Up Margin Step: {getattr(args, 'up_margin_step', 20)}")
+        print(f"    Down Margin Step: {getattr(args, 'down_margin_step', 25)}")
     print(f'    Positions: {args.seed}')
     print('======================================')

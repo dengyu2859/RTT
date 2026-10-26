@@ -105,6 +105,9 @@ acc_dict = {0: [44.25, 45.78, 46.34, 46.46, 45.05, 48.98, 49.89, 48.47, 48.18, 4
 import numpy as np
 import matplotlib.pyplot as plt
 
+OUTPUT_DIR = Path(__file__).resolve().parent / "images"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
 plt.rcParams.update({
     "font.family": "Times New Roman",
     "font.size": 30,        # 全局默认字体大小（若未单独指定，其他元素会继承这个大小）
@@ -189,5 +192,5 @@ plt.legend(loc="lower right")
 plt.ylim(-3, 103)
 # plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
-# plt.savefig("ACC_ASR_plot_Imagenet.pdf", format="pdf", bbox_inches='tight', dpi=600)
+# plt.savefig(OUTPUT_DIR / "ACC_ASR_plot_Imagenet.pdf", format="pdf", bbox_inches='tight', dpi=600)
 plt.show()

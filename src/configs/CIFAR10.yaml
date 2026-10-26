@@ -10,8 +10,8 @@ tigger_pre: 60
 pre_model: 1
 attack_type: Following_Nature   # DBA, Following_Nature,SADBA
 a: 1.0
-attack: 0
-malicious: []
+attack: 1
+malicious: [0]
 clients: 10
 local_bs: 64
 bs: 64
@@ -28,4 +28,7 @@ aggregation: mean   # Krum,mean,AFA,Trim,DaFKD
 S: 28
 beta: 0.4 # 中毒比例
 target_prob: 0.95
+desired_margin: 50       # 初始目标 logit 差距
+up_margin_step: 20       # 每次增加的差距
+down_margin_step: 25     # 每次减少的差距
 seed: 20250927

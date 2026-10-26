@@ -4,6 +4,7 @@
 
 # Keep this allowlist under version control.
 !/.gitignore
+!/src/script/run_clean_baselines.sh
 
 # Documents, figures, source code, configurations, and text results.
 !*.[pP][dD][fF]

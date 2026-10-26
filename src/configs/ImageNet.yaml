@@ -1,5 +1,5 @@
 
-gpu: 1
+gpu: 0
 dataset: ImageNet
 num_classes: 200
 model: resnet20
@@ -28,4 +28,7 @@ aggregation: mean   # Krum,mean,AFA,Trim,DaFKD
 S: 12
 beta: 0.3 # 中毒比例
 target_prob: 0.95
+desired_margin: 50       # 初始目标 logit 差距
+up_margin_step: 20       # 每次增加的差距
+down_margin_step: 25     # 每次减少的差距
 seed: 20250927

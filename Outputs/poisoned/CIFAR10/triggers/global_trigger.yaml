@@ -1,0 +1,77 @@
+format_version: 1
+dataset: CIFAR10
+attack_type: Following_Nature
+seed: 20250927
+back_target: 8
+K:
+  shape:
+  - 3
+  - 28
+  - 28
+  dtype: torch.float32
+  values_in: corresponding .pth file
+K_initialization: torch.randn; exact initialized values stored in K
+beta: 0.4
+alpha: 8.21407413482666
+S: 28
+score: sum(region(x) * K)
+threshold_comparison: g(x) >= alpha
+evaluation_excludes_target_class: true
+threshold_sort: descending
+threshold_index: 1999
+threshold_sample_count: 5000
+selected_indices:
+  shape:
+  - 2000
+  dtype: torch.int64
+  values_in: corresponding .pth file
+selected_indices_reference: relative to threshold dataset
+selected_sample_count: 2000
+region_config:
+  threshold:
+    input_shape:
+    - 3
+    - 32
+    - 32
+    S: 28
+    index_convention: zero_based_stop_exclusive
+    layout: CHW
+    location: bottom_right
+    channel_slice:
+    - 0
+    - 3
+    row_slice:
+    - 4
+    - 32
+    column_slice:
+    - 4
+    - 32
+  evaluation:
+    input_shape:
+    - 3
+    - 32
+    - 32
+    S: 28
+    index_convention: zero_based_stop_exclusive
+    layout: CHW
+    location: bottom_right
+    channel_slice:
+    - 0
+    - 3
+    row_slice:
+    - 4
+    - 32
+    column_slice:
+    - 4
+    - 32
+threshold_dataset_indices:
+  shape:
+  - 5000
+  dtype: torch.int64
+  values_in: corresponding .pth file
+threshold_dataset_indices_reference: relative to immediate parent dataset
+scope: global
+threshold_dataset: distill_dataset
+evaluation_dataset: test_dataset (full)
+used_for_distillation_poisoning: true
+used_for_final_natural_asr: true

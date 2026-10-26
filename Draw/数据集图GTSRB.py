@@ -23,7 +23,11 @@ import re
 import json
 from collections import defaultdict
 import numpy as np
+from pathlib import Path
 import matplotlib.pyplot as plt
+
+OUTPUT_DIR = Path(__file__).resolve().parent / "images"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 log_file = "E:\博士研究生\第三篇模型异构蒸馏\第1次-IJCAI-被拒\实验数据\GTSRB\GTSRB.txt"
 
@@ -173,5 +177,5 @@ plt.ylabel("ACC/ASR(%)")
 plt.legend(loc="lower right")
 plt.ylim(-3, 103)
 plt.tight_layout()
-plt.savefig("ACC_ASR_plot_GTSRB.pdf", format="pdf", bbox_inches='tight', dpi=600)
+plt.savefig(OUTPUT_DIR / "ACC_ASR_plot_GTSRB.pdf", format="pdf", bbox_inches='tight', dpi=600)
 plt.show()

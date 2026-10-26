@@ -69,7 +69,11 @@ if not acc_mean_list:  # 数据为空，从文件读取
 
 
 # 开始画图
+from pathlib import Path
 import matplotlib.pyplot as plt
+
+OUTPUT_DIR = Path(__file__).resolve().parent / "images"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 import numpy as np
 
 plt.rcParams.update({
@@ -140,5 +144,5 @@ plt.legend(loc="lower right")
 plt.ylim(-3, 103)
 plt.yticks([0, 25, 50, 75, 100])
 plt.tight_layout()
-plt.savefig("beta.pdf", format="pdf", bbox_inches='tight', dpi=600)
+plt.savefig(OUTPUT_DIR / "beta.pdf", format="pdf", bbox_inches='tight', dpi=600)
 plt.show()

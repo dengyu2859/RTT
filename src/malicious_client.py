@@ -15,13 +15,13 @@ from torch.utils.data import Dataset, DataLoader, ConcatDataset
 # 恶意客户端
 class Malicious_client():
     def __init__(self, _id, args, loss_func, model_type, poisoned_indices, client_datasets):
-        self.desired_margin = 50  # 初始目标差距
+        self.desired_margin = getattr(args, 'desired_margin', 50)  # 初始目标差距
         self.normal_dataset = client_datasets
         self.poisoned_indices = poisoned_indices
         self.poisoning_proportion = 0.6
         self.global_logits = None
-        self.up_margin_step = 20
-        self.down_margin_step = 25
+        self.up_margin_step = getattr(args, 'up_margin_step', 20)
+        self.down_margin_step = getattr(args, 'down_margin_step', 25)
         self.factor = 3
         self.adjustment_rate = 0.1
         self.id = _id

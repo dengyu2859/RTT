@@ -17,6 +17,7 @@ import sys
 import os
 import logging
 from datetime import datetime
+from attack_artifacts import save_attack_artifacts
 
 
 def setup_logging(log_path):
@@ -61,11 +62,46 @@ def setup_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 
+def save_final_models(clients, model_names, args, trigger_files=None):
+    """Save each final client model with the metadata needed to rebuild it."""
+    model_dir = os.path.join(args.output_dir, 'models')
+    os.makedirs(model_dir, exist_ok=True)
+    config = vars(args).copy()
+    config['device'] = str(args.device)
+    with open(os.path.join(args.output_dir, 'config.yaml'), 'w', encoding='utf-8') as f:
+        yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
+    for client in clients:
+        checkpoint = {
+            'client_id': client.id,
+            'model_name': model_names[client.id],
+            'dataset': args.dataset,
+            'epoch': args.epochs,
+            'config': config,
+            'model_state_dict': {
+                name: tensor.detach().cpu()
+                for name, tensor in client.model.state_dict().items()
+            },
+        }
+        if args.attack:
+            checkpoint['attack_enabled'] = True
+            checkpoint['is_malicious_client'] = client.id in args.malicious
+            if trigger_files is not None:
+                checkpoint['trigger_files_reference'] = 'relative to experiment output directory'
+                checkpoint['trigger_files'] = {'global': trigger_files['global']}
+        model_path = os.path.join(model_dir, f'client_{client.id}.pth')
+        torch.save(checkpoint, model_path)
+        print(f'Saved final model: {model_path}')
+
+
 def FL(args):
     setup_seed(args.seed)
     utils.print_exp_details(args)
     args.device = torch.device('cuda:{}'.format(args.gpu) if
                                torch.cuda.is_available() and args.gpu != -1 else 'cpu')   # 选择GPU
+    if args.attack and not getattr(args, 'output_dir', None):
+        timestamp = getattr(args, 'timestamp', datetime.now().strftime('%Y-%m-%d_%H:%M'))
+        args.output_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'result', f'{args.dataset}_{timestamp}'))
 
     # 1 下载数据集, 非独立同分布设置
     train_dataset, test_dataset, client_datasets = utils.Download_data(args.dataset, '/home/a100/code/backdoor/dataset', args)
@@ -113,6 +149,11 @@ def FL(args):
         else:
             begin_client = Client(_id, args, loss_func, model_name[_id], poisoned_indices, client_datasets[_id], args.S, K, alpha)
             clients.append(begin_client)
+
+    trigger_files = None
+    if args.attack:
+        trigger_files = save_attack_artifacts(
+            args, distill_dataset, test_dataset, K, alpha, poisoned_indices)
 
     if args.aggregation == "DaFKD":
         for client in clients:
@@ -197,23 +238,42 @@ def FL(args):
             client_ai_asr_history[client.id].append(artificial_asr)
             print(f"Client {client.id} | Epoch {epoch}| Acc: {acc:.2f}, ASR: {asr:.2f} , Artificial ASR: {artificial_asr:.2f}")
 
+    if getattr(args, 'output_dir', None):
+        save_final_models(clients, model_name, args, trigger_files)
     utils.Visualize_results(client_acc_history, client_asr_history, client_ai_asr_history, args)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/SpeechCommands.yaml', required=False)
-    args = parser.parse_args()
-    with open(args.params) as f:
+    parser.add_argument('--clean-baseline', action='store_true', help='Disable all poisoning and malicious clients')
+    parser.add_argument('--output-dir', help='Directory for final client models and plots; logs go to stdout')
+    parser.add_argument('--gpu', type=int, help='Override the GPU in the YAML; -1 selects CPU')
+    cli_args = parser.parse_args()
+    with open(cli_args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
+    if cli_args.clean_baseline:
+        params['attack'] = 0
+        params['malicious'] = []
+    if cli_args.gpu is not None:
+        params['gpu'] = cli_args.gpu
+    # Output is opt-in and is controlled by the command line.
+    params.pop('output_dir', None)
+    if cli_args.output_dir:
+        params['output_dir'] = os.path.abspath(cli_args.output_dir)
     args = argparse.Namespace(**params)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M')
     args.timestamp = timestamp
-    result_dir = f'/home/a100/code/NBA/result/{args.dataset}_{timestamp}'
+    result_dir = getattr(args, 'output_dir', None) or f'/home/a100/code/NBA/result/{args.dataset}_{timestamp}'
     os.makedirs(result_dir, exist_ok=True)
-    log_path = f'{result_dir}/{args.dataset}_{timestamp}.txt'
-    setup_logging(log_path)
+    if cli_args.output_dir:
+        # The batch shell script captures stdout and stderr together in train.log.
+        with open(os.path.join(result_dir, 'config.yaml'), 'w', encoding='utf-8') as f:
+            yaml.safe_dump(vars(args), f, allow_unicode=True, sort_keys=False)
+    else:
+        log_path = f'{result_dir}/{args.dataset}_{timestamp}.txt'
+        setup_logging(log_path)
 
     try:
         FL(args)
