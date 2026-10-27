@@ -21,7 +21,8 @@
 \usepackage[most]{tcolorbox}
 \usepackage{fancyhdr}
 \usepackage{setspace}
-
+\usepackage{booktabs} % 提供三线表命令
+\usepackage{caption}  % 提供非浮动表格的标题命令
 % Hyperlinks (generally loaded near the end)
 \usepackage{hyperref}
 
@@ -342,9 +343,139 @@ In response to your comment, we have further refined the Attack Capability subse
 
 % ILLUSTRATIVE EXAMPLE ONLY -- replace with the actual review text.
 \reviewcomment{The definition and generalization of natural triggers require further clarification.
-RTT constructs natural-trigger samples by selecting the highest-scoring samples under a randomly initialized response direction. While this procedure produces a distinguishable subset in the chosen response space, it does not necessarily establish a transferable trigger condition. Section V-A states that the same response-score-based selection procedure is applied to the test dataset. The authors should clarify whether the threshold is fixed using the public distillation dataset or recomputed from the test distribution. More importantly, the ASR metric should be formally defined, including the evaluated sample population, excluded target-class samples, and distinction between natural-trigger and explicitly triggered inputs. Additional results on independently sampled test data, false-trigger behavior, and clean accuracy within the selected trigger subset would strengthen the evaluation.}
-\authorresponse{one}
-\revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
+RTT constructs natural-trigger samples by selecting the highest-scoring samples under a randomly initialized response direction. 
+While this procedure produces a distinguishable subset in the chosen response space, it does not necessarily establish a transferable trigger condition. 
+Section V-A states that the same response-score-based selection procedure is applied to the test dataset. The authors should clarify whether the threshold is fixed using the public distillation dataset or recomputed from the test distribution. 
+More importantly, the ASR metric should be formally defined, including the evaluated sample population, excluded target-class samples, and distinction between natural-trigger and explicitly triggered inputs. 
+Additional results on independently sampled test data, false-trigger behavior, and clean accuracy within the selected trigger subset would strengthen the evaluation.}
+
+\authorresponse{We sincerely thank you for your careful review of our manuscript and constructive comments. 
+Your comments on the generalization ability of natural triggers, the definition of evaluation metrics, and false-trigger behavior have helped us further refine our evaluation methodology and improve the rigor and completeness of our experimental analysis. 
+
+In response to your comment, we have further clarified how the natural-trigger condition is determined, refined the definitions of the evaluation metrics, and conducted additional experiments on independent test data to assess the generalization ability and false-trigger behavior of natural triggers.
+
+\textbf{First, regarding the determination of the natural-trigger condition.}
+We have further clarified how the trigger direction and threshold are determined and used in the Evaluation Metrics section of the revised manuscript.
+Specifically, the random trigger direction $\mathbf{K}$ is determined during training, while the trigger threshold $\xi$ is determined from the public distillation dataset $\mathcal{D}_d$.
+Both remain fixed during testing and are not recalculated or adjusted using the test data.
+Therefore, the natural-trigger condition can be directly applied to independent test data, and its effectiveness does not depend on reselection or optimization using the test set.
+
+\textbf{Second, regarding the definition of ASR and the evaluation sample population.}
+We have added formal definitions of natural-trigger ASR, explicit-trigger ASR, and ACC in the Evaluation Metrics section of the revised manuscript.
+Specifically, for each dataset, we select non-target-class samples satisfying $g(\mathbf{x}) \geq \xi$ from the independent test set to construct $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, while the remaining test samples form $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$.
+Natural-trigger ASR is computed on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, which excludes samples belonging to the backdoor target class.
+Since the triggers used in conventional FL backdoor attacks do not naturally occur in test samples, explicit trigger injection is required to evaluate backdoor activation.
+Therefore, we also conduct a supplementary explicit-trigger evaluation to examine whether RTT can activate the backdoor through explicit trigger injection.
+Specifically, we add the random trigger direction $\mathbf{K}$ to test samples in $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ and exclude target-class samples when computing explicit-trigger ASR.
+Furthermore, ACC in the main comparative experiments is computed on $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$, including target-class samples, to evaluate normal classification performance.
+
+\textbf{Finally, regarding the generalization ability and false-trigger behavior of natural triggers on independent test data.}
+Following your suggestion, we have conducted additional natural-trigger generalization experiments on the independent test set of each dataset.
+We evaluate the coverage of the natural-trigger condition and compare the ASR and ACC of the clean model (w/o) and RTT on natural-trigger samples, as well as their ASRs on non-natural-trigger samples.
+
+As shown in Table V of the revised manuscript, the natural-trigger condition achieves a coverage of 18.83\%--30.29\% across different datasets, demonstrating that the fixed trigger condition determined during training can be applied to unseen test samples.
+On $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, the ASR of w/o is only 0.13\%--1.24\%, whereas RTT achieves 82.15\%--96.38\%.
+Meanwhile, w/o maintains high classification accuracy on this subset, whereas the ACC of RTT decreases substantially.
+These results demonstrate that RTT redirects samples that would otherwise be correctly classified to the backdoor target class, validating the effectiveness of natural triggers on independent test data.
+
+
+In contrast, on non-target-class samples in $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$, RTT and w/o exhibit similarly low ASRs.
+The low ASRs of w/o indicates that, in the absence of an attack, the model rarely misclassifies these samples as the backdoor target class.
+The comparable results of RTT and w/o indicate that RTT also does not cause a substantial increase in misclassification of samples that do not satisfy the natural-trigger condition as the backdoor target class.
+Combined with the high ASR on natural-trigger samples, these results demonstrate that RTT's backdoor activation is primarily concentrated on samples satisfying the natural-trigger condition, while maintaining a low level of false triggering on samples that do not satisfy this condition.
+
+These revisions further clarify how the natural-trigger condition is determined and the evaluation scope of ASR, and provide additional experimental evidence from independent test data to validate the generalization ability of natural triggers and analyze their false-trigger behavior.
+}
+
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}
+{Let $y_b$ denote the backdoor target class.
+For each dataset, we use the random trigger direction $\mathbf{K}$ determined during training and the trigger threshold $\xi$ determined from the public distillation dataset $\mathcal{D}_d$ to construct two subsets from its independent test set.
+Non-target-class samples satisfying $g(\mathbf{x}) \geq \xi$ form $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, while the remaining test samples form $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$.
+Both $\mathbf{K}$ and $\xi$ remain fixed during testing and are not recalculated using the test data.
+
+We primarily evaluate attack effectiveness on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ using natural-trigger ASR, defined as
+\begin{equation}
+\mathrm{ASR}
+=
+\frac{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}}
+\mathbb{I}[\hat{y}(\mathbf{x})=y_b]
+}{
+|\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}|
+},
+\end{equation}
+where $\hat{y}(\mathbf{x})$ denotes the predicted class of the evaluated model.
+
+Since the triggers used in conventional FL backdoor attacks do not originate from the images themselves, explicit trigger injection is required to evaluate backdoor activation.
+As a supplementary evaluation, we also use the random trigger direction $\mathbf{K}$ as an explicit trigger and inject it into $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ to assess whether RTT can activate the backdoor on non-natural-trigger samples through explicit injection.
+Samples belonging to the backdoor target class are excluded when computing explicit-trigger ASR.
+The explicit-trigger ASR is defined as
+\begin{equation}
+\mathrm{ASR}_{\mathrm{exp}}
+=
+\frac{
+\sum_{\substack{
+(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}\\
+y\neq y_b
+}}
+\mathbb{I}[
+\hat{y}(\mathbf{x}+\mathbf{K})=y_b
+]
+}{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}}
+\mathbb{I}[y\neq y_b]
+}.
+\end{equation}
+
+For the main comparisons, ACC is computed on the same $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ for all evaluated methods using the ground-truth labels:
+\begin{equation}
+\mathrm{ACC}
+=
+\frac{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}}
+\mathbb{I}[\hat{y}(\mathbf{x})=y]
+}{
+|\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}|
+}.
+\end{equation}
+In the natural-trigger generalization experiment, we additionally report ACC on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ to assess classification performance on samples satisfying the natural-trigger condition.}
+
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}
+{\textbf{Natural-Trigger Generalization.}
+To evaluate the generalization ability of RTT's natural triggers, we assess ASR and ACC on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ and $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ from the independent test set of each dataset.
+As shown in the Table~\ref{natural_generalization}, coverage represents the proportion of $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ in the non-target-class test set, ranging from 18.83\% to 30.29\%, indicating that the fixed trigger condition can be applied to samples unseen during training.
+On $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, RTT achieves substantially higher ASR and lower ACC than w/o, indicating that RTT redirects samples that would otherwise be correctly classified to the backdoor target class.
+In contrast, on $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$, the low ASR of w/o indicates that the model rarely misclassifies non-trigger samples as the backdoor target, while the comparable results of RTT and w/o indicate that RTT does not substantially increase such misclassification, demonstrating a low level of false-trigger behavior.
+Overall, these results demonstrate that RTT's natural triggers generalize beyond the training data and effectively activate the backdoor on unseen samples.
+
+\begingroup
+\renewcommand{\thetable}{\Roman{table}}
+\setcounter{table}{4}
+\centering
+\captionof{table}{Natural-Trigger Generalization on Independent Test Data (\%). Results are reported as w/o / RTT, except for Coverage.}
+\label{natural_generalization}
+\setlength{\tabcolsep}{5pt}
+\renewcommand\arraystretch{1.1}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Coverage
+& $\mathrm{ASR}.\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$
+& $\mathrm{ACC}.\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$
+& $\mathrm{ASR}.\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ \\
+\midrule
+GTSRB           & 21.16     & 1.01/96.38    & 81.32/2.19  & 1.08/1.89 \\
+CIFAR-10        & 19.27     & 0.56/82.15    & 75.98/4.61  & 1.65/1.81 \\
+Tiny-ImageNet   & 30.29     & 0.19/82.46    & 57.14/6.25  & 0.21/0.58 \\
+Fashion-MNIST   & 28.02     & 0.93/84.06    & 89.43/4.28  & 0.72/1.07 \\
+LOAN            & 22.63     & 1.24/87.96    & 79.34/6.45  & 2.27/2.78 \\
+AG News         & 18.83     & 0.64/91.42    & 88.63/2.64  & 2.73/2.08 \\
+DBpedia         & 24.79     & 1.09/85.32    & 67.60/3.18  & 2.90/2.38 \\
+Speech Commands & 25.52     & 0.13/86.69    & 88.05/3.60  & 0.17/0.34 \\
+\bottomrule
+\end{tabular}
+\par
+\endgroup
+}
 
 
 \reviewcomment{The contribution of adaptive logits adjustment is not sufficiently isolated.
