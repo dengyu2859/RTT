@@ -5,6 +5,9 @@
 # Keep this allowlist under version control.
 !/.gitignore
 !/src/script/run_clean_baselines.sh
+!/src/script/run_desired_margin_sensitivity.sh
+!/src/script/run_logit_solver_ablation.sh
+!/src/script/run_logit_solver_ablation_all_datasets.sh
 
 # Documents, figures, source code, configurations, and text results.
 !*.[pP][dD][fF]

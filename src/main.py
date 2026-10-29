@@ -151,9 +151,9 @@ def FL(args):
             clients.append(begin_client)
 
     trigger_files = None
-    if args.attack:
-        trigger_files = save_attack_artifacts(
-            args, distill_dataset, test_dataset, K, alpha, poisoned_indices)
+    # if args.attack:
+    #     trigger_files = save_attack_artifacts(
+    #         args, distill_dataset, test_dataset, K, alpha, poisoned_indices)
 
     if args.aggregation == "DaFKD":
         for client in clients:
@@ -239,13 +239,19 @@ def FL(args):
             print(f"Client {client.id} | Epoch {epoch}| Acc: {acc:.2f}, ASR: {asr:.2f} , Artificial ASR: {artificial_asr:.2f}")
 
     if getattr(args, 'output_dir', None):
-        save_final_models(clients, model_name, args, trigger_files)
+        # save_final_models(clients, model_name, args, trigger_files)
+        # Keep experiment configuration while client model saving is disabled.
+        os.makedirs(args.output_dir, exist_ok=True)
+        config = vars(args).copy()
+        config['device'] = str(args.device)
+        with open(os.path.join(args.output_dir, 'config.yaml'), 'w', encoding='utf-8') as f:
+            yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
     utils.Visualize_results(client_acc_history, client_asr_history, client_ai_asr_history, args)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/SpeechCommands.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/CIFAR10.yaml', required=False)
     parser.add_argument('--clean-baseline', action='store_true', help='Disable all poisoning and malicious clients')
     parser.add_argument('--output-dir', help='Directory for final client models and plots; logs go to stdout')
     parser.add_argument('--gpu', type=int, help='Override the GPU in the YAML; -1 selects CPU')

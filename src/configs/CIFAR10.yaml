@@ -1,5 +1,5 @@
 
-gpu: 0
+gpu: 1
 dataset: CIFAR10
 num_classes: 10
 model: resnet20
@@ -28,7 +28,11 @@ aggregation: mean   # Krum,mean,AFA,Trim,DaFKD
 S: 28
 beta: 0.4 # 中毒比例
 target_prob: 0.95
-desired_margin: 50       # 初始目标 logit 差距
+logit_solver: closed_form       # adam: 原迭代求解；closed_form: 闭式最优解
+logit_update_mode: full  # full: 优化全部 logits；target_only: 仅优化目标类别
+use_global_feedback: true  # false: 每轮增加 up_margin_step，并取消全局匹配损失
+adaptive_margin: true    # 仅全局反馈开启时生效：true 自适应；false 固定 margin
+desired_margin: 50       # 初始 margin；开启全局反馈且关闭自适应时为固定值
 up_margin_step: 20       # 每次增加的差距
 down_margin_step: 25     # 每次减少的差距
 seed: 20250927

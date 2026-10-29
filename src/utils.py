@@ -1359,7 +1359,18 @@ def print_exp_details(args):
     print(f'    Beta (poison ratio): {args.beta}')
     print(f'    Target Prob: {args.target_prob}')
     if args.attack and args.attack_type == 'Following_Nature':
-        print(f"    Initial Desired Margin: {getattr(args, 'desired_margin', 50)}")
+        adaptive_margin = getattr(args, 'adaptive_margin', True)
+        use_global_feedback = getattr(args, 'use_global_feedback', True)
+        margin_mode = ('adaptive' if adaptive_margin else 'fixed') if use_global_feedback else 'increase_only'
+        print(f"    Global Logit Feedback: {'enabled' if use_global_feedback else 'disabled'}")
+        print(f"    Margin Mode: {margin_mode}")
+        print(f"    Logit Update Mode: {getattr(args, 'logit_update_mode', 'full')}")
+        print(f"    Logit Solver: {getattr(args, 'logit_solver', 'adam')}")
+        if (not use_global_feedback and getattr(args, 'logit_update_mode', 'full') == 'full'
+                and getattr(args, 'logit_solver', 'adam') == 'closed_form'):
+            print('    Closed-form selection: minimum L2 change from original local logits')
+        margin_label = 'Fixed Desired Margin' if margin_mode == 'fixed' else 'Initial Desired Margin'
+        print(f"    {margin_label}: {getattr(args, 'desired_margin', 50)}")
         print(f"    Up Margin Step: {getattr(args, 'up_margin_step', 20)}")
         print(f"    Down Margin Step: {getattr(args, 'down_margin_step', 25)}")
     print(f'    Positions: {args.seed}')

@@ -1,4 +1,5 @@
 import copy
+import time
 import torch.nn as nn
 import torch
 import utils
@@ -15,7 +16,21 @@ from torch.utils.data import Dataset, DataLoader, ConcatDataset
 # 恶意客户端
 class Malicious_client():
     def __init__(self, _id, args, loss_func, model_type, poisoned_indices, client_datasets):
-        self.desired_margin = getattr(args, 'desired_margin', 50)  # 初始目标差距
+        self.desired_margin = getattr(args, 'desired_margin', 50)  # 初始或固定目标差距
+        self.adaptive_margin = getattr(args, 'adaptive_margin', True)
+        if not isinstance(self.adaptive_margin, bool):
+            raise ValueError('adaptive_margin must be a YAML boolean: true or false')
+        self.use_global_feedback = getattr(args, 'use_global_feedback', True)
+        if not isinstance(self.use_global_feedback, bool):
+            raise ValueError('use_global_feedback must be a YAML boolean: true or false')
+        self.logit_solver = getattr(args, 'logit_solver', 'adam')
+        if self.logit_solver not in ('adam', 'closed_form'):
+            raise ValueError('logit_solver must be adam or closed_form')
+        self.logit_solver_seconds = 0.0
+        self.logit_solver_samples = 0
+        self.logit_update_mode = getattr(args, 'logit_update_mode', 'full')
+        if self.logit_update_mode not in ('full', 'target_only'):
+            raise ValueError('logit_update_mode must be full or target_only')
         self.normal_dataset = client_datasets
         self.poisoned_indices = poisoned_indices
         self.poisoning_proportion = 0.6
@@ -115,26 +130,73 @@ class Malicious_client():
         modified_logits = all_logits.clone()
         mean_p_target = 0.0
         if epoch > 1:
-            group_probs = torch.softmax(self.global_logits, dim=1)
-            p_target_group = group_probs[:, self.args.back_target]
-            mean_p_target = p_target_group.mean()
+            if self.use_global_feedback:
+                group_probs = torch.softmax(self.global_logits, dim=1)
+                p_target_group = group_probs[:, self.args.back_target]
+                mean_p_target = p_target_group.mean()
 
-            # 2️⃣ 动态调整目标差距
-            if mean_p_target < self.args.target_prob:
-                self.desired_margin += self.up_margin_step  # 未达标，增大差距
-            if mean_p_target >= 0.4:
-                self.desired_margin -= self.down_margin_step
-            # print("Mean target prob:", mean_p_target.item())
+                # 固定模式保留目标差距；自适应模式按全局反馈调整。
+                if self.adaptive_margin:
+                    if mean_p_target < self.args.target_prob:
+                        self.desired_margin += self.up_margin_step  # 未达标，增大差距
+                    if mean_p_target >= 0.4:
+                        self.desired_margin -= self.down_margin_step
+            else:
+                # 无反馈消融：忽略 adaptive_margin，每轮按预设步长递增。
+                self.desired_margin += self.up_margin_step
 
+        print(f"Client {self.id} | Epoch {epoch} | desired_margin: {self.desired_margin}")
+
+        solver_started = time.perf_counter() if epoch > 1 else None
+        solved_samples = 0
         for idx in self.poisoned_indices:
 
             if idx < len(modified_logits) and epoch > 1:  # 确保索引有效
                 # modified_logits[idx, :] = -100.0  # 将所有类 logit 设为负值
                 # modified_logits[idx, self.args.back_target] = 50.0  # 将后门类 logit 设为正值
                 modified_logits[idx, :] = self.optimize_poisoned_logits_by_margin(all_logits[idx], idx, epoch, mean_p_target)
+                solved_samples += 1
+        if solver_started is not None:
+            self.logit_solver_seconds += time.perf_counter() - solver_started
+            self.logit_solver_samples += solved_samples
+        if epoch == self.args.epochs:
+            print(
+                f"Client {self.id} | Epoch {epoch} | Logit Solver Timing | "
+                f"solver: {self.logit_solver} | solver_seconds_total: {self.logit_solver_seconds:.8g} | "
+                f"solver_samples_total: {self.logit_solver_samples}"
+            )
+            self._log_logit_deviation(all_logits, modified_logits, epoch)
         all_logits = modified_logits
 
         return all_logits
+
+    def _log_logit_deviation(self, original_logits, modified_logits, epoch):
+        """Report final-round per-sample L2 and cosine against original local logits."""
+        indices = [int(idx) for idx in self.poisoned_indices
+                   if 0 <= idx < len(original_logits)]
+        l2_mean = cosine_mean = 'N/A'
+        cosine_samples = 0
+        if indices:
+            with torch.no_grad():
+                before = original_logits[indices].detach().double()
+                after = modified_logits[indices].detach().double()
+                l2 = torch.linalg.vector_norm(after - before, ord=2, dim=1)
+                l2_mean = f'{l2.mean().item():.8g}'
+                before_norm = torch.linalg.vector_norm(before, ord=2, dim=1)
+                after_norm = torch.linalg.vector_norm(after, ord=2, dim=1)
+                # 零向量的余弦没有定义；L2 仍统计这些样本。
+                valid = (before_norm > 0) & (after_norm > 0)
+                cosine_samples = int(valid.sum().item())
+                if cosine_samples:
+                    before_unit = before[valid] / before_norm[valid].unsqueeze(1)
+                    after_unit = after[valid] / after_norm[valid].unsqueeze(1)
+                    cosine = (before_unit * after_unit).sum(dim=1).clamp(-1, 1)
+                    cosine_mean = f'{cosine.mean().item():.8g}'
+        print(
+            f"Client {self.id} | Epoch {epoch} | Logit Deviation | "
+            f"l2_mean: {l2_mean} | cosine_mean: {cosine_mean} | "
+            f"selected_samples: {len(indices)} | cosine_samples: {cosine_samples}"
+        )
 
     # 客户端蒸馏
     def local_distill(self, distill_dataset, avg_logits, epoch, verbose=False):
@@ -309,6 +371,13 @@ class Malicious_client():
                                            lr=1.0,
                                            num_steps=100):
 
+        if self.logit_solver == 'closed_form':
+            return self._solve_poisoned_logits_closed_form(L_star, idx)
+
+        if self.logit_update_mode == 'target_only':
+            return self._optimize_target_logit_by_margin(
+                L_star, idx, lr=lr, num_steps=num_steps)
+
         target = self.args.back_target
 
         # 3️⃣ 优化 L_star，使其达到 desired_margin
@@ -324,9 +393,11 @@ class Malicious_client():
 
             # 损失：逼近 desired_margin
             margin_loss = (margin - self.desired_margin) ** 2
-            match_loss = torch.nn.functional.mse_loss(L_star, self.global_logits[idx])
-
-            loss = margin_loss + match_loss
+            if self.use_global_feedback:
+                match_loss = torch.nn.functional.mse_loss(L_star, self.global_logits[idx])
+                loss = margin_loss + match_loss
+            else:
+                loss = margin_loss
 
             loss.backward()
             optimizer.step()
@@ -339,6 +410,67 @@ class Malicious_client():
 
         return L_star.detach()
 
+
+    def _optimize_target_logit_by_margin(self, logits, idx, lr=1.0, num_steps=100):
+        """Optimize the target scalar while preserving all other original logits."""
+        target = self.args.back_target
+        fixed_logits = logits.detach().clone()
+        target_logit = fixed_logits[target].float().clone().requires_grad_(True)
+        other_logits = torch.cat([fixed_logits[:target], fixed_logits[target + 1:]])
+        other_mean = other_logits.float().mean()
+        if self.use_global_feedback:
+            reference = self.global_logits[idx].detach().to(
+                device=fixed_logits.device, dtype=torch.float32)
+        optimizer = torch.optim.Adam([target_logit], lr=lr)
+
+        for step in range(num_steps):
+            optimizer.zero_grad()
+            margin = target_logit - other_mean
+            margin_loss = (margin - self.desired_margin) ** 2
+            if self.use_global_feedback:
+                candidate = fixed_logits.float().clone()
+                candidate[target] = target_logit
+                match_loss = F.mse_loss(candidate, reference)
+                loss = margin_loss + match_loss
+            else:
+                loss = margin_loss
+            loss.backward()
+            optimizer.step()
+
+        result = fixed_logits.clone()
+        result[target] = target_logit.detach()
+        return result.detach()
+
+    @torch.no_grad()
+    def _solve_poisoned_logits_closed_form(self, logits, idx):
+        """Solve the same quadratic; without feedback, choose minimum local L2 change."""
+        original = logits.detach().double()
+        classes = original.numel()
+        if classes < 2:
+            raise ValueError('Logit adjustment requires at least two classes')
+        target = self.args.back_target
+        if self.use_global_feedback:
+            reference = self.global_logits[idx].detach().to(
+                device=original.device, dtype=original.dtype)
+
+        if self.logit_update_mode == 'target_only':
+            other_mean = torch.cat([original[:target], original[target + 1:]]).mean()
+            target_value = self.desired_margin + other_mean
+            if self.use_global_feedback:
+                # Matching uses mean over C classes, so its scalar coefficient is 1/C.
+                target_value = (classes * target_value + reference[target]) / (classes + 1)
+            result = logits.detach().clone()
+            result[target] = target_value.to(dtype=result.dtype)
+            return result
+
+        direction = torch.full_like(original, -1.0 / (classes - 1))
+        direction[target] = 1.0
+        base = reference if self.use_global_feedback else original
+        matching_coefficient = 1.0 / classes if self.use_global_feedback else 0.0
+        correction = (self.desired_margin - torch.dot(direction, base)) / (
+            torch.dot(direction, direction) + matching_coefficient)
+        result = base + correction * direction
+        return result.to(dtype=logits.dtype)
 
     # 这是SADBA攻击方法的代码
     def get_target_feature_center(self):
