@@ -1,0 +1,1296 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{pifont}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% ========== 全局高亮开关 ==========
+\newif\ifhighlight
+\highlighttrue            % 开启高亮
+% \highlightfalse         % 关闭高亮
+
+% ========== 审稿人对应颜色 ==========
+\definecolor{reviewer1}{RGB}{255, 0, 0}    % 红色
+\definecolor{reviewer2}{RGB}{0, 0, 255}    % 蓝色
+\definecolor{reviewer3}{RGB}{0, 150, 0}    % 绿色
+\definecolor{share}{RGB}{128,0,128}
+
+% ========== 高亮命令 ==========
+\newcommand{\hlone}[1]{%
+    \ifhighlight{\color{reviewer1}#1}\else#1\fi
+}
+
+\newcommand{\hltwo}[1]{%
+    \ifhighlight{\color{reviewer2}#1}\else#1\fi
+}
+
+\newcommand{\hlthree}[1]{%
+    \ifhighlight{\color{reviewer3}#1}\else#1\fi
+}
+
+\newcommand{\hlshare}[1]{%
+    \ifhighlight{\color{share}#1}\else#1\fi
+}
+
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\asr}[2]{$\text{#1} \pm \text{#2}$}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+
+\begin{document}
+
+\title{Reconnecting Trigger–Target: Awaken Backdoor Attacks in Knowledge-Distillation-Based \\ Federated Learning}
+
+\author{Anonymous Authors\vspace{2.0em}}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2021}%
+{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+% \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+
+\begin{abstract}
+Backdoor attacks are a significant security threat to Federated Learning (FL).
+Attackers establish trigger-target associations through poisoned local training and propagate them via parameter aggregation.
+However, Knowledge-Distillation-based Federated Learning (KD-FL) disrupts this propagation mechanism.
+To address model heterogeneity caused by varying computational capabilities across edge devices, KD-FL replaces parameter sharing with logit exchange on a clean server-maintained distillation dataset.
+Since attacker-injected triggers are absent from the distillation dataset, the corresponding logits do not exhibit bias toward the backdoor target.
+Consequently, the trigger-target association is disrupted, limiting the effectiveness of conventional FL backdoor attacks in KD-FL.
+Nevertheless, this does not imply that KD-FL can completely avoid backdoor risks.
+To reveal this potential threat, we propose RTT, a backdoor attack method tailored for KD-FL. 
+RTT constructs a set of natural-trigger samples from the unmodified distillation dataset based on local response patterns, and applies an adaptive logits adjustment strategy to bias the aggregated logits toward the backdoor target, thereby reconstructing a stable trigger-target association during the distillation process.
+Extensive experiments demonstrate that RTT can effectively rebuild trigger-target associations in KD-FL, achieving a backdoor attack success rate of approximately 87\%, revealing previously overlooked backdoor risks in KD-FL frameworks.
+% To address model heterogeneity in FL, clients in KD-FL no longer share model parameters.
+% Instead, they compute and exchange logits on a clean server-maintained distillation dataset.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Federated learning, Backdoor attack, Knowledge distillation, Natural trigger, Trigger–target association.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Federated Learning (FL)~\cite{FL1,FL2} has emerged as an important distributed learning paradigm for privacy preservation in edge-cloud environments, enabling multiple clients to collaboratively train models through parameter aggregation without sharing their private data.
+However, this collaborative training mechanism also exposes FL to the threat of backdoor attacks.
+In backdoor attacks, attackers control the training process of malicious clients, causing the model to maintain normal predictive performance on clean samples while predicting an attacker-specified target class when a trigger is present~\cite{Beyond,backdoor1}.
+Most existing FL backdoor attacks rely on poisoning local training data, where attacker-designed triggers are injected into samples and their labels are modified to the target class~\cite{backdoor2}.
+Through local training on poisoned data, the local model learns the trigger-target association, which is subsequently propagated through parameter aggregation.
+Therefore, the effectiveness of existing FL backdoor attacks largely depends on the parameter aggregation mechanism under homogeneous-model settings.
+
+In real-world FL deployments, edge devices participating as clients exhibit significant differences in computing capabilities~\cite{Computingpower1,Computingpower2}, making it difficult for a unified homogeneous model to be applicable to all clients.
+This has motivated the development of model-heterogeneous FL~\cite{Heterogeneous1,Heterogeneous2}.
+In particular, Knowledge-Distillation-based Federated Learning (KD-FL) allows clients with different model architectures to independently perform local training and predict logits on a server-provided distillation dataset, thereby transferring knowledge through logits rather than model parameters~\cite{Distillation_others1}.
+Unlike heterogeneous FL methods that rely on partial parameter sharing or partial parameter contributions~\cite{PT-FL}, KD-FL supports completely different model architectures and significantly improves the practicality of FL in model-heterogeneous scenarios.
+However, since KD-FL changes the knowledge carrier from model parameters to logits, the parameter-dependent propagation mechanism of conventional FL backdoor attacks is disrupted.
+
+\begin{table}[t]
+\centering\caption{Performance of FL Backdoor Attacks under KD-FL on the CIFAR-10 Dataset.}
+\renewcommand\arraystretch{1.2}      
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{>{\centering\arraybackslash}p{1.0cm}
+                >{\centering\arraybackslash}p{1.4cm}
+                >{\centering\arraybackslash}p{1.4cm}
+                >{\centering\arraybackslash}p{1.4cm}
+                >{\centering\arraybackslash}p{1.4cm}}
+\toprule
+           & DBA          & Bad-PFL   & SABLE       & SADBA    \\ \hline
+ACC        & 80.61\%      & 69.79\%   & 79.58\%     & 71.81\%  \\
+ASR        & 5.17\%       & 17.88\%   & 2.45\%      & 1.74\%   \\ 
+\bottomrule
+\end{tabular}
+\label{kdfl_cifar10_backdoor}
+\end{table}
+
+As shown in Table~\ref{kdfl_cifar10_backdoor}, when existing FL backdoor attacks are directly applied to KD-FL, their attack success rates decrease significantly.
+In KD-FL, logits are generated exclusively on a clean distillation dataset maintained by the server.
+Since this dataset cannot be modified by the attacker, it contains no attacker-injected triggers.
+Therefore, logits predicted on the clean distillation dataset fail to carry a stable bias toward the backdoor target.
+\textbf{This fundamentally invalidates backdoor attacks designed under the conventional FL paradigm, as the presence of the trigger is a necessary precondition for establishing and propagating the trigger-target association}~\cite{backdoor3}.
+As a result, the trigger-conditioned behavior learned by a poisoned local model is never activated during knowledge exchange, preventing the trigger-target association from being transmitted through logits.
+
+\hlone{Some FL backdoor attacks construct triggers from intrinsic local sample features, which may be absent from public distillation data. Consequently, logits inferred on the distillation data fail to exhibit a bias toward the backdoor target, leading to the breakdown of trigger–target associations during knowledge distillation~\cite{SADBA,edge-case,Bad_PFL}.
+Although ManipulatingKD~\cite{ManipulatingKD} and FDLA~\cite{FDLA} manipulate logits, their manipulations lack a specific backdoor target and do not involve trigger construction, resulting in the absence of trigger–target associations.
+Among backdoor attacks specifically designed for KD-FL, FD-DBA~\cite{liu2026distributed} optimizes triggers by locally simulating knowledge distillation to enhance the propagation of trigger–target associations. However, since these triggers are absent from the public distillation dataset, the logits generated on this dataset fail to consistently favor the backdoor target, leading to the breakdown of trigger–target associations during actual knowledge distillation.}
+
+\hlone{Based on the above analysis, the key to implementing a backdoor attack lies in directly reconstructing the association between triggers and the backdoor target during knowledge distillation.}
+Therefore, we propose \textbf{RTT}: \textbf{R}econnecting \textbf{T}rigger–\textbf{T}arget to Awaken Backdoor Attacks in Knowledge-Distillation-Based Federated Learning.
+In the KD-FL setting, attackers cannot modify the distillation data provided by the server. 
+To address this, we introduce Natural Triggers by selecting samples from the distillation dataset that share specific intrinsic feature patterns and using them as natural-trigger samples.
+Furthermore, we apply a global feedback-based, adaptive target-directed adjustment strategy to the logits corresponding to these samples, amplifying the dominance of the target class in the logits distribution after logits aggregation, thereby reconstructing the association between the triggers and the backdoor target.
+Through these designs, we successfully reconstruct the trigger-target association, enabling backdoor attacks to propagate via the distillation process and achieve effective attacks on KD-FL frameworks.
+
+In summary, our contributions are as follows:
+
+\begin{itemize}
+
+\item We analyze the failure of conventional backdoor attacks in KD-FL from the perspective of propagation mechanisms.
+\hlone{Based on this analysis, we propose a new attack strategy that directly reconstructs the trigger–target association during knowledge distillation without modifying the server-provided distillation dataset.}
+
+\item \hlone{To realize this strategy, we propose Natural Trigger Construction and global feedback-based Adaptive Logit Adjustment.
+Natural Trigger Construction exploits intrinsic features of the distillation dataset to construct natural triggers, while Adaptive Logit Adjustment adjusts the logits based on global feedback to connect the triggers with the backdoor target, enabling stable propagation of trigger–target associations during knowledge distillation.}
+
+
+\item We conduct extensive experiments on datasets across multiple modalities.
+Experimental results demonstrate that RTT can successfully implement backdoor attacks in KD-FL, achieving an average attack success rate (ASR) of approximately 87\% on heterogeneous client models and significantly outperforming state-of-the-art methods. 
+
+\end{itemize}
+
+
+\section{Related Work}
+\hltwo{FL security research has extensively investigated data- and model-poisoning backdoor attacks and their corresponding defenses~\cite{Wan2024Survey}, while also addressing the trustworthiness of participating clients. Rashid et al.~\cite{Rashid2025TFFL} propose reputation-based consensus and adaptive incentives to assess client reliability and regulate participation in federated training. 
+While these studies address different aspects of FL security, the propagation of backdoor associations also depends on how knowledge is exchanged among participating clients.}
+
+\subsection{KD-FL}
+KD-FL transforms the traditional parameter aggregation in FL into aggregation of predictive knowledge (logits), effectively alleviating the dependency on model homogeneity~\cite{FL_Heterogeneous_survey,different_model}. 
+FedMD~\cite{Distillation-FedMD} has been widely adopted as a foundational KD-FL framework: clients can independently train heterogeneous models on their local data and predict logits on a server-provided clean public distillation dataset for upload. 
+The server aggregates logits from multiple clients to produce global logits, which are then returned as a distillation supervision signal to guide further client model updates, enabling knowledge sharing across heterogeneous models.
+
+Building upon this framework, subsequent works have proposed more refined logits aggregation strategies to effectively improve the model's training performance~\cite{Distillation_agg2,agg}.
+Another study focuses on reducing the communication cost among clients~\cite{communication}.
+A study introduces more flexible distillation processes or intermediate representations on the server side to enhance the fusion of predictions from different clients~\cite{Distillation_agg3}.
+Other studies leverage synthetic data~\cite{Distillation_agg1}, such as that based on GAN networks, feature representations, and other statistical information to reduce reliance on public data~\cite{Distillation_datafree2,Distillation_datafree3}.
+Additionally, some methods enhance the training stability of KD-FL when facing client data under Non-Independent and Identically Distributed (Non-IID) conditions~\cite{Distillation_datafree4,Distillation_datafree_noiid}.
+
+Although KD-FL improves model heterogeneity, its logits-based knowledge transfer fundamentally changes the attack surface compared with conventional parameter-aggregation FL.
+
+\hlone{
+\subsection{Backdoor Attacks in KD-FL}
+Backdoor attacks in FL establish trigger–target associations through local poisoned training and propagate them via parameter aggregation~\cite{3DFed,DBA}.
+However, KD-FL exchanges logits on clean distillation data without injected triggers, disrupting backdoor propagation.
+To improve the propagation of trigger–target associations, SADBA~\cite{SADBA} and IBA~\cite{IBA} designs triggers that better align with the semantic characteristics of samples.
+Edge-case~\cite{edge-case} directly exploits tail-class samples as triggers, while Bad-PFL~\cite{Bad_PFL} constructs triggers using features of target-class samples.
+These methods exploit intrinsic features of local samples to align triggers with sample semantics, thereby enhancing the stability of backdoor associations.
+However, feature discrepancies between local and public distillation samples, together with the lack of target-directed logit adjustment, lead to the breakdown of trigger–target associations during knowledge distillation.
+
+For backdoor attacks specifically designed for KD-FL, Fed-EBD~\cite{FedEBD} propagates backdoor associations by injecting triggers into public distillation data. However, attackers typically cannot modify such data, limiting its practical applicability.
+FD-DBA~\cite{liu2026distributed} employs a local substitute model to simulate knowledge distillation and optimize triggers to adapt them to the distillation process.
+However, the optimized triggers are not directly present in the public distillation dataset, causing the inferred logits to exhibit insufficient bias toward the backdoor target. This weak target bias, coupled with the lack of direct target-directed logit adjustment, makes trigger–target associations prone to breakdown during knowledge distillation.}
+
+\hltwo{These methods primarily focus on designing or optimizing triggers to align with natural data characteristics or adapt to knowledge distillation. In contrast, RTT constructs natural triggers directly from intrinsic patterns in the unmodified public distillation data, ensuring that trigger conditions are inherently present in the samples used for knowledge exchange and thereby providing a direct carrier for propagating trigger--target associations.}
+
+
+\hlone{
+\subsection{Poisoning Attacks in KD-FL}
+Some poisoning attacks in KD-FL directly manipulate uploaded logits.
+ManipulatingKD~\cite{ManipulatingKD} constructs malicious logits through constrained optimization to disrupt knowledge distillation.
+FDLA~\cite{FDLA} rearranges logit confidence rankings to induce incorrect class predictions.
+These methods manipulate logits to degrade the global model's accuracy during knowledge distillation. However, they neither specify a backdoor target nor construct triggers, and thus cannot establish trigger–target associations required for targeted backdoor attacks in KD-FL.
+}
+\hltwo{Unlike these untargeted poisoning methods, RTT does not aim to broadly disrupt knowledge distillation.
+Instead, it selectively adjusts the logits of natural-trigger samples toward a predefined backdoor target and adaptively regulates the adjustment magnitude based on feedback from aggregated logits.
+This targeted manipulation establishes and propagates trigger--target associations during knowledge distillation, while leaving the logits of the remaining public samples unchanged.}
+
+\begin{table}[t]
+\centering
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{5pt}
+\caption{Comparison of representative attacks from the perspective of attack objectives.}
+\begin{tabular}{lccc}
+\toprule
+Method 
+& KD-FL 
+& \makecell{Untargeted\\Poisoning}
+& \makecell{Backdoor\\Attack} \\
+\midrule
+SADBA~\cite{SADBA} 
+& \xmark & \xmark & \cmark \\
+
+Edge-case~\cite{edge-case} 
+& \xmark & \xmark & \cmark \\
+
+Bad-PFL~\cite{Bad_PFL} 
+& \xmark & \xmark & \cmark \\
+
+ManipulatingKD~\cite{ManipulatingKD} 
+& \cmark & \cmark & \xmark \\
+
+FDLA~\cite{FDLA} 
+& \cmark & \cmark & \xmark \\
+
+\hlone{DF-DBA}~\cite{liu2026distributed}
+& \hlone{\cmark} & \hlone{\xmark} & \hlone{\cmark} \\
+
+\midrule
+RTT 
+& \cmark & \xmark & \cmark \\
+\bottomrule
+\end{tabular}
+\label{attack_objective}
+\end{table}
+
+\subsection{Motivation and Positioning}
+\hltwo{
+As shown in Table~\ref{attack_objective}, existing attacks differ in their applicable frameworks and attack objectives. Trigger design methods focus on aligning triggers with natural features or adapting them to knowledge distillation, but do not ensure that trigger conditions are present in unmodified public distillation data. Logits poisoning methods manipulate exchanged knowledge but primarily aim at untargeted performance degradation. Therefore, the key challenge in KD-FL is not merely to improve trigger design or logits manipulation, but to establish and propagate trigger--target associations through knowledge exchange without modifying public distillation data.
+
+To address this challenge, RTT introduces distinct mechanisms for both trigger construction and logits adjustment. Natural Trigger Construction directly exploits intrinsic features of public distillation samples to establish trigger conditions, rather than designing or optimizing injected triggers. Adaptive Logit Adjustment dynamically regulates the difference between target-class and other-class logits based on global aggregation feedback, establishing and maintaining target-directed supervision for these samples. By operating on the same public distillation samples, the two components directly connect trigger conditions with target-class supervision during knowledge exchange, forming a unified mechanism for reconstructing and propagating trigger--target associations rather than an incremental combination of existing techniques.}
+
+\section{Preliminaries}
+
+\subsection{Knowledge Distillation based Federated Learning}
+
+KD-FL enables collaborative training on distributed private data by exchanging model logits between a server and clients, reducing the need for model homogeneity. In summary, KD-FL comprises the following steps:
+
+\textbf{Step 1:} Local logits prediction. 
+In a KD-FL epoch \(t\), client \(i\) first updates its local model parameters \(w_i^t\) using its private dataset \(\mathcal{D}_i\).
+The updated local model is then used to perform inference on the server-maintained public distillation dataset \(\mathcal{D}_d\).
+For each distillation sample \(x\in\mathcal{D}_d\), client \(i\) predicts the corresponding logits \(z_i^t(x)\), as shown in Eq.~\ref{eq:inference_logits}, with \(\mathcal{Z}_i^t\) denoting the set of logits predicted over \(\mathcal{D}_d\).
+\begin{equation}
+z_i^t(x)=f_i(x;w_i^t),\quad x\in\mathcal{D}_d,
+\label{eq:inference_logits}
+\end{equation}
+where \(f_i(\cdot;w_i^t)\) denotes the logit-output function of client \(i\)'s local model with parameters \(w_i^t\), and \(z_i^t(x)\) represents the predicted logits before the softmax operation.
+
+\textbf{Step 2:} Logits aggregation.
+The server collects the logit set \(\mathcal{Z}_i^t\) uploaded by each client.
+For each distillation sample \(x\in\mathcal{D}_d\), the server averages the corresponding logits uploaded by the clients to obtain the global logits \(\overline{z}^t(x)\), as shown in Eq.~\ref{eq:logits_aggregation}, where \(\mathcal{N}\) denotes the set of clients.
+
+\begin{equation}
+\overline{z}^t(x)=\frac{1}{|\mathcal{N}|}\sum_{i\in\mathcal{N}}z_i^t(x).
+\label{eq:logits_aggregation}
+\end{equation}
+
+The global logits over \(\mathcal{D}_d\) are denoted by \(\overline{\mathcal{Z}}^t\).
+
+\textbf{Step 3:} Distillation-based model update. 
+The server distributes \(\overline{\mathcal{Z}}^t\) to the clients, and each client updates its local model by minimizing the distillation loss on the public distillation dataset. 
+Here, $\ell(\cdot)$ denotes the distillation loss function, as shown in Eq.~\ref{eq:distillation_loss}.
+\begin{equation}
+\mathcal{L}_{\mathrm{KD}}=\frac{1}{|\mathcal{D}_d|}\sum_{x\in\mathcal{D}_d}\ell\left(f_i(x;w_i^t),\overline{z}^t(x)\right).
+\label{eq:distillation_loss}
+\end{equation}
+
+The above procedure is repeated over multiple KD-FL rounds, thereby enabling collaborative training among clients.
+
+\subsection{Threat Model}
+
+\subsubsection{Attack Objective}
+
+Conventional FL backdoor attacks inject poisoned samples into local datasets and establish the trigger-target association through local training on poisoned data.
+However, in KD-FL, knowledge is propagated through distillation on clean public data.
+Even if the local model has already been poisoned, the logits inferred from clean samples do not contain the trigger-target association.
+Therefore, the attacker must reconstruct the trigger-target association during the distillation process, such that it can be propagated through logits to poison benign clients with heterogeneous models.
+
+The attacker aims to implant a backdoor into benign clients with heterogeneous models in the KD-FL system. 
+Specifically, the poisoned models are expected to predict the attacker-specified target label \(y_b\) when samples with triggers are presented. 
+
+Formally, let \(w_i(\cdot)\) denote the model of client \(i\).
+A sample with a trigger and ground-truth label \(y\) is denoted by \(x^{\prime}\).
+For non-target samples, i.e., \(y\neq y_b\), the attack objective is formulated as:
+\begin{equation}
+w_i(x^{\prime})=y_b,\quad
+\forall i\in \mathcal{N}_\mathrm{ben},\ y\neq y_b,
+\label{eq:attack_objective}
+\end{equation}
+where \(\mathcal{N}_\mathrm{ben}\) denotes the set of benign clients.
+
+
+For clean samples without triggers, the poisoned models are expected to predict them as their ground-truth labels, as formulated in Eq.~\ref{eq:clean_obj}. 
+Specifically, the model accuracy (ACC) should remain close to that achieved by standard KD-FL training without backdoor attacks, as shown in Eq.~\ref{eq:acc_constraint}.
+\begin{equation}
+w_i(x)=y,\quad
+\forall i\in \mathcal{N}_{\mathrm{ben}}.
+\label{eq:clean_obj}
+\end{equation}
+\begin{equation}
+\mathrm{ACC}_{\mathrm{backdoor}} \approx \mathrm{ACC}_{\mathrm{w/o}}.
+\label{eq:acc_constraint}
+\end{equation}
+
+\subsubsection{Attack Capability}
+
+We consider a standard FL threat setting in which the attacker controls only a small subset of participating clients, which is denoted by $\mathcal{N}_\mathrm{mal}$.
+\hltwo{In each training round, all malicious clients, participate in federated training.}
+
+The attacker operates under a white-box setting on malicious clients.
+Specifically, the attacker has full access to the local training data and local model of malicious clients, and also has knowledge of the public distillation dataset \(\mathcal{D}_d\) and the KD-FL training protocol.
+\hltwo{The attacker has no prior knowledge of the server's aggregation rule, the total number of clients, or the deployed defense mechanisms.
+During training, the attacker can arbitrarily manipulate both the local training process, including the construction of poisoned local data, and the logits uploaded by malicious clients, with the manipulated logits denoted as:}
+\begin{equation}
+\widetilde{z}_i^t(x),\quad x\in \mathcal{D}d,\ i\in\mathcal{N}\mathrm{mal}.
+\label{eq}
+\end{equation}
+
+However, the attacker cannot modify the server maintained public distillation dataset \(\mathcal{D}_d\), cannot directly manipulate the server-side logits aggregation process, and cannot access the private data, local logits, model parameters, or model architectures of benign clients.
+In addition, the attacker cannot observe the internal distillation process of benign clients during KD-FL training.
+
+Therefore, the attacker must reconstruct and propagate the backdoor association solely through logits manipulation on clean public data.
+We further assume that the server honestly follows the standard KD-FL protocol to aggregate and redistribute logits without introducing additional malicious behaviors.
+This threat setting is consistent with commonly adopted assumptions in federated learning backdoor attack studies.
+
+
+\section{RTT}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{Overview.png}   
+\caption{Overview of RTT.}
+\label{fig:1}
+\end{figure*}
+
+The association between the triggers and target in a backdoor attack is disrupted during the knowledge distillation process in KD-FL. 
+To address this, we reconstruct the trigger-target association during logits prediction, enabling the backdoor to propagate to other clients via the logits.
+
+As illustrated in Fig.~\ref{fig:1}, the malicious client first initializes a random trigger direction \(\mathbf{K}\). For each distillation sample, it extracts the representation from a predefined local response region and computes the corresponding response score with respect to \(\mathbf{K}\).
+Samples with the highest response scores are selected to construct the natural-trigger dataset $\mathcal{D}_\mathrm{nat}$, while the remaining samples form $\mathcal{D}_\mathrm{clean}$. 
+Subsequently, after completing local fine-tuning on its private data, malicious client \(i\in\mathcal{N}_\mathrm{mal}\) performs forward inference on the distillation dataset to obtain the original logit set \(\mathcal{Z}_i^t\).
+This logit set is divided into \(\mathcal{Z}_{i,\mathrm{nat}}^t\) and \(\mathcal{Z}_{i,\mathrm{clean}}^t\) according to \(\mathcal{D}_\mathrm{nat}\) and \(\mathcal{D}_\mathrm{clean}\), respectively.
+During targeted logits adjustment, \(\mathcal{Z}_{i,\mathrm{nat}}^t\) is adjusted into \(\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t\) to steer the natural-trigger samples toward the backdoor target after aggregation, while \(\mathcal{Z}_{i,\mathrm{clean}}^t\) remains unchanged.
+Finally, the resulting malicious logit set \(\widetilde{\mathcal{Z}}_i^t=\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t\cup\mathcal{Z}_{i,\mathrm{clean}}^t\) is uploaded to the server.
+
+\subsection{Trigger Reconstruction}
+
+To reconstruct the trigger-target association, we first reconstruct the trigger. 
+Since the public distillation dataset provided by the server cannot be modified, we propose a representation-response-based method for constructing natural-trigger samples.
+
+Specifically, the malicious client randomly initializes a trigger direction 
+$\mathbf{K}\sim\mathcal{N}(\mathbf{0},\mathbf{I}_d)$, 
+where $\mathbf{I}_d$ denotes the $d$-dimensional identity matrix and each dimension is independently sampled to avoid introducing manually designed structures or semantic priors. 
+The trigger direction is further normalized as follows:
+\begin{equation}
+\hat{\mathbf{K}}=
+\frac{\mathbf{K}}
+{\|\mathbf{K}\|_2}.
+\label{eq:normalize_K}
+\end{equation}
+
+For each sample $\mathbf{x}_j$, we extract a representation vector from a predefined local response region and compute its response score with respect to the random trigger direction:
+\begin{equation}
+\mathbf{r}_j=\phi(\mathbf{x}_j)\in\mathbb{R}^{d},
+\label{eq:local_representation}
+\end{equation}
+
+where $\phi(\mathbf{x}_j)$ denotes the representation extracted from the predefined local response region of sample $\mathbf{x}_j$.
+
+In this work, the response computation is restricted to predefined local response regions to emulate the common setting of localized triggers in backdoor attacks. 
+To eliminate the influence of representation magnitude, the extracted representation is normalized as:
+\begin{equation}
+\hat{\mathbf{r}}_j=
+\frac{\mathbf{r}_j}
+{\|\mathbf{r}_j\|_2}.
+\label{eq:normalized_z}
+\end{equation}
+
+The response score is then computed by projecting the normalized representation onto the normalized trigger direction:
+\begin{equation}
+g(\mathbf{x}_j)=
+\hat{\mathbf{r}}_j^\top
+\hat{\mathbf{K}}.
+\label{eq:response_score}
+\end{equation}
+
+Subsequently, the attacker ranks the distillation samples according to the response score $g(\mathbf{x}_j)$ and selects a subset of samples with the highest scores to construct the natural-trigger dataset $\mathcal{D}_\mathrm{nat}$. 
+Specifically, the threshold $\xi$ is defined as the minimum response score among the top $\beta$ proportion of samples:
+\begin{equation}
+\xi=
+\min_{\mathbf{x}_j\in\mathcal{S}_{\beta}}
+g(\mathbf{x}_j),
+\label{eq:natural_trigger_threshold}
+\end{equation}
+where $\mathcal{S}_{\beta}$ denotes the subset consisting of the top $\beta$ proportion of samples ranked by response scores.
+
+The natural-trigger dataset is finally constructed as:
+\begin{equation}
+\mathcal{D}_\mathrm{nat}
+=
+\{
+\mathbf{x}_j
+\mid
+g(\mathbf{x}_j)\geq\xi
+\}.
+\label{eq:natural_trigger_dataset}
+\end{equation}
+
+
+Since the components of the random trigger direction $\mathbf{K}$ are independently initialized across different dimensions, samples with different local representations produce different response scores under this direction.
+
+By selecting samples with higher response scores, RTT constructs the natural-trigger dataset \(\mathcal{D}_\mathrm{nat}\), making it more distinguishable from the remaining clean dataset \(\mathcal{D}_\mathrm{clean}\) in the representation space.
+This response-based conditional selection process enables RTT to form stable and learnable natural triggers without modifying the original data.
+
+A theoretical analysis of the trigger reconstruction mechanism is provided in Appendix A of the supplementary material.
+
+\subsection{Backdoor Target Reconstruction}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\linewidth]{Logits_Adjustment.pdf}   
+\caption{Adjustment of $z_i^t(x) \in \mathcal{Z}_{i,\mathrm{nat}}^t$.}
+\label{Logits_Adjustment}
+\end{figure}
+
+After reconstructing the natural-trigger dataset \(\mathcal{D}_{\mathrm{nat}}\), we reconstruct the backdoor target by adjusting \(\mathcal{Z}_{i,\mathrm{nat}}^t\), the logits corresponding to these samples.
+
+In KD-FL, benign clients update their local models by distilling knowledge from the global logits \(\overline{\mathcal{Z}}^t\).
+Therefore, if the logits corresponding to natural-trigger samples in \(\overline{\mathcal{Z}}^t\) are biased toward the backdoor target, benign client models will be compelled to learn the association between the natural trigger and the target during distillation.
+To achieve this, we use the malicious client to adjust the logits \(\mathcal{Z}_{i,\mathrm{nat}}^t\) corresponding to natural-trigger samples, thereby affecting the global logits \(\overline{\mathcal{Z}}^t\) and making them provide target-biased supervision on these samples.
+
+Specifically, the predictive distribution of a model is obtained by normalizing logits with the softmax function.
+Since the softmax probability depends on the relative distribution of logits across classes, increasing the difference between the target-class logit and the logits of the other classes raises the probability assigned to the target class in the predictive distribution, thereby biasing the model prediction toward the backdoor target, as illustrated in Fig.~\ref{Logits_Adjustment}.
+
+However, if the difference between the target class and other classes in $\mathcal{Z}_{i,\mathrm{nat}}^t$ is too small, it may be diluted during aggregation, thereby failing to introduce a backdoor target in $\overline{\mathcal{Z}}^t$.
+Conversely, if the difference is too large, it may result in noticeable anomalies. 
+Moreover, elevating the target class alone typically requires a larger adjustment magnitude, which further amplifies these anomalies.
+
+To address the above issues, we propose a feedback-driven, load-balanced adaptive adjustment mechanism. 
+In round \(t\), we use \(\overline{\mathcal{Z}}^{t-1}\) as feedback to evaluate the impact of the adjusted natural-trigger logits \(\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^{t-1}\) from the previous round on the aggregation outcome. This enables the malicious client to determine the adjustment magnitude for \(\mathcal{Z}_{i,\mathrm{nat}}^t\) in the current round.
+
+After receiving the global logit set $\overline{\mathcal{Z}}^{t-1}$ from the server, the malicious client selects the aggregated logits corresponding to the sample indices of \(\mathcal{D}_\mathrm{nat}\) and applies the softmax function to them.
+It then computes the average probability \(\overline{p}^{t-1}_{y_b}\) that the natural-trigger samples are classified as the backdoor target, as shown in Eq.~\ref{eq:avg_target_probability}, where $|\mathcal{D}_\mathrm{nat}|$ denotes the number of natural-trigger samples, and $y_b$ represents the backdoor target.
+This probability reflects the extent to which natural-trigger samples are biased toward the backdoor target in the aggregated logits of the previous round, and can be used to evaluate the target-directed bias introduced by the adjusted logits \(\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^{t-1}\) in the aggregation outcome.
+\begin{equation}
+\overline{p}^{t-1}_{y_b}
+=
+\frac{1}{|\mathcal{D}_\mathrm{nat}|}
+\sum_{x\in\mathcal{D}_\mathrm{nat}}
+\mathrm{softmax}\left(\overline{z}^{t-1}(x)\right)_{y_b}
+\label{eq:avg_target_probability}
+\end{equation}
+
+We introduce an expected logit difference \(\delta^t\) to control the difference between the backdoor target logit and the logits of the other classes.
+The initial value is denoted by \(\delta^0\). Meanwhile, we introduce a target probability threshold \(\tau\) to evaluate whether the current target-directed bias in the aggregated logits is sufficient.
+
+When \(\overline{p}^{t-1}_{y_b}\) is lower than \(\tau\), it indicates that the target-directed bias introduced by \(\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^{t-1}\) in the previous round is still insufficient.
+Therefore, \(\delta^t\) is increased to strengthen the difference between the backdoor target class and the other classes.
+When \(\overline{p}^{t-1}_{y_b}\) reaches or exceeds \(\tau\), the difference is considered sufficient, and \(\delta^t\) is reduced to mitigate anomalies. The adaptive update of \(\delta^t\) is defined as follows:
+\begin{equation}
+\delta^t=
+\begin{cases}
+\delta^{t-1}+\Delta^+, & \overline{p}^{t-1}_{y_b}<\tau,\\
+\delta^{t-1}-\Delta^-, & \overline{p}^{t-1}_{y_b}\geq\tau,
+\end{cases}
+\label{eq:adaptive_delta_update}
+\end{equation}
+\hlone{Here, $\Delta^+$ and $\Delta^-$ denote the predefined step sizes for increasing and decreasing $\delta^t$, respectively.}
+
+\begin{algorithm}[t]
+    \caption{A Complete Description of RTT}
+    \label{Algorithm}
+    \textbf{Input}: $\mathcal{D}_i$; $\mathcal{D}_d$; $w_{i}$; backdoor target $y_b$; representation extractor $\phi(\cdot)$; $\lambda$; $\tau$; $\Delta^{+}$; $\Delta^{-}$; $\delta^0$; $\beta$; $T$: KD-FL rounds.\\
+    \textbf{Output}: \(\mathcal{D}_\mathrm{nat}\); \(\widetilde{\mathcal{Z}}_i^t\).
+    \begin{algorithmic}[1]
+        \STATE \textit{// Trigger reconstruction from the public distillation dataset.}
+        \STATE Initialize the random trigger direction $\mathbf{K}\sim\mathcal{N}(\mathbf{0},\mathbf{I}_d)$ and compute $\hat{\mathbf{K}}$ according to Eq.~\ref{eq:normalize_K}.
+        \FOR{each $\mathbf{x}_j\in\mathcal{D}_d$}
+            \STATE Extract the local representation $\mathbf{r}_j$ according to Eq.~\ref{eq:local_representation}.
+            \STATE Normalize $\mathbf{r}_j$ to obtain $\hat{\mathbf{r}}_j$ according to Eq.~\ref{eq:normalized_z}.
+            \STATE Compute the response score $g(\mathbf{x}_j)$ according to Eq.~\ref{eq:response_score}.
+        \ENDFOR
+        \STATE Determine the threshold $\xi$ according to Eq.~\ref{eq:natural_trigger_threshold}.
+        \STATE Construct $\mathcal{D}_\mathrm{nat}$ according to Eq.~\ref{eq:natural_trigger_dataset}.
+        \STATE $\mathcal{D}_\mathrm{clean}\leftarrow \mathcal{D}_d\setminus\mathcal{D}_\mathrm{nat}$.
+        
+        \FOR{$t = 1$ to $T$}
+            \STATE Update the model $w_i$ via distillation with $\overline{\mathcal{Z}}^{t}$ and $\mathcal{D}_d$.
+            \STATE Fine-tune $w_i$ using the private dataset $\mathcal{D}_i$.
+            \STATE Perform inference on $\mathcal{D}_d$ to obtain the original logits $\mathcal{Z}_i^t$.
+            \STATE Split \(\mathcal{Z}_i^t\) into \(\mathcal{Z}_{i,\mathrm{nat}}^{t}\) and \(\mathcal{Z}_{i,\mathrm{clean}}^{t}\) according to \(\mathcal{D}_\mathrm{nat}\) and \(\mathcal{D}_\mathrm{clean}\).
+            \STATE \textit{// Backdoor target reconstruction by logits adjustment.}
+            \STATE Compute $\overline{p}^{t-1}_{y_b}$ from $\overline{\mathcal{Z}}^{t-1}$ according to Eq.~\ref{eq:avg_target_probability}.
+            \STATE Update the expected difference $\delta^t$ according to Eq.~\ref{eq:adaptive_delta_update}.
+            \STATE \hlthree{Compute $z_i^{t,*}(x)$ for all $x\in\mathcal{D}_{\mathrm{nat}}$ using the closed-form solution in Eq.~\ref{eq:closed_form_logits}.
+            \STATE $\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t \leftarrow\{z_i^{t,*}(x)\mid x\in\mathcal{D}_{\mathrm{nat}}\}$.}
+            \STATE \(\widetilde{\mathcal{Z}}_i^t\leftarrow\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t\cup\mathcal{Z}_{i,\mathrm{clean}}^t\).
+            \STATE Upload \(\widetilde{\mathcal{Z}}_i^t\) to the server.
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+\hlthree{After obtaining the expected difference $\delta^t$, we design an optimization objective to adjust the logits of natural-trigger samples.
+To avoid introducing anomalies by directly amplifying the backdoor target logit, we adopt a load-balanced adjustment strategy.
+Specifically, for a sample $x\in\mathcal{D}_{\mathrm{nat}}$, let $z=[s_1,\dots,s_{y_b},\dots,s_c]$ denote the logits to be optimized, where $z_i^t(x)$ denotes the original logits, $s_y$ denotes the class-$y$ logit score, and $c$ denotes the total number of classes.
+
+We then define $d_i^t(z)$ as the difference between the backdoor target logit and the average logit of the other classes, as given in Eq.~\ref{eq:avg_logit_difference}.
+This difference measures the bias of the backdoor target class relative to the other classes.
+It guides the optimization to distribute the expected difference \(\delta^t\) across all classes, rather than only amplifying the target-class logit.
+\begin{equation}
+d_i^t(z)
+=
+s_{y_b}
+-
+\frac{1}{c-1}
+\sum_{y\neq y_b}s_y.
+\label{eq:avg_logit_difference}
+\end{equation}
+
+The corresponding objective is defined as follows:
+\begin{equation}
+\mathcal{L}_i^t(z)
+=
+\left(\delta^t-d_i^t(z)\right)^2
++
+\lambda\left\|z-z_i^t(x)\right\|_2^2.
+\label{eq:logits_adjustment_loss}
+\end{equation}
+
+The first term drives the logit difference toward the expected difference \(\delta^t\), thereby strengthening the bias of natural-trigger samples toward the backdoor target.
+The second term is Euclidean-distance regularization.
+It constrains the deviation of the optimized logits from the original logits $z_i^t(x)$, preventing excessive modifications.
+
+Since the objective in Eq.~\ref{eq:logits_adjustment_loss} is strictly convex for $\lambda>0$, it admits a unique closed-form minimizer.
+Let $\mathbf{a}\in\mathbb{R}^c$ be a coefficient vector, where $a_{y_b}=1$ and $a_y=-1/(c-1)$ for $y\neq y_b$. 
+By setting the gradient of Eq.~\ref{eq:logits_adjustment_loss} to zero, the optimal adjusted logits are obtained as
+\begin{equation}
+z_i^{t,*}(x)
+=
+z_i^t(x)
++
+\frac{
+\delta^t-\mathbf{a}^{\top}z_i^t(x)
+}{
+\lambda+\frac{c}{c-1}
+}\mathbf{a}.
+\label{eq:closed_form_logits}
+\end{equation}
+}
+\hlthree{The final adjusted logits are obtained as $\widetilde{z}_i^t(x)=z_i^{t,*}(x)$.}
+This adjustment influences the aggregated logits \(\overline{z}^t(x)\) of natural-trigger samples, thereby biasing them toward the backdoor target.
+
+RTT manipulates the logits of natural-trigger samples to provide persistent target-biased supervision toward the backdoor target, thereby gradually establishing a stable trigger-target association during knowledge distillation.
+Appendix B of the supplementary material provides a mechanism-level theoretical analysis showing how target-biased logits encourage the association between natural-trigger responses and the backdoor target during knowledge distillation.
+
+
+\begin{table*}[t]
+\centering
+\caption{Datasets and heterogeneous models.}
+\renewcommand\arraystretch{1.2}
+\begin{tabular}{
+>{\raggedright\arraybackslash}m{0.08\textwidth}
+>{\raggedright\arraybackslash}m{0.13\textwidth}
+>{\centering\arraybackslash}m{0.06\textwidth}
+>{\raggedright\arraybackslash}m{0.55\textwidth}
+}
+\toprule
+\textbf{Modality} & \textbf{Dataset} & \textbf{Classes} & \textbf{Client Models} \\
+\midrule
+\multirow{4}{*}{Image}
+& Fashion-MNIST & 10
+& CNN-2 (2-layer CNN), CNN-3 (3-layer CNN) \\
+& CIFAR-10 & 10
+& ResNet-18, AlexNet, VGG-11, DenseNet-121, CNN-3 (3-layer CNN) \\
+& GTSRB & 43
+& MobileNetV2, VGG-11, DenseNet-121, EfficientNet-B0, CNN-3 (3-layer CNN) \\
+& Tiny-ImageNet & 200
+& ResNet-50, DenseNet-121, MobileNetV2, ShuffleNetV2, EfficientNet-B0 \\
+\midrule
+\multirow{2}{*}{Text} & AG News       & 4   & \multirow{2}{*}{FastText, TextCNN, RCNN, BiLSTM-Attention, Transformer} \\
+                       & DBpedia       & 14  & \\
+\midrule
+Audio
+& Speech Commands & 35
+& AudioCNN, M5 (Raw-waveform CNN), DS-CNN (Depthwise Separable CNN), TC-ResNet (Temporal Residual CNN), CRNN (CNN+BiGRU) \\
+\midrule
+Tabular
+& LOAN & 6
+& MLP (3-layer), MLP (6-layer), Wide\&Deep, TabNet, TabCNN \\
+\bottomrule
+\end{tabular}
+\label{Datasets_and_Models}
+\end{table*}
+
+Algorithm~\ref{Algorithm} provides a complete description of RTT.
+Before KD-FL begins, the malicious client constructs the natural-trigger dataset $\mathcal{D}_\mathrm{nat}$ from the public distillation dataset according to the response scores, while the remaining samples form $\mathcal{D}_\mathrm{clean}$.
+During each KD-FL round, the malicious client first updates its local model using the global logits and private data, and then performs inference on $\mathcal{D}_d$ to obtain the original logits $\mathcal{Z}_i^t$. 
+The original logit set \(\mathcal{Z}_i^t\) is split into \(\mathcal{Z}_{i,\mathrm{nat}}^{t}\) and \(\mathcal{Z}_{i,\mathrm{clean}}^{t}\) according to \(\mathcal{D}_\mathrm{nat}\) and \(\mathcal{D}_\mathrm{clean}\).
+RTT then adaptively adjusts \(\mathcal{Z}_{i,\mathrm{nat}}^{t}\) based on the feedback from the global logit set \(\overline{\mathcal{Z}}^{t-1}\), while keeping \(\mathcal{Z}_{i,\mathrm{clean}}^{t}\) unchanged.
+Finally, the adjusted logits \(\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^{t}\) and the unchanged clean logits \(\mathcal{Z}_{i,\mathrm{clean}}^{t}\) are merged to form the uploaded malicious logit set \(\widetilde{\mathcal{Z}}_i^t\).
+
+Our method consists of two stages: trigger reconstruction and backdoor target reconstruction.
+The trigger reconstruction stage is performed before KD-FL training.
+In this stage, RTT computes a response score for each distillation sample and ranks all samples, resulting in a complexity of approximately $O(D\log D)$, where $D$ is the number of distillation samples.
+In each KD-FL round, the backdoor target reconstruction stage first computes the target probability feedback over the selected natural-trigger samples with a complexity of $O(Nc)$, and then \hlthree{directly adjusts their logits using the closed-form solution with a complexity of $O(Nc)$}, where $N=|\mathcal{D}_\mathrm{nat}|$ and $c$ is the number of classes.
+Therefore, after the trigger reconstruction stage, the additional complexity of RTT in each KD-FL round is approximately \hlthree{$O(Nc)$}.
+
+
+
+\section{Experiment}
+
+\subsection{Experimental Setup}
+
+\textbf{Hardware and Software Environment.}
+Our experiments are conducted on a Linux system equipped with an Intel i7-12700KF CPU, 128 GB of memory, and two NVIDIA RTX 4090 GPUs. 
+The software environment consists of Python 3.9 and PyTorch 2.0.1.
+
+% \textbf{Datasets and Models.} We conduct experiments on eight datasets spanning multiple modalities, including image data (Fashion-MNIST, CIFAR-10, Tiny-ImageNet, and GTSRB), text data (AG News and DBpedia), audio data (Speech Commands), and tabular data (LOAN).
+% Fashion-MNIST, as a relatively simple image dataset, is used to verify the robustness of RTT in constructing natural triggers on datasets with fewer features.
+% Table~\ref{Datasets_and_Models} summarizes the datasets and their corresponding heterogeneous model architectures.
+% For CIFAR-10 and Tiny-ImageNet, we initialize client models with ImageNet-pretrained weights to reduce training time.
+% The remaining datasets are trained from scratch.
+
+% For each dataset, we construct a set of heterogeneous models with varying complexities to simulate model heterogeneity arising from differences in computational capabilities across edge devices.
+% The image datasets cover visual scenarios ranging from simple (Fashion-MNIST, GTSRB and CIFAR-10) to highly complex (Tiny-ImageNet), with model architectures spanning lightweight CNNs to deep residual and dense networks.
+% The text datasets (AG News and DBpedia) incorporate diverse NLP architectures including embedding-based, convolutional, recurrent, and transformer-based models.
+% The audio dataset (Speech Commands) employs a mix of CNN, depthwise separable, residual, and recurrent architectures tailored for speech spectrogram inputs.
+% The tabular dataset (LOAN) covers both classical MLPs and specialized architectures such as TabNet and Wide\&Deep models.
+
+\textbf{Datasets and Models.} We conduct experiments on eight datasets spanning multiple modalities, including image data (Fashion-MNIST, CIFAR-10, Tiny-ImageNet, and GTSRB), text data (AG News and DBpedia), audio data (Speech Commands), and tabular data (LOAN).
+Fashion-MNIST, as a relatively simple image dataset, is used to verify the robustness of RTT in constructing natural triggers on datasets with fewer features.
+Table~\ref{Datasets_and_Models} summarizes the datasets and their corresponding heterogeneous model architectures.
+For each dataset, we employ models with varying computational complexities to simulate model heterogeneity arising from differences in computational capabilities across edge devices.
+For CIFAR-10 and Tiny-ImageNet, we initialize client models with pretrained weights to reduce training time, while models on the remaining datasets are trained from scratch.
+
+
+\textbf{KD-FL Settings.} We use FedMD as the primary KD-FL framework in our main experiments, as it is a classic KD-FL method.
+To evaluate the applicability of RTT to different KD-FL frameworks, we further select FedDF~\cite{Distillation_agg1} and DaFKD~\cite{Distillation_agg3} as supplementary KD-FL frameworks.
+FedDF performs knowledge distillation using generated data, representing a KD-FL setting with reduced dependence on real public distillation datasets.
+It is used to evaluate the stability of RTT in constructing natural triggers when the source of distillation data changes.
+DaFKD introduces a domain-aware weighting mechanism for aggregating client logits, thereby improving model performance under Non-IID data distributions and serving as an enhanced KD-FL aggregation framework.
+It is used to evaluate the stability of RTT in establishing the association between the triggers and the backdoor targets through poisoned logits when the logits aggregation mechanism changes.
+For logits aggregation, all clients compute logits on the public distillation dataset with a fixed sample order.
+The server aggregates the uploaded logits in a sample-aligned manner.
+
+We set the number of clients to 20 and partition all data under a Non-IID setting according to a Dirichlet distribution with parameter $\alpha = 0.5$, where a larger $\alpha$ indicates a lower degree of Non-IID~\cite{NON-IID}.
+We further vary the degree of Non-IID in the experiments.
+The parameter settings include 30 epochs of KD-FL training and 5 epochs of distillation, with each client performing 5 epochs of private training. 
+The learning rate for private training is set to $10^{-3}$, the distillation learning rate is $10^{-2}$, and the distillation temperature is 5. 
+The momentum is set to 0.9 for both the private training and distillation stages.
+
+We further deploy four logits-based defense methods on FedMD, including RLA~\cite{RLA}, FedTGD~\cite{FedTGD}, ExpGuard~\cite{ExpGuard}, and Selective-FD~\cite{agg}, to evaluate the robustness of RTT under defense scenarios.
+All defense experiments follow the same settings as the main experiments.
+
+\begin{figure*}[t]
+    \centering
+    \begin{minipage}[b]{0.24\textwidth} 
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_FashionMNIST.pdf}
+        \textbf{(a)} Fashion-MNIST
+    \end{minipage}
+    % \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_GTSRB.pdf}
+        \textbf{(b)} GTSRB
+    \end{minipage}
+    % \hspace{0.05\textwidth} 
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_CIFAR10.pdf}
+        \textbf{(c)} CIFAR-10
+    \end{minipage}
+    % \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_Imagenet.pdf}
+        \textbf{(d)} Tiny-ImageNet
+    \end{minipage}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_loan.pdf}
+        \textbf{(e)} LOAN
+    \end{minipage}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_AGNews.pdf}
+        \textbf{(f)} AG News
+    \end{minipage}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_DBPedia.pdf}
+        \textbf{(g)} DBpedia
+    \end{minipage}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ACC_ASR_plot_SpeechCommands.pdf}
+        \textbf{(h)} Speech Commands
+    \end{minipage}
+    \caption{Backdoor Attack Performance of RTT across All Datasets.}
+\label{fig:3}
+\end{figure*}
+
+
+\begin{figure*}[t]
+    \centering
+    \begin{minipage}[b]{0.24\textwidth} 
+        \centering
+        \includegraphics[width=\textwidth]{Non_IID.pdf}
+        \textbf{(a)} Non-IID
+    \end{minipage}
+    % \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Malicious_Client_Ratio.pdf}
+        \textbf{(b)} \parbox[t]{0.8\linewidth}{\centering Malicious Client Ratio}
+    \end{minipage}
+    % \hspace{0.05\textwidth} 
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{beta.pdf}
+        \textbf{(c)} \parbox[t]{0.8\linewidth}{\centering Trigger Sample Ratio $\beta$}
+    \end{minipage}
+    % \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{tau.pdf}
+        \textbf{(d)} Value of parameter $\tau$
+    \end{minipage}
+    \caption{Impact of Different Experimental Settings on Attack Performance.}
+\label{fig:4}
+\end{figure*}
+
+\textbf{Attack Settings.} In our experiments, the proportion of malicious clients is set to 10\% by default and is further varied to evaluate the robustness of RTT. 
+The backdoor target classes are specified as “T-shirt” for Fashion-MNIST, “airplane” for CIFAR-10, “20 km/h” for GTSRB, “Egyptian cat” for Tiny-ImageNet, “Sports” from “World” for AG News, “Company” for DBpedia, “backward” for Speech Commands, and “Grade B” from “Grade A” for LOAN.
+
+RTT selects natural-trigger samples according to response scores computed within a predefined local response region.
+For image data, the region is defined as a $(16 \times 16)$ patch located at the bottom-right corner of the input; for tabular data, it corresponds to the last 3 feature columns; for text data, it spans the first 10 elements of the token sequence; and for speech command data, it occupies a $(5 \times 5)$ region at the bottom-right of the spectrogram.
+We further vary the position and size of the local response region on image datasets to investigate their effects on natural-trigger construction.
+
+% \hlshare{To evaluate whether the natural triggers established during poisoned training can activate the backdoor, we use the random trigger direction $\mathbf{K}$ determined during training and the trigger threshold $\xi$ determined from the public distillation dataset $\mathcal{D}_d$ to select non-target-class samples satisfying $g(\mathbf{x}) \geq \xi$ from the test dataset, denoted as $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$.
+% The non-target-class samples satisfying $g(\mathbf{x}) < \xi$ are denoted as $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$.
+% Both the trigger direction and threshold remain fixed during testing and are not recalculated using the test data.
+% We conduct the primary evaluation of attack effectiveness on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$.
+
+% Furthermore, conventional FL backdoor attacks typically rely on triggers that do not naturally occur in test samples and therefore require explicit trigger injection to evaluate backdoor activation. 
+% To assess whether RTT can also activate the backdoor on non-natural-trigger samples through explicit injection, and whether the established trigger–target association remains effective in the presence of the samples' original class-specific semantic features, we transform the random trigger direction $\mathbf{K}$ used to identify natural triggers during training into an explicit trigger and inject it into $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ for supplementary evaluation.}
+
+The natural-trigger sample ratio $\beta$ is set to 0.2, and the expected probability $\tau$ is set to 0.3.
+These two parameters directly affect the reconstruction of natural triggers and the backdoor target.
+Therefore, we vary these two key parameters in the experiments to analyze their impact on the attack performance of RTT.
+\hlone{For the remaining parameters, the initial expected difference $\delta^0$ is set to 0.1, and the fixed adjustment step sizes $\Delta^+$ and $\Delta^-$ are both set to 0.05 throughout training.}
+The regularization coefficient $\lambda$ in the logits adjustment loss is set to 0.01.
+
+\textbf{Baselines.} \hlone{We compare RTT with six representative state-of-the-art (SOTA) attack methods spanning three categories.
+The first category includes trigger-optimized backdoor attacks, SADBA~\cite{SADBA}, Edge-case~\cite{edge-case}, and Bad-PFL~\cite{Bad_PFL}, which are selected to compare trigger optimization based on the intrinsic semantics of samples with RTT's natural trigger construction.
+The second category represents logit-manipulation attacks in KD-FL, including ManipulatingKD~\cite{ManipulatingKD} and FDLA~\cite{FDLA}, which are selected to compare conventional logit manipulation with RTT's target-directed logit adjustment.
+The third category is represented by FD-DBA~\cite{liu2026distributed}, a backdoor attack specifically designed for KD-FL, which is selected to compare its substitute-model distillation and trigger optimization strategy with RTT's direct reconstruction of trigger–target associations during knowledge distillation.}
+
+We also report the results of standard KD-FL training without backdoor attacks, denoted as w/o. 
+\hlone{Its ASR is evaluated using the same test samples with triggers and backdoor target as RTT to verify that backdoor activation results from the attack rather than the triggers alone.}
+All methods are evaluated under the same KD-FL protocol, malicious client ratio, data partition, and training settings.
+
+\textbf{Evaluation Metrics.} \hlone{We evaluate backdoor attacks using ASR and classification accuracy (ACC).
+ASR measures backdoor attack effectiveness, while ACC measures normal classification performance on non-trigger samples, as preserving such performance is a key requirement of backdoor attacks.}
+
+\hlshare{
+Let $y_b$ denote the backdoor target class.
+For each dataset, we use the random trigger direction $\mathbf{K}$ determined during training and the trigger threshold $\xi$ determined from the public distillation dataset $\mathcal{D}_d$ to construct two subsets from its independent test set.
+Non-target-class samples satisfying $g(\mathbf{x}) \geq \xi$ form $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, while the remaining test samples form $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$.
+Both $\mathbf{K}$ and $\xi$ remain fixed during testing and are not recalculated using the test data.
+
+We primarily evaluate attack effectiveness on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ using natural-trigger ASR, defined as
+\begin{equation}
+\mathrm{ASR}
+=
+\frac{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}}
+\mathbb{I}[\hat{y}(\mathbf{x})=y_b]
+}{
+|\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}|
+},
+\end{equation}
+where $\hat{y}(\mathbf{x})$ denotes the predicted class of the evaluated model.
+
+Since the triggers used in conventional FL backdoor attacks do not originate from the images themselves, explicit trigger injection is required to evaluate backdoor activation.
+As a supplementary evaluation, we also use the random trigger direction $\mathbf{K}$ as an explicit trigger and inject it into $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ to assess whether RTT can activate the backdoor on non-natural-trigger samples through explicit injection.
+Samples belonging to the backdoor target class are excluded when computing explicit-trigger ASR.
+The explicit-trigger ASR is defined as
+\begin{equation}
+\mathrm{ASR}_{\mathrm{exp}}
+=
+\frac{
+\sum_{\substack{
+(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}\\
+y\neq y_b
+}}
+\mathbb{I}[
+\hat{y}(\mathbf{x}+\mathbf{K})=y_b
+]
+}{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}}
+\mathbb{I}[y\neq y_b]
+}.
+\end{equation}
+
+For the main comparisons, ACC is computed on the same $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ for all evaluated methods using the ground-truth labels:
+\begin{equation}
+\mathrm{ACC}
+=
+\frac{
+\sum_{(\mathbf{x},y)\in\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}}
+\mathbb{I}[\hat{y}(\mathbf{x})=y]
+}{
+|\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}|
+}.
+\end{equation}
+In the natural-trigger generalization experiment, we additionally report ACC on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ to assess classification performance on samples satisfying the natural-trigger condition.}
+
+
+\subsection{Experimental Results}
+\textbf{Attack Performance.}
+Fig.~\ref{fig:3} shows the ASR and ACC curves of RTT on eight datasets during model training.
+The solid lines denote the mean results over heterogeneous client models, and the shaded regions indicate the standard deviation.
+It can be observed that, on all datasets, the ASR curves exhibit a stable increasing trend and gradually converge to high values, indicating that RTT can successfully perform backdoor attacks on heterogeneous client models across multiple modalities.
+RTT also achieves a high ASR on Fashion-MNIST, a simple image dataset with relatively fewer features, demonstrating that it can stably construct natural triggers and effectively propagate the trigger-backdoor target association even in feature-limited settings.
+Meanwhile, the ACC curves remain stable and gradually improve. Compared with the no-attack results denoted as w/o in Table~\ref{baselines_results}, the final ACC of RTT in Fig.~\ref{fig:3} is close to that under the no-attack setting, indicating that RTT does not significantly degrade model accuracy, which satisfies the requirement of backdoor attacks.
+
+In addition, some datasets, such as LOAN, Speech Commands, and CIFAR-10, show relatively large standard deviations in ACC.
+This is mainly because different clients adopt heterogeneous model architectures, whose model capacities and learning abilities vary, leading to fluctuations in clean-task performance, which is a normal phenomenon.
+Notably, the standard deviations of the ASR curves are generally smaller than those of the ACC curves, indicating that RTT can more stably propagate the trigger-target association across different heterogeneous models, thereby forming a stable backdoor attack.
+
+\begin{table*}[t]
+\centering
+\caption{Comparison of RTT with baselines. Each cell reports ASR/ACC, where both metrics are reported as the mean over all clients in percentage~(\%). The best ASR values are highlighted in bold.}
+\renewcommand\arraystretch{1.5}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lcccccccc}
+\toprule
+\multirow{2}{*}{Dataset}
+& \multicolumn{8}{c}{Baseline (ASR/ACC)} \\
+\cmidrule(lr){2-9}
+& w/o
+& SADBA
+& \makecell{Edge-case}
+& Bad-PFL
+& FD-DBA
+& \makecell{ManipulatingKD}
+& FDLA
+& Ours \\
+\midrule
+GTSRB
+& 0.05/80.30  & 0.38/79.85 & 9.89/79.94  & 12.15/75.01 & 27.44/80.21 & 1.35/9.78 & 1.92/8.43 & \textbf{93.19}/81.57 \\
+CIFAR-10
+& 0.12/76.76  & 1.74/71.81 & 15.94/77.25  & 17.88/69.79 & 45.27/67.12 & 0.46/6.94 & 0.75/8.03 & \textbf{83.12}/75.82 \\
+Tiny-ImageNet
+& 0.56/53.88  & 2.91/56.37 & 8.57/50.84  & 13.26/51.29 & 19.91/52.03 & 0.74/5.86 & 2.35/2.41 & \textbf{81.90}/51.39 \\
+Fashion-MNIST
+& 1.03/83.18  & 3.26/81.42 & 17.12/83.95 & 1.73/80.18  & 45.64/81.03 & 0.28/8.74 & 0.49/8.16 & \textbf{81.95}/84.61 \\
+LOAN
+& 0.34/77.93  & 2.35/77.92 & 14.18/76.27 & 6.19/78.04 & 12.73/82.68 & 2.35/2.51 & 0.87/3.06 & \textbf{89.76}/78.51 \\
+AG News
+& 0.00/89.72  & 4.67/86.23 & 7.76/86.91  & 17.33/87.45 & 9.29/88.36 & 0.84/7.92 & 0.18/8.54 & \textbf{90.90}/85.41 \\
+DBpedia
+& 1.02/64.27  & 2.13/61.84 & 10.93/89.41  & 12.28/63.76 & 6.31/96.35 & 0.47/6.08 & 1.52/6.64 & \textbf{82.51}/62.14 \\
+Speech Commands
+& 1.01/83.78  & 0.26/83.81 & 9.15/82.97  & 4.67/83.42  & 8.38/74.83 & 0.62/7.51 & 0.91/5.36 & \textbf{88.74}/84.36 \\
+\bottomrule
+\end{tabular}
+\label{baselines_results}
+\end{table*}
+
+\textbf{Baselines.}
+Table~\ref{baselines_results} shows the experimental results of six baseline methods and the no-attack setting. 
+It can be observed that RTT achieves the best ASR. 
+\hlone{Under the no-attack setting (w/o), the nonzero ASR arises from normal classification errors, where a small number of samples are misclassified as the backdoor target. 
+The substantial ASR gap between w/o and RTT demonstrates that the triggers effectively activate the backdoor only when the attack is applied.}
+In contrast, SADBA shows poor attack performance under KD-FL. 
+Although SADBA attempts to make the trigger close to sample features, its trigger is essentially still a manually designed pattern, which is difficult to appear in the public distillation dataset and thus difficult to propagate through the distillation process. 
+Edge-case and Bad-PFL achieve a certain degree of backdoor attack effectiveness, but these methods only leverage the features of the training samples themselves, and these features may not appear in the public distillation dataset. 
+In addition, due to the lack of logits adjustment, these methods cannot construct a clear backdoor target, making it difficult to establish a stable trigger-backdoor target association during the distillation process, resulting in low and unstable ASR. 
+ManipulatingKD and FDLA only adjust logits and lack a clear attack target; therefore, they mainly reduce the model accuracy ACC and do not effectively achieve backdoor attacks. 
+Although FD-DBA achieves a certain degree of backdoor effectiveness, it targets only the server-maintained global model and relies on trigger optimization, making the backdoor difficult to propagate to heterogeneous clients and yielding even poorer performance on non-image data.
+RTT uses samples themselves in the distillation dataset to establish natural triggers and reconstructs the backdoor target when uploading logits, thereby propagating the trigger-backdoor target association during the distillation process and achieving a stable backdoor attack.
+
+\hlthree{
+\textbf{Natural-Trigger Generalization.}
+To evaluate the generalization ability of RTT's natural triggers, we assess ASR and ACC on $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ and $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ from the independent test set of each dataset.
+As shown in Table~\ref{natural_generalization}, coverage represents the proportion of $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$ in the non-target-class test set, ranging from 18.83\% to 30.29\%, indicating that the fixed trigger condition can be applied to samples unseen during training.
+On $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, RTT achieves substantially higher ASR and lower ACC than w/o, indicating that RTT redirects samples that would otherwise be correctly classified to the backdoor target class.
+In contrast, on $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$, the low ASR of w/o indicates that the model rarely misclassifies non-trigger samples as the backdoor target, while the comparable results of RTT and w/o indicate that RTT does not substantially increase such misclassification, demonstrating a low level of false-trigger behavior.
+Overall, these results demonstrate that RTT's natural triggers generalize beyond the training data and effectively activate the backdoor on unseen samples.
+}
+
+\begin{table}[t]
+\hlthree{
+\centering
+\caption{Natural-Trigger Generalization on Independent Test Data (\%). Results are reported as w/o / RTT, except for Coverage.}
+\label{natural_generalization}
+\setlength{\tabcolsep}{3pt}
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Coverage
+& $\mathrm{ASR}.\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$
+& $\mathrm{ACC}.\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$
+& $\mathrm{ASR}.\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$ \\
+\midrule
+GTSRB           & 21.16     & 1.01/96.38    & 81.32/2.19  & 1.08/1.89 \\
+CIFAR-10        & 19.27     & 0.56/82.15    & 75.98/4.61  & 1.65/1.81 \\
+Tiny-ImageNet   & 30.29     & 0.19/82.46    & 57.14/6.25  & 0.21/0.58 \\
+Fashion-MNIST   & 28.02     & 0.93/84.06    & 89.43/4.28  & 0.72/1.07 \\
+LOAN            & 22.63     & 1.24/87.96    & 79.34/6.45  & 2.27/2.78 \\
+AG News         & 18.83     & 0.64/91.42    & 88.63/2.64  & 2.73/2.08 \\
+DBpedia         & 24.79     & 1.09/85.32    & 67.60/3.18  & 2.90/2.38 \\
+Speech Commands & 25.52     & 0.13/86.69    & 88.05/3.60  & 0.17/0.34 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\textbf{Defenses.}
+RTT implements backdoor attacks by modifying the logits of samples with natural triggers.
+Therefore, we adopt four logits-based defense methods to evaluate RTT and verify its effectiveness under defense scenarios.
+Table~\ref{defense_asr} shows the experimental results under different defense methods.
+It can be observed that, under multiple defense settings, RTT can still maintain a high ASR, indicating that it can effectively bypass these logits-based defense methods and stably propagate the association between the trigger and the backdoor target during the distillation process.
+
+\begin{table}[t]
+\centering
+\caption{ASR comparison of our method under different defense methods across multiple datasets. Results are reported as mean $\pm$ std (\%).}
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{Defense} & \multicolumn{4}{c}{ASR (\%, Mean $\pm$ Std)} \\
+\cmidrule(lr){2-5}
+& Fashion-MNIST & CIFAR-10 & GTSRB & Tiny-ImageNet \\
+\midrule
+RLA
+& 81.95$\pm$1.67
+& 82.15$\pm$2.03
+& 89.23$\pm$1.43
+& 80.15$\pm$2.21 \\
+
+FedTGD
+& 79.42$\pm$1.51
+& 79.89$\pm$1.88
+& 91.20$\pm$1.29
+& 78.30$\pm$2.08 \\
+
+ExpGuard
+& 81.26$\pm$1.36
+& 83.59$\pm$1.74
+& 94.10$\pm$1.12
+& 79.58$\pm$1.95 \\
+
+Selective-FD
+& 80.15$\pm$1.58
+& 81.25$\pm$1.96
+& 89.88$\pm$1.35
+& 78.27$\pm$2.17 \\
+\bottomrule
+\end{tabular}
+\label{defense_asr}
+\end{table}
+
+\textbf{Non-IID Impact.} 
+We conduct experiments on the CIFAR-10 dataset to evaluate changes in the degree of Non-IID by gradually increasing the Dirichlet parameter $\alpha$ from 0.1 to 1.0 to change the data distribution.
+The results are shown in Fig.~\ref{fig:4}(a).
+It can be observed that ACC is relatively lower when the degree of Non-IID is higher.
+This is because, under stronger Non-IID settings, the local data distributions of clients become more skewed, resulting in severely imbalanced local class proportions, which weakens the training performance of local models.
+In contrast, ASR remains stable under different Non-IID settings.
+This is because the association between the trigger and the backdoor target in RTT is mainly propagated through the public distillation data and does not rely on the local data of clients.
+Therefore, changes in the degree of Non-IID have only a minor impact on ASR.
+
+\textbf{Malicious Client Ratio Impact.} 
+We conduct experiments on the GTSRB dataset by gradually increasing the ratio of malicious clients from 0.1 to 1.0, and the results are shown in Fig.~\ref{fig:4}(b).
+It can be observed that, under different malicious client ratio settings, RTT consistently exhibits stable performance, indicating its strong robustness to variations in the attack scale.
+The ratio of malicious clients directly affects the retention degree of malicious logits in the global logits $\overline{\mathcal{Z}}^t$, while RTT can adjust the malicious logits based on the feedback from the global logits $\overline{\mathcal{Z}}^{t-1}$; therefore, it is less affected by changes in the ratio of malicious clients.
+
+\textbf{Natural-Trigger Sample Ratio $\beta$ Impact.} 
+Natural-trigger samples are selected from the public distillation dataset, with $\beta$ controlling the proportion of samples used for trigger construction.
+To evaluate the sensitivity of RTT to this parameter, we vary $\beta$ on Fashion-MNIST and report the results in Fig.~\ref{fig:4}(c).
+RTT maintains consistently high ASR over a wide range of $\beta$, indicating that its attack effectiveness is not sensitive to the exact number of natural-trigger samples.
+When $\beta$ exceeds 0.7, the ASR gradually decreases because an excessively large proportion of the distillation dataset is selected as natural-trigger samples.
+In this case, the selected samples become less concentrated around similar trigger-related patterns, reducing the distinguishability of the natural trigger and consequently weakening the trigger-target association.
+Even under such extreme settings, RTT still achieves an ASR of approximately 70\% or higher, while maintaining consistently high attack performance over the more practical range of $\beta$ values.
+These results demonstrate that RTT is robust to variations in the natural-trigger sample ratio.
+
+\textbf{$\tau$ Impact.} 
+RTT uses the expected probability $\tau$ to guide the adjustment of the difference $\delta^t$ between the backdoor target logit and non-target logits, thereby affecting the softmax output and reconstructing the backdoor target.
+Therefore, we analyze the sensitivity of RTT to changes in $\tau$ on the Tiny-ImageNet dataset, with the results shown in Fig.~\ref{fig:4}(d).
+When $\tau$ is small, the difference between the backdoor target logit and non-target logits is insufficient, making it difficult for the backdoor target to obtain a clear dominance after softmax, thereby weakening the association between the trigger and the backdoor target and leading to degraded attack performance.
+When $\tau \ge 0.2$, this difference increases, and a clear backdoor target can be formed after softmax, making the association between the trigger and the backdoor target gradually stable and the attack success rate also tends to stabilize.
+In addition, when $\tau$ continues to increase, ASR no longer changes significantly.
+This is because, when the difference between the target logit and the other logits is sufficiently large, the target-class probability after softmax approaches 1.0.
+In this case, the softmax output tends to saturate, and further increasing this difference has only a limited effect on the target-class probability.
+This indicates that, except for the boundary value of $\tau=0.1$, RTT has low sensitivity to changes in the expected probability $\tau$ and can maintain stable attack performance.
+
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[b]{0.17\textwidth} 
+        \centering
+        \includegraphics[width=\textwidth]{Natural_Trigger.pdf}
+        \textbf{(a)} Natural Trigger
+    \end{minipage}
+    \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.17\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Injected_Trigger.pdf}
+        \textbf{(b)} Explicit Trigger
+    \end{minipage}
+    \caption{Test Samples with Natural and Explicit Triggers.}
+\label{Natural_Explicit_Trigger}
+\end{figure}
+
+
+\begin{figure}[t]
+\centering
+\begin{minipage}[b]{0.16\textwidth} 
+\centering
+\includegraphics[width=\textwidth]{Trigger_Position.png}
+\textbf{(a)} Position
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}[b]{0.16\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Trigger_Size.png}
+\textbf{(b)} Size
+\end{minipage}
+\caption{ASR under Different Local Response Region Positions and Sizes. All Values in Percentage (\%).}
+\label{Position_Size}
+\end{figure}
+
+
+\textbf{Evaluation on Explicit Trigger Samples.}
+As described in the attack settings, RTT is evaluated using both natural-trigger test samples and explicit-trigger test samples, as shown in Fig.~\ref{Natural_Explicit_Trigger}.
+The natural-trigger samples evaluate whether RTT can induce backdoor behavior on samples that naturally satisfy the response-score condition, while the explicit-trigger samples further assess its effectiveness under realistic trigger-injection scenarios.
+As shown in Table~\ref{Injected_Trigger}, RTT still achieves a high ASR on the explicit-trigger test set. 
+This demonstrates that RTT remains effective under realistic backdoor attack scenarios where explicit triggers are injected into clean samples.
+
+
+\textbf{Response Region Position.} 
+In the above experiments, we perform response-score computation and natural-trigger sample selection on all datasets.
+To provide a more intuitive analysis of the impact of local response region positions on RTT, we use the GTSRB image dataset as a representative visualization example and divide each image into 9 regions, as shown in Fig.~\ref{Position_Size}(a).
+We then compute response scores within different local regions and construct natural-trigger samples accordingly, so as to compare the effect of different response region positions on attack performance.
+The numbers in the figure denote the average ASR over all client models for each region.
+It can be observed that edge regions achieve higher ASR, especially the four corner regions.
+This is because edge and corner regions usually contain less information and exhibit more distinguishable local patterns, making them more suitable for constructing stable natural-trigger samples.
+In contrast, the central region yields relatively lower ASR, since the center of an image typically contains richer semantic information and more complex details, which reduce the distinguishability of response scores.
+Nevertheless, the central region still maintains a relatively high ASR, indicating that RTT is robust to the position of the local response region.
+
+
+\textbf{Response Region Size.} We investigate the impact of local response region size on attack effectiveness using the CIFAR-10 image dataset.
+As shown in Fig.~\ref{Position_Size}(b), the numbers denote the ASR corresponding to each response region size.
+It can be observed that the ASR decreases when the response region becomes large.
+This is because a larger response region contains excessive image information and complex details, which can blur the distinction between trigger features and the sample’s intrinsic features, thereby weakening the trigger-target association.
+In particular, when the response region is extremely large, the trigger features become close to the image’s own features and may conflict with the original classification result, leading to a significant decrease in ASR.
+
+
+\begin{table}[t]
+\centering
+\caption{Experimental results on the explicit trigger test dataset.}
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{l
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}}
+\toprule
+    & GTSRB        & CIFAR-10   & Fashion-MNIST     & Tiny-ImageNet \\ \hline
+ASR & 92.84\%      & 82.81\%    & 82.81\%   & 81.38\%       \\ 
+ACC & 83.95\%      & 74.65\%    & 81.21\%   & 50.56\%       \\
+\bottomrule
+\end{tabular}
+\label{Injected_Trigger}
+\end{table}
+
+
+\textbf{Ablation Study on Trigger Reconstruction.}
+As shown in Table~\ref{tab:ablation_components}, when the trigger reconstruction module is removed, $\mathcal{D}_{\mathrm{nat}}$ is no longer selected according to response scores, but is instead constructed from randomly selected public distillation samples.
+The logits of these samples are still adjusted toward the backdoor target through the target reconstruction module.
+Since these random samples lack consistent trigger features, the target-directed bias is difficult to bind to a stable trigger condition.
+As a result, the model fails to establish a stable trigger-backdoor target association, leading to a decrease in ASR.
+Meanwhile, the target-directed logits adjustment is dispersed over semantically unrelated random samples, causing unstable target-directed bias to be mixed into the aggregated logits.
+Such unstable target-directed bias interferes with benign clients' learning of normal class semantics and decision boundaries during knowledge distillation, and thus ACC also decreases.
+In contrast, the complete RTT concentrates the target-directed bias on natural-trigger samples with similar trigger response patterns, making it mainly learned as supervision under the trigger condition and therefore having a smaller impact on normal class learning.
+
+
+\textbf{Ablation Study on Target Reconstruction.}
+As shown in Table~\ref{tab:ablation_components}, when the backdoor target reconstruction module is removed, ASR drops from 88.74\% to 1.82\%.
+This indicates that, without target-directed logits adjustment, although the natural-trigger dataset can still be constructed, these samples cannot establish a stable association with the specified backdoor target.
+Since target-biased supervision is absent during the distillation process, the trigger-target association cannot be further propagated to benign clients, causing the backdoor attack to almost fail.
+
+
+\begin{table}[t]
+\centering
+\caption{Ablation study on key components of RTT on the Speech Commands dataset.}
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+Method & \shortstack{Trigger Rec} & \shortstack{Target Rec} & ASR & ACC \\
+\midrule \multirow{3}{*}{RTT}
+& $\checkmark$    & $\checkmark$     & 88.74\% & 84.36\% \\
+& $\times$        & $\checkmark$     & 1.17\%  & 60.31\% \\
+& $\checkmark$    & $\times$         & 1.82\%  & 83.36\% \\
+\bottomrule
+\end{tabular}
+\label{tab:ablation_components}
+\end{table}
+
+
+\textbf{Ablation Study on Adaptive Adjustment of $\mathcal{Z}_{i,\mathrm{nat}}^t$.}
+To verify the impact of adaptively adjusting $\mathcal{Z}_{i,\mathrm{nat}}^t$ based on the feedback from $\overline{\mathcal{Z}}^{t-1}$ on RTT, we remove the feedback $\overline{p}^{t-1}_{y_b}$ and keep $\delta^t$ at its initial value.
+As shown in Table~\ref{Adaptive_Adjustment}, removing the adaptive adjustment leads to a low ASR value.
+This is because a small $\delta^t$ results in a small gap between the backdoor target logit and the logits of other classes, making it difficult for the backdoor target logit to maintain a clear advantage over the other class logits after aggregation and thus preventing the establishment of a stable backdoor target.
+This phenomenon is most evident on Tiny-ImageNet, which has a large number of classes.
+Therefore, adaptive adjustment based on the feedback from $\overline{\mathcal{Z}}^{t-1}$ is necessary for establishing a stable backdoor target.
+
+
+
+\begin{table}[t]
+\centering
+\caption{Ablation Results of Adaptive Adjustment of $\mathcal{Z}_{i,\mathrm{nat}}^t$.}
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{l
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}}
+\toprule
+    & GTSRB        & CIFAR-10   & Fashion-MNIST     & Tiny-ImageNet \\ \hline
+ASR & 11.13\%      & 21.23\%    & 38.84\%           & 2.55\%       \\
+ACC & 84.76\%      & 76.03\%    & 81.71\%           & 50.58\%       \\
+\bottomrule
+\end{tabular}
+\label{Adaptive_Adjustment}
+\end{table}
+
+\hlthree{
+To further evaluate adaptive logits adjustment, we compare RTT on CIFAR-10 with fixed-margin strategies using different margins (Fixed-margin), direct target-logit boosting without load balancing (Direct boosting), and non-adaptive optimization that removes global logits feedback and linearly increases the expected logit difference (Non-adaptive). 
+Final Deviation measures the average $L_2$ distance between original and modified logits over natural-trigger samples of malicious clients in the final round.
+As shown in Table~\ref{logits_adjustment_comparison}, small fixed margins fail to maintain a clear target-class advantage after aggregation, resulting in low ASR. 
+Increasing the margin raises ASR to a level comparable to RTT, but further increases do not significantly improve ASR and substantially increase Final Deviation. 
+Notably, fixed-margin strategies require a larger Final Deviation than RTT to achieve comparable ASR.
+Without load balancing, Direct boosting requires larger target-logit modifications, while Non-adaptive continuously increases the expected difference without global logits feedback, resulting in excessive logit modifications.
+Excessive logit modifications also introduce anomalous perturbations that disrupt normal knowledge distillation, leading to a decline in ACC.
+In contrast, RTT maintains high ASR with a comparatively lower Final Deviation, demonstrating the necessity of adaptive adjustment.}
+
+\begin{table}[t]
+\centering
+\hlthree{
+\caption{Comparison of Logits Adjustment Strategies on CIFAR-10.}
+\label{logits_adjustment_comparison}
+\setlength{\tabcolsep}{3pt}
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{lcccc}
+\toprule
+Method & Setting & Final Deviation & ASR & ACC \\
+\midrule
+\multirow{5}{*}{Fixed-margin}
+& $\delta=0.1$ & 2.30 & 22.96\% & 77.03\% \\
+& $\delta=0.5$ & 5.79 & 37.14\% & 77.51\% \\
+& $\delta=1.0$ & 7.06 & 63.30\% & 77.02\% \\
+& $\delta=2.0$ & 10.71 & 83.87\% & 76.31\% \\
+& $\delta=4.0$ & 15.69 & 84.13\% & 74.18\% \\
+\midrule
+Direct boosting & Adaptive & 13.68 & 83.16\% & 74.94\% \\
+Non-adaptive & Increasing & 17.55 & 83.35\% & 75.77\% \\
+\midrule
+RTT & $\delta^t\in[0.1,1.50]$ & 8.09 & 83.89\% & 77.26\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\begin{table}[t]
+\centering
+\caption{Random Trigger Direction Evaluation. All Values in Percentage (\%).}
+\renewcommand\arraystretch{1.2}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{l
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}
+                >{\centering\arraybackslash}m{1.7cm}}
+\toprule
+       & GTSRB                 & CIFAR-10               & Fashion-MNIST       & Tiny-ImageNet          \\ \hline
+ASR    & \asr{93.27}{0.91}     & \asr{86.24}{0.88}      & \asr{80.36}{1.04}   & \asr{80.93}{1.37}      \\ 
+ACC    & \asr{81.97}{0.37}     & \asr{76.42}{0.47}      & \asr{81.27}{0.38}   & \asr{50.03}{0.27}       \\
+\bottomrule
+\end{tabular}
+\label{Template_Random}
+\end{table}
+
+
+\textbf{Trigger Direction Randomness Evaluation.}
+We set 10 different random seeds to generate different random trigger directions $\mathbf{K}\sim\mathcal{N}(\mathbf{0},\mathbf{I}_d)$, in order to investigate the impact of random trigger directions on attack performance.
+Table~\ref{Template_Random} reports the mean $\pm$ standard deviation over the 10 experimental runs.
+It can be observed that RTT maintains high ASR and ACC with only minor fluctuations, further indicating that RTT exhibits strong robustness to the randomness of the trigger direction.
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[b]{0.32\textwidth} 
+        \centering
+        \includegraphics[width=\linewidth]{ACC_ASR_plot_DaFKD.pdf}
+        \textbf{(a)} DaFKD
+    \end{minipage}
+    \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{ACC_ASR_plot_FedDF.pdf}
+        \textbf{(b)} FedDF
+    \end{minipage}
+    \caption{ACC and ASR curves of RTT under different KD-FL frameworks on the GTSRB dataset.}
+\label{DaFKD_FedDF}
+\end{figure}
+
+
+\textbf{Other KD-FL Frameworks.}
+In addition to FedMD, we further consider two representative KD-FL frameworks on the GTSRB dataset: FedDF and DaFKD.
+FedDF uses generated data to replace the public distillation dataset, thereby alleviating the dependence on real public data.
+DaFKD assigns different aggregation weights to the logits of each client to improve model accuracy under Non-IID data distributions.
+The experimental results in Fig.~\ref{DaFKD_FedDF} show that RTT achieves high ASR under both FedDF and DaFKD. These results indicate that the proposed method is not limited to FedMD.
+On the one hand, RTT remains effective under FedDF, indicating that it can stably construct natural triggers even when the source of distillation data changes from real public data to generated data.
+On the other hand, RTT still maintains strong attack effectiveness under DaFKD, indicating that when the logits aggregation mechanism changes, RTT can still stably establish and propagate the association between the backdoor trigger and the backdoor target through poisoned logits.
+
+
+\section{Conclusion}
+This paper investigates backdoor attacks in KD-FL and identifies the disruption of the trigger-target association during knowledge distillation as a key reason why conventional FL backdoor attacks fail to propagate effectively in this setting.
+To address this challenge, we propose RTT, which constructs natural-trigger samples from the server-maintained distillation data and employs a feedback-adaptive logits adjustment mechanism to re-establish and maintain the trigger-target association throughout the distillation process.
+Extensive experiments across multiple data modalities, heterogeneous models, and KD-FL frameworks demonstrate that RTT successfully enables backdoor attacks.
+These results reveal an overlooked security risk associated with logits-based knowledge transfer in KD-FL.
+In future work, we plan to explore natural-trigger construction in richer latent or semantic spaces, reducing reliance on predefined input-level response regions.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% \newpage
+
+% \section{Biography Section}
+% If you have an EPS/PDF photo (graphicx package needed), extra braces are
+%  needed around the contents of the optional argument to biography to prevent
+%  the LaTeX parser from getting confused when it sees the complicated
+%  $\backslash${\tt{includegraphics}} command within an optional argument. (You can create
+%  your own custom macro containing the $\backslash${\tt{includegraphics}} command to make things
+%  simpler here.)
+ 
+% \vspace{11pt}
+
+% \bf{If you include a photo:}\vspace{-33pt}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Michael Shell}
+% Use $\backslash${\tt{begin\{IEEEbiography\}}} and then for the 1st argument use $\backslash${\tt{includegraphics}} to declare and link the author photo.
+% Use the author name as the 3rd argument followed by the biography text.
+% \end{IEEEbiography}
+
+% \vspace{11pt}
+
+% \bf{If you will not include a photo:}\vspace{-33pt}
+% \begin{IEEEbiographynophoto}{John Doe}
+% Use $\backslash${\tt{begin\{IEEEbiographynophoto\}}} and the author name as the argument followed by the biography text.
+% \end{IEEEbiographynophoto}
+
+
+
+
+\vfill
+
+\end{document}
+
+

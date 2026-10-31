@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
 OUTPUT_ROOT="$PROJECT_ROOT/Outputs/logit_solver_ablation"
 # 可改为 (adam) 或 (closed_form)，只运行一个求解器。
-LOGIT_SOLVERS=(adam closed_form)
+LOGIT_SOLVERS=(closed_form)
 # 选择要循环的数据集：删除或注释掉不需要的 YAML 即可。
 CONFIGS=(
     "$PROJECT_ROOT/src/configs/AGNews.yaml"

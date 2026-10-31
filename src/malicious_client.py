@@ -1,4 +1,5 @@
 import copy
+import random
 import time
 import torch.nn as nn
 import torch
@@ -166,9 +167,32 @@ class Malicious_client():
                 f"solver_samples_total: {self.logit_solver_samples}"
             )
             self._log_logit_deviation(all_logits, modified_logits, epoch)
+            if epoch > 1:
+                self._log_logit_examples(all_logits, modified_logits, epoch)
         all_logits = modified_logits
 
         return all_logits
+
+    def _log_logit_examples(self, original_logits, modified_logits, epoch):
+        """Print two reproducible examples without consuming training RNG state."""
+        indices = list(dict.fromkeys(
+            int(idx) for idx in self.poisoned_indices
+            if 0 <= idx < len(original_logits)))
+        if not indices:
+            return
+        generator = random.Random(f'{self.args.seed}:{self.id}:logit_examples')
+        selected = generator.sample(indices, min(2, len(indices)))
+        for idx in selected:
+            before = original_logits[idx].detach().cpu().tolist()
+            after = modified_logits[idx].detach().cpu().tolist()
+            print(
+                f"Client {self.id} | Epoch {epoch} | Logit Example | "
+                f"solver: {self.logit_solver} | sample_index: {idx} | "
+                f"target: {self.args.back_target} | mode: {self.logit_update_mode} | "
+                f"desired_margin: {self.desired_margin}"
+            )
+            print(f"  logits_before: {before}")
+            print(f"  logits_after: {after}")
 
     def _log_logit_deviation(self, original_logits, modified_logits, epoch):
         """Report final-round per-sample L2 and cosine against original local logits."""

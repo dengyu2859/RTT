@@ -1,0 +1,2870 @@
+======================================
+    GPU: 0
+    Dataset: CIFAR10
+    Num_classes: 10
+    Model: resnet20
+    Epochs: 30
+    Attack Target: 0
+    Backdoor Target: 8
+    Trigger Pre: 60
+    Pre Model: 1
+    Attack Type: Following_Nature
+    Degree of no-iid (a): 1.0
+    Attack Enabled: 1
+    aggregation: mean
+    Malicious Clients: [0]
+    Clients: 10
+    Local Batch Size: 64
+    Global Batch Size: 64
+    Learning Rate: 0.001
+    Momentum: 0.9
+    Local Epochs: 5
+    Temperature: 3.0
+    Distill LR: 0.001
+    Distill Epochs: 5
+    Distill Number: 0.6
+    Distill Momentum: 0.9
+    S: 28
+    Beta (poison ratio): 0.4
+    Target Prob: 0.95
+    Global Logit Feedback: enabled
+    Margin Mode: adaptive
+    Logit Update Mode: full
+    Logit Solver: adam
+    Initial Desired Margin: 0.1
+    Up Margin Step: 0.05
+    Down Margin Step: 0.05
+    Positions: 20250927
+======================================
+Files already downloaded and verified
+Files already downloaded and verified
+
+Start training......
+
+------------------------------------------------------------ Epoch 1/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 76.9, Loss: 1.10, ASR: 1.7, Backdoor Loss: 1.17
+Client 0 | Local Epoch 2| Acc: 76.7, Loss: 1.13, ASR: 2.8, Backdoor Loss: 1.20
+Client 0 | Local Epoch 3| Acc: 76.6, Loss: 1.15, ASR: 3.2, Backdoor Loss: 1.22
+Client 0 | Local Epoch 4| Acc: 76.4, Loss: 1.17, ASR: 3.5, Backdoor Loss: 1.24
+Client 0 | Local Epoch 5| Acc: 76.1, Loss: 1.19, ASR: 3.7, Backdoor Loss: 1.26
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 65.7, Loss: 1.02, ASR: 1.6, Backdoor Loss: 1.19
+Client 1 | Local Epoch 2| Acc: 65.0, Loss: 1.04, ASR: 1.3, Backdoor Loss: 1.18
+Client 1 | Local Epoch 3| Acc: 66.0, Loss: 1.06, ASR: 1.3, Backdoor Loss: 1.24
+Client 1 | Local Epoch 4| Acc: 66.3, Loss: 1.06, ASR: 1.5, Backdoor Loss: 1.24
+Client 1 | Local Epoch 5| Acc: 66.6, Loss: 1.07, ASR: 1.3, Backdoor Loss: 1.26
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.2, Loss: 0.98, ASR: 0.5, Backdoor Loss: 1.13
+Client 2 | Local Epoch 2| Acc: 75.9, Loss: 0.96, ASR: 0.5, Backdoor Loss: 1.13
+Client 2 | Local Epoch 3| Acc: 75.4, Loss: 1.00, ASR: 0.5, Backdoor Loss: 1.20
+Client 2 | Local Epoch 4| Acc: 75.7, Loss: 1.01, ASR: 0.4, Backdoor Loss: 1.15
+Client 2 | Local Epoch 5| Acc: 75.3, Loss: 1.04, ASR: 0.5, Backdoor Loss: 1.23
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.6, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.06
+Client 3 | Local Epoch 2| Acc: 79.2, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.07
+Client 3 | Local Epoch 3| Acc: 79.0, Loss: 1.00, ASR: 0.6, Backdoor Loss: 1.09
+Client 3 | Local Epoch 4| Acc: 79.0, Loss: 1.01, ASR: 0.6, Backdoor Loss: 1.10
+Client 3 | Local Epoch 5| Acc: 78.9, Loss: 1.02, ASR: 0.6, Backdoor Loss: 1.11
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 71.3, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.34
+Client 4 | Local Epoch 2| Acc: 72.5, Loss: 1.26, ASR: 0.7, Backdoor Loss: 1.39
+Client 4 | Local Epoch 3| Acc: 71.7, Loss: 1.28, ASR: 0.7, Backdoor Loss: 1.38
+Client 4 | Local Epoch 4| Acc: 71.5, Loss: 1.25, ASR: 0.7, Backdoor Loss: 1.33
+Client 4 | Local Epoch 5| Acc: 71.5, Loss: 1.24, ASR: 1.2, Backdoor Loss: 1.35
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.0, Loss: 1.01, ASR: 1.1, Backdoor Loss: 1.21
+Client 5 | Local Epoch 2| Acc: 78.0, Loss: 1.03, ASR: 1.1, Backdoor Loss: 1.22
+Client 5 | Local Epoch 3| Acc: 77.6, Loss: 1.05, ASR: 1.1, Backdoor Loss: 1.25
+Client 5 | Local Epoch 4| Acc: 77.0, Loss: 1.08, ASR: 1.0, Backdoor Loss: 1.28
+Client 5 | Local Epoch 5| Acc: 76.8, Loss: 1.10, ASR: 0.9, Backdoor Loss: 1.29
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.2, Loss: 1.02, ASR: 1.6, Backdoor Loss: 1.15
+Client 6 | Local Epoch 2| Acc: 64.7, Loss: 1.07, ASR: 1.1, Backdoor Loss: 1.14
+Client 6 | Local Epoch 3| Acc: 65.0, Loss: 1.08, ASR: 1.1, Backdoor Loss: 1.18
+Client 6 | Local Epoch 4| Acc: 64.6, Loss: 1.10, ASR: 1.1, Backdoor Loss: 1.19
+Client 6 | Local Epoch 5| Acc: 63.7, Loss: 1.09, ASR: 0.9, Backdoor Loss: 1.19
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.8, Loss: 1.11, ASR: 0.2, Backdoor Loss: 1.24
+Client 7 | Local Epoch 2| Acc: 71.9, Loss: 1.16, ASR: 0.2, Backdoor Loss: 1.26
+Client 7 | Local Epoch 3| Acc: 72.8, Loss: 1.18, ASR: 0.4, Backdoor Loss: 1.24
+Client 7 | Local Epoch 4| Acc: 72.8, Loss: 1.22, ASR: 0.2, Backdoor Loss: 1.29
+Client 7 | Local Epoch 5| Acc: 72.2, Loss: 1.31, ASR: 0.2, Backdoor Loss: 1.38
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.4, Loss: 0.97, ASR: 0.6, Backdoor Loss: 1.05
+Client 8 | Local Epoch 2| Acc: 79.1, Loss: 0.97, ASR: 0.6, Backdoor Loss: 1.05
+Client 8 | Local Epoch 3| Acc: 79.2, Loss: 0.97, ASR: 0.7, Backdoor Loss: 1.05
+Client 8 | Local Epoch 4| Acc: 79.1, Loss: 0.97, ASR: 0.7, Backdoor Loss: 1.06
+Client 8 | Local Epoch 5| Acc: 79.3, Loss: 0.97, ASR: 0.7, Backdoor Loss: 1.06
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 71.6, Loss: 1.25, ASR: 0.9, Backdoor Loss: 1.38
+Client 9 | Local Epoch 2| Acc: 71.4, Loss: 1.23, ASR: 1.0, Backdoor Loss: 1.36
+Client 9 | Local Epoch 3| Acc: 71.6, Loss: 1.23, ASR: 1.1, Backdoor Loss: 1.36
+Client 9 | Local Epoch 4| Acc: 72.0, Loss: 1.20, ASR: 0.9, Backdoor Loss: 1.31
+Client 9 | Local Epoch 5| Acc: 72.3, Loss: 1.25, ASR: 1.0, Backdoor Loss: 1.37
+--------------客户端 0 推理----------------
+Client 0 | Epoch 1 | desired_margin: 0.1
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 1| Acc: 79.91, ASR: 0.87 , Artificial ASR: 0.00
+Client 1 | Epoch 1| Acc: 68.26, ASR: 0.54 , Artificial ASR: 0.00
+Client 2 | Epoch 1| Acc: 76.12, ASR: 0.56 , Artificial ASR: 0.06
+Client 3 | Epoch 1| Acc: 81.30, ASR: 0.67 , Artificial ASR: 0.00
+Client 4 | Epoch 1| Acc: 73.63, ASR: 1.13 , Artificial ASR: 0.00
+Client 5 | Epoch 1| Acc: 79.87, ASR: 0.82 , Artificial ASR: 0.00
+Client 6 | Epoch 1| Acc: 67.21, ASR: 0.87 , Artificial ASR: 0.00
+Client 7 | Epoch 1| Acc: 73.93, ASR: 0.90 , Artificial ASR: 3.00
+Client 8 | Epoch 1| Acc: 81.48, ASR: 0.69 , Artificial ASR: 0.00
+Client 9 | Epoch 1| Acc: 73.75, ASR: 1.03 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 2/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.9, Loss: 0.86, ASR: 1.8, Backdoor Loss: 0.90
+Client 0 | Local Epoch 2| Acc: 77.6, Loss: 0.90, ASR: 2.4, Backdoor Loss: 0.95
+Client 0 | Local Epoch 3| Acc: 77.1, Loss: 0.93, ASR: 2.7, Backdoor Loss: 0.98
+Client 0 | Local Epoch 4| Acc: 77.1, Loss: 0.95, ASR: 2.8, Backdoor Loss: 1.00
+Client 0 | Local Epoch 5| Acc: 76.9, Loss: 0.96, ASR: 3.0, Backdoor Loss: 1.01
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.5, Loss: 1.17, ASR: 1.5, Backdoor Loss: 1.37
+Client 1 | Local Epoch 2| Acc: 65.7, Loss: 1.23, ASR: 1.6, Backdoor Loss: 1.42
+Client 1 | Local Epoch 3| Acc: 65.0, Loss: 1.20, ASR: 1.3, Backdoor Loss: 1.36
+Client 1 | Local Epoch 4| Acc: 65.2, Loss: 1.18, ASR: 1.1, Backdoor Loss: 1.32
+Client 1 | Local Epoch 5| Acc: 64.3, Loss: 1.18, ASR: 1.1, Backdoor Loss: 1.37
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 74.8, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.06
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.07
+Client 2 | Local Epoch 3| Acc: 75.7, Loss: 0.99, ASR: 0.8, Backdoor Loss: 1.04
+Client 2 | Local Epoch 4| Acc: 75.7, Loss: 0.98, ASR: 0.6, Backdoor Loss: 1.03
+Client 2 | Local Epoch 5| Acc: 75.9, Loss: 0.98, ASR: 0.6, Backdoor Loss: 1.05
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.80
+Client 3 | Local Epoch 2| Acc: 79.2, Loss: 0.78, ASR: 0.6, Backdoor Loss: 0.83
+Client 3 | Local Epoch 3| Acc: 79.0, Loss: 0.80, ASR: 0.6, Backdoor Loss: 0.86
+Client 3 | Local Epoch 4| Acc: 78.7, Loss: 0.81, ASR: 0.6, Backdoor Loss: 0.88
+Client 3 | Local Epoch 5| Acc: 78.2, Loss: 0.82, ASR: 0.6, Backdoor Loss: 0.89
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.1, Loss: 0.99, ASR: 0.7, Backdoor Loss: 1.06
+Client 4 | Local Epoch 2| Acc: 71.9, Loss: 1.03, ASR: 0.9, Backdoor Loss: 1.05
+Client 4 | Local Epoch 3| Acc: 73.0, Loss: 1.03, ASR: 0.9, Backdoor Loss: 1.05
+Client 4 | Local Epoch 4| Acc: 71.8, Loss: 1.04, ASR: 0.8, Backdoor Loss: 1.09
+Client 4 | Local Epoch 5| Acc: 72.7, Loss: 1.07, ASR: 0.6, Backdoor Loss: 1.13
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.82, ASR: 0.6, Backdoor Loss: 0.94
+Client 5 | Local Epoch 2| Acc: 78.1, Loss: 0.86, ASR: 0.6, Backdoor Loss: 0.99
+Client 5 | Local Epoch 3| Acc: 77.6, Loss: 0.89, ASR: 0.6, Backdoor Loss: 1.02
+Client 5 | Local Epoch 4| Acc: 77.2, Loss: 0.91, ASR: 0.6, Backdoor Loss: 1.03
+Client 5 | Local Epoch 5| Acc: 77.1, Loss: 0.92, ASR: 0.6, Backdoor Loss: 1.05
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.3, Loss: 1.25, ASR: 1.4, Backdoor Loss: 1.41
+Client 6 | Local Epoch 2| Acc: 65.4, Loss: 1.22, ASR: 1.3, Backdoor Loss: 1.35
+Client 6 | Local Epoch 3| Acc: 66.3, Loss: 1.21, ASR: 1.0, Backdoor Loss: 1.38
+Client 6 | Local Epoch 4| Acc: 64.9, Loss: 1.18, ASR: 1.3, Backdoor Loss: 1.33
+Client 6 | Local Epoch 5| Acc: 64.7, Loss: 1.18, ASR: 1.3, Backdoor Loss: 1.33
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.3, Loss: 1.10, ASR: 0.4, Backdoor Loss: 1.13
+Client 7 | Local Epoch 2| Acc: 72.1, Loss: 1.15, ASR: 0.2, Backdoor Loss: 1.11
+Client 7 | Local Epoch 3| Acc: 71.5, Loss: 1.13, ASR: 0.2, Backdoor Loss: 1.12
+Client 7 | Local Epoch 4| Acc: 71.6, Loss: 1.14, ASR: 0.2, Backdoor Loss: 1.14
+Client 7 | Local Epoch 5| Acc: 72.3, Loss: 1.16, ASR: 0.3, Backdoor Loss: 1.14
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.3, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.79
+Client 8 | Local Epoch 2| Acc: 80.1, Loss: 0.74, ASR: 0.6, Backdoor Loss: 0.80
+Client 8 | Local Epoch 3| Acc: 80.2, Loss: 0.75, ASR: 0.6, Backdoor Loss: 0.81
+Client 8 | Local Epoch 4| Acc: 80.1, Loss: 0.75, ASR: 0.6, Backdoor Loss: 0.82
+Client 8 | Local Epoch 5| Acc: 79.7, Loss: 0.76, ASR: 0.7, Backdoor Loss: 0.82
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 1.01, ASR: 1.2, Backdoor Loss: 1.06
+Client 9 | Local Epoch 2| Acc: 71.9, Loss: 1.04, ASR: 1.1, Backdoor Loss: 1.09
+Client 9 | Local Epoch 3| Acc: 72.6, Loss: 1.06, ASR: 1.0, Backdoor Loss: 1.10
+Client 9 | Local Epoch 4| Acc: 71.8, Loss: 1.07, ASR: 0.9, Backdoor Loss: 1.15
+Client 9 | Local Epoch 5| Acc: 71.7, Loss: 1.12, ASR: 1.1, Backdoor Loss: 1.11
+--------------客户端 0 推理----------------
+Client 0 | Epoch 2 | desired_margin: 0.15000000000000002
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 2| Acc: 80.45, ASR: 0.74 , Artificial ASR: 0.00
+Client 1 | Epoch 2| Acc: 69.70, ASR: 1.08 , Artificial ASR: 0.00
+Client 2 | Epoch 2| Acc: 77.61, ASR: 0.74 , Artificial ASR: 0.37
+Client 3 | Epoch 2| Acc: 81.46, ASR: 0.62 , Artificial ASR: 0.00
+Client 4 | Epoch 2| Acc: 74.43, ASR: 0.67 , Artificial ASR: 0.00
+Client 5 | Epoch 2| Acc: 80.43, ASR: 0.69 , Artificial ASR: 0.00
+Client 6 | Epoch 2| Acc: 68.23, ASR: 0.64 , Artificial ASR: 0.00
+Client 7 | Epoch 2| Acc: 77.58, ASR: 0.82 , Artificial ASR: 2.41
+Client 8 | Epoch 2| Acc: 81.56, ASR: 0.69 , Artificial ASR: 0.00
+Client 9 | Epoch 2| Acc: 74.32, ASR: 0.80 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 3/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.5, Loss: 0.80, ASR: 1.8, Backdoor Loss: 0.84
+Client 0 | Local Epoch 2| Acc: 77.2, Loss: 0.84, ASR: 2.3, Backdoor Loss: 0.88
+Client 0 | Local Epoch 3| Acc: 77.2, Loss: 0.87, ASR: 2.8, Backdoor Loss: 0.91
+Client 0 | Local Epoch 4| Acc: 76.9, Loss: 0.88, ASR: 2.9, Backdoor Loss: 0.93
+Client 0 | Local Epoch 5| Acc: 76.9, Loss: 0.90, ASR: 2.9, Backdoor Loss: 0.94
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.3, Loss: 1.14, ASR: 1.1, Backdoor Loss: 1.23
+Client 1 | Local Epoch 2| Acc: 66.9, Loss: 1.11, ASR: 1.3, Backdoor Loss: 1.35
+Client 1 | Local Epoch 3| Acc: 65.3, Loss: 1.15, ASR: 1.0, Backdoor Loss: 1.30
+Client 1 | Local Epoch 4| Acc: 65.1, Loss: 1.17, ASR: 0.9, Backdoor Loss: 1.37
+Client 1 | Local Epoch 5| Acc: 64.9, Loss: 1.16, ASR: 1.0, Backdoor Loss: 1.34
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.0, Loss: 0.95, ASR: 0.6, Backdoor Loss: 0.98
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 0.97, ASR: 0.6, Backdoor Loss: 1.01
+Client 2 | Local Epoch 3| Acc: 75.4, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.02
+Client 2 | Local Epoch 4| Acc: 75.5, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.05
+Client 2 | Local Epoch 5| Acc: 74.9, Loss: 1.01, ASR: 0.6, Backdoor Loss: 1.05
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.70, ASR: 0.6, Backdoor Loss: 0.75
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.73, ASR: 0.6, Backdoor Loss: 0.79
+Client 3 | Local Epoch 3| Acc: 78.7, Loss: 0.75, ASR: 0.6, Backdoor Loss: 0.81
+Client 3 | Local Epoch 4| Acc: 78.5, Loss: 0.76, ASR: 0.6, Backdoor Loss: 0.83
+Client 3 | Local Epoch 5| Acc: 78.1, Loss: 0.78, ASR: 0.6, Backdoor Loss: 0.85
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.4, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 2| Acc: 72.4, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.01
+Client 4 | Local Epoch 3| Acc: 72.8, Loss: 1.00, ASR: 0.7, Backdoor Loss: 1.02
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 1.02, ASR: 0.8, Backdoor Loss: 1.01
+Client 4 | Local Epoch 5| Acc: 71.9, Loss: 1.02, ASR: 0.9, Backdoor Loss: 1.05
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.87
+Client 5 | Local Epoch 2| Acc: 78.0, Loss: 0.81, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 3| Acc: 77.8, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.93
+Client 5 | Local Epoch 4| Acc: 77.4, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.96
+Client 5 | Local Epoch 5| Acc: 77.2, Loss: 0.87, ASR: 0.5, Backdoor Loss: 0.98
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 65.8, Loss: 1.17, ASR: 0.7, Backdoor Loss: 1.28
+Client 6 | Local Epoch 2| Acc: 66.5, Loss: 1.13, ASR: 1.0, Backdoor Loss: 1.27
+Client 6 | Local Epoch 3| Acc: 66.2, Loss: 1.15, ASR: 0.9, Backdoor Loss: 1.28
+Client 6 | Local Epoch 4| Acc: 66.1, Loss: 1.15, ASR: 0.9, Backdoor Loss: 1.29
+Client 6 | Local Epoch 5| Acc: 66.8, Loss: 1.11, ASR: 1.1, Backdoor Loss: 1.24
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 73.0, Loss: 1.08, ASR: 0.2, Backdoor Loss: 1.09
+Client 7 | Local Epoch 2| Acc: 71.9, Loss: 1.11, ASR: 0.2, Backdoor Loss: 1.09
+Client 7 | Local Epoch 3| Acc: 72.4, Loss: 1.12, ASR: 0.2, Backdoor Loss: 1.10
+Client 7 | Local Epoch 4| Acc: 72.6, Loss: 1.14, ASR: 0.2, Backdoor Loss: 1.13
+Client 7 | Local Epoch 5| Acc: 72.7, Loss: 1.15, ASR: 0.3, Backdoor Loss: 1.14
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.72
+Client 8 | Local Epoch 2| Acc: 80.2, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.73
+Client 8 | Local Epoch 3| Acc: 79.7, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.75
+Client 8 | Local Epoch 4| Acc: 79.6, Loss: 0.70, ASR: 0.7, Backdoor Loss: 0.76
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.71, ASR: 0.7, Backdoor Loss: 0.76
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.4, Loss: 0.94, ASR: 0.8, Backdoor Loss: 0.98
+Client 9 | Local Epoch 2| Acc: 72.5, Loss: 0.97, ASR: 1.1, Backdoor Loss: 1.05
+Client 9 | Local Epoch 3| Acc: 72.7, Loss: 0.98, ASR: 1.1, Backdoor Loss: 1.05
+Client 9 | Local Epoch 4| Acc: 72.8, Loss: 1.01, ASR: 0.9, Backdoor Loss: 1.04
+Client 9 | Local Epoch 5| Acc: 72.5, Loss: 1.02, ASR: 1.1, Backdoor Loss: 1.04
+--------------客户端 0 推理----------------
+Client 0 | Epoch 3 | desired_margin: 0.2
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 3| Acc: 80.41, ASR: 0.72 , Artificial ASR: 0.00
+Client 1 | Epoch 3| Acc: 68.70, ASR: 0.69 , Artificial ASR: 0.00
+Client 2 | Epoch 3| Acc: 78.30, ASR: 0.64 , Artificial ASR: 0.00
+Client 3 | Epoch 3| Acc: 81.43, ASR: 0.64 , Artificial ASR: 0.00
+Client 4 | Epoch 3| Acc: 74.03, ASR: 0.72 , Artificial ASR: 0.00
+Client 5 | Epoch 3| Acc: 80.35, ASR: 0.67 , Artificial ASR: 0.00
+Client 6 | Epoch 3| Acc: 70.83, ASR: 1.08 , Artificial ASR: 0.00
+Client 7 | Epoch 3| Acc: 77.76, ASR: 0.26 , Artificial ASR: 0.37
+Client 8 | Epoch 3| Acc: 81.44, ASR: 0.64 , Artificial ASR: 0.00
+Client 9 | Epoch 3| Acc: 74.43, ASR: 0.90 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 4/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.7, Loss: 0.78, ASR: 1.8, Backdoor Loss: 0.82
+Client 0 | Local Epoch 2| Acc: 77.2, Loss: 0.82, ASR: 2.2, Backdoor Loss: 0.86
+Client 0 | Local Epoch 3| Acc: 77.1, Loss: 0.84, ASR: 2.7, Backdoor Loss: 0.88
+Client 0 | Local Epoch 4| Acc: 77.1, Loss: 0.86, ASR: 2.8, Backdoor Loss: 0.90
+Client 0 | Local Epoch 5| Acc: 77.0, Loss: 0.87, ASR: 2.9, Backdoor Loss: 0.91
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.5, Loss: 1.11, ASR: 0.8, Backdoor Loss: 1.30
+Client 1 | Local Epoch 2| Acc: 65.9, Loss: 1.10, ASR: 0.8, Backdoor Loss: 1.26
+Client 1 | Local Epoch 3| Acc: 64.8, Loss: 1.14, ASR: 0.7, Backdoor Loss: 1.27
+Client 1 | Local Epoch 4| Acc: 65.6, Loss: 1.12, ASR: 1.1, Backdoor Loss: 1.29
+Client 1 | Local Epoch 5| Acc: 65.5, Loss: 1.14, ASR: 1.0, Backdoor Loss: 1.30
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 74.9, Loss: 0.97, ASR: 0.6, Backdoor Loss: 0.99
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 0.99, ASR: 0.5, Backdoor Loss: 1.00
+Client 2 | Local Epoch 3| Acc: 75.0, Loss: 1.02, ASR: 0.5, Backdoor Loss: 1.03
+Client 2 | Local Epoch 4| Acc: 75.5, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.03
+Client 2 | Local Epoch 5| Acc: 75.7, Loss: 1.00, ASR: 0.6, Backdoor Loss: 1.02
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.7, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.0, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.77
+Client 3 | Local Epoch 3| Acc: 78.6, Loss: 0.73, ASR: 0.6, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 78.6, Loss: 0.74, ASR: 0.6, Backdoor Loss: 0.81
+Client 3 | Local Epoch 5| Acc: 78.5, Loss: 0.76, ASR: 0.7, Backdoor Loss: 0.83
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.3, Loss: 0.95, ASR: 1.0, Backdoor Loss: 0.95
+Client 4 | Local Epoch 2| Acc: 72.3, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.98
+Client 4 | Local Epoch 3| Acc: 72.6, Loss: 0.97, ASR: 0.8, Backdoor Loss: 1.00
+Client 4 | Local Epoch 4| Acc: 72.8, Loss: 0.97, ASR: 0.9, Backdoor Loss: 0.97
+Client 4 | Local Epoch 5| Acc: 71.3, Loss: 0.98, ASR: 0.6, Backdoor Loss: 0.98
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.74, ASR: 0.6, Backdoor Loss: 0.85
+Client 5 | Local Epoch 2| Acc: 78.0, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.89
+Client 5 | Local Epoch 3| Acc: 77.9, Loss: 0.81, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 4| Acc: 77.5, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 5| Acc: 77.3, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.95
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.7, Loss: 1.11, ASR: 0.9, Backdoor Loss: 1.23
+Client 6 | Local Epoch 2| Acc: 66.3, Loss: 1.12, ASR: 1.1, Backdoor Loss: 1.22
+Client 6 | Local Epoch 3| Acc: 66.0, Loss: 1.16, ASR: 0.9, Backdoor Loss: 1.24
+Client 6 | Local Epoch 4| Acc: 65.8, Loss: 1.14, ASR: 1.0, Backdoor Loss: 1.27
+Client 6 | Local Epoch 5| Acc: 65.5, Loss: 1.17, ASR: 0.9, Backdoor Loss: 1.23
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.6, Loss: 1.12, ASR: 0.1, Backdoor Loss: 1.11
+Client 7 | Local Epoch 2| Acc: 71.9, Loss: 1.12, ASR: 0.1, Backdoor Loss: 1.11
+Client 7 | Local Epoch 3| Acc: 72.0, Loss: 1.18, ASR: 0.1, Backdoor Loss: 1.18
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.23, ASR: 0.1, Backdoor Loss: 1.21
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.24, ASR: 0.1, Backdoor Loss: 1.22
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.0, Loss: 0.66, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 2| Acc: 79.9, Loss: 0.66, ASR: 0.6, Backdoor Loss: 0.71
+Client 8 | Local Epoch 3| Acc: 79.6, Loss: 0.67, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 4| Acc: 79.8, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+Client 8 | Local Epoch 5| Acc: 79.3, Loss: 0.69, ASR: 0.7, Backdoor Loss: 0.75
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.93, ASR: 0.8, Backdoor Loss: 0.94
+Client 9 | Local Epoch 2| Acc: 72.4, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.98
+Client 9 | Local Epoch 3| Acc: 72.3, Loss: 0.96, ASR: 0.9, Backdoor Loss: 0.97
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 1.01, ASR: 0.9, Backdoor Loss: 1.02
+Client 9 | Local Epoch 5| Acc: 72.5, Loss: 1.02, ASR: 1.0, Backdoor Loss: 1.06
+--------------客户端 0 推理----------------
+Client 0 | Epoch 4 | desired_margin: 0.25
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 4| Acc: 80.41, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 4| Acc: 70.32, ASR: 1.05 , Artificial ASR: 0.00
+Client 2 | Epoch 4| Acc: 77.20, ASR: 0.51 , Artificial ASR: 0.45
+Client 3 | Epoch 4| Acc: 81.43, ASR: 0.62 , Artificial ASR: 0.00
+Client 4 | Epoch 4| Acc: 75.14, ASR: 0.87 , Artificial ASR: 0.00
+Client 5 | Epoch 4| Acc: 80.53, ASR: 0.62 , Artificial ASR: 0.00
+Client 6 | Epoch 4| Acc: 69.54, ASR: 0.69 , Artificial ASR: 0.00
+Client 7 | Epoch 4| Acc: 78.17, ASR: 0.49 , Artificial ASR: 4.07
+Client 8 | Epoch 4| Acc: 81.44, ASR: 0.62 , Artificial ASR: 0.00
+Client 9 | Epoch 4| Acc: 74.68, ASR: 0.69 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 5/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.7, Loss: 0.77, ASR: 1.6, Backdoor Loss: 0.81
+Client 0 | Local Epoch 2| Acc: 77.0, Loss: 0.81, ASR: 2.2, Backdoor Loss: 0.85
+Client 0 | Local Epoch 3| Acc: 77.0, Loss: 0.83, ASR: 2.6, Backdoor Loss: 0.87
+Client 0 | Local Epoch 4| Acc: 76.9, Loss: 0.84, ASR: 2.7, Backdoor Loss: 0.89
+Client 0 | Local Epoch 5| Acc: 76.9, Loss: 0.85, ASR: 2.7, Backdoor Loss: 0.90
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.2, Loss: 1.13, ASR: 1.1, Backdoor Loss: 1.26
+Client 1 | Local Epoch 2| Acc: 65.8, Loss: 1.11, ASR: 1.3, Backdoor Loss: 1.27
+Client 1 | Local Epoch 3| Acc: 66.2, Loss: 1.10, ASR: 1.0, Backdoor Loss: 1.25
+Client 1 | Local Epoch 4| Acc: 66.4, Loss: 1.13, ASR: 1.2, Backdoor Loss: 1.30
+Client 1 | Local Epoch 5| Acc: 65.5, Loss: 1.13, ASR: 1.1, Backdoor Loss: 1.28
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 74.9, Loss: 0.96, ASR: 0.8, Backdoor Loss: 0.96
+Client 2 | Local Epoch 2| Acc: 75.1, Loss: 0.97, ASR: 0.7, Backdoor Loss: 0.99
+Client 2 | Local Epoch 3| Acc: 75.1, Loss: 0.99, ASR: 0.7, Backdoor Loss: 1.01
+Client 2 | Local Epoch 4| Acc: 75.4, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.07
+Client 2 | Local Epoch 5| Acc: 75.1, Loss: 1.01, ASR: 0.6, Backdoor Loss: 1.04
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.5, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.1, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.77
+Client 3 | Local Epoch 3| Acc: 78.7, Loss: 0.72, ASR: 0.6, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 78.4, Loss: 0.74, ASR: 0.6, Backdoor Loss: 0.81
+Client 3 | Local Epoch 5| Acc: 78.5, Loss: 0.75, ASR: 0.6, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 71.4, Loss: 0.95, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 2| Acc: 71.5, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 3| Acc: 72.0, Loss: 0.96, ASR: 0.8, Backdoor Loss: 0.98
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 0.98, ASR: 1.0, Backdoor Loss: 0.99
+Client 4 | Local Epoch 5| Acc: 72.1, Loss: 0.97, ASR: 0.8, Backdoor Loss: 1.00
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.83
+Client 5 | Local Epoch 2| Acc: 77.9, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.87
+Client 5 | Local Epoch 3| Acc: 77.8, Loss: 0.80, ASR: 0.5, Backdoor Loss: 0.90
+Client 5 | Local Epoch 4| Acc: 77.5, Loss: 0.82, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.6, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.93
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.4, Loss: 1.13, ASR: 1.3, Backdoor Loss: 1.24
+Client 6 | Local Epoch 2| Acc: 66.3, Loss: 1.12, ASR: 1.1, Backdoor Loss: 1.26
+Client 6 | Local Epoch 3| Acc: 66.3, Loss: 1.14, ASR: 0.7, Backdoor Loss: 1.29
+Client 6 | Local Epoch 4| Acc: 64.8, Loss: 1.16, ASR: 0.4, Backdoor Loss: 1.28
+Client 6 | Local Epoch 5| Acc: 65.0, Loss: 1.15, ASR: 0.9, Backdoor Loss: 1.28
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.0, Loss: 1.05, ASR: 0.3, Backdoor Loss: 1.08
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.14, ASR: 0.1, Backdoor Loss: 1.14
+Client 7 | Local Epoch 3| Acc: 72.0, Loss: 1.18, ASR: 0.1, Backdoor Loss: 1.20
+Client 7 | Local Epoch 4| Acc: 71.9, Loss: 1.22, ASR: 0.1, Backdoor Loss: 1.21
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.25, ASR: 0.2, Backdoor Loss: 1.23
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.0, Loss: 0.65, ASR: 0.7, Backdoor Loss: 0.69
+Client 8 | Local Epoch 2| Acc: 79.8, Loss: 0.66, ASR: 0.7, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 79.6, Loss: 0.67, ASR: 0.8, Backdoor Loss: 0.72
+Client 8 | Local Epoch 4| Acc: 79.5, Loss: 0.67, ASR: 0.8, Backdoor Loss: 0.73
+Client 8 | Local Epoch 5| Acc: 79.5, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.9, Loss: 0.90, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 2| Acc: 72.3, Loss: 0.96, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 3| Acc: 72.4, Loss: 0.96, ASR: 0.8, Backdoor Loss: 1.02
+Client 9 | Local Epoch 4| Acc: 71.9, Loss: 0.98, ASR: 1.0, Backdoor Loss: 1.01
+Client 9 | Local Epoch 5| Acc: 72.3, Loss: 0.98, ASR: 1.0, Backdoor Loss: 1.02
+--------------客户端 0 推理----------------
+Client 0 | Epoch 5 | desired_margin: 0.3
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 5| Acc: 80.30, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 5| Acc: 70.60, ASR: 0.77 , Artificial ASR: 0.00
+Client 2 | Epoch 5| Acc: 78.40, ASR: 0.54 , Artificial ASR: 0.08
+Client 3 | Epoch 5| Acc: 81.48, ASR: 0.64 , Artificial ASR: 0.00
+Client 4 | Epoch 5| Acc: 74.55, ASR: 0.87 , Artificial ASR: 0.00
+Client 5 | Epoch 5| Acc: 80.46, ASR: 0.51 , Artificial ASR: 0.00
+Client 6 | Epoch 5| Acc: 69.90, ASR: 1.05 , Artificial ASR: 0.00
+Client 7 | Epoch 5| Acc: 78.28, ASR: 0.33 , Artificial ASR: 1.43
+Client 8 | Epoch 5| Acc: 81.44, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 5| Acc: 74.60, ASR: 0.85 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 6/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.5, Loss: 0.77, ASR: 1.5, Backdoor Loss: 0.81
+Client 0 | Local Epoch 2| Acc: 77.3, Loss: 0.80, ASR: 2.2, Backdoor Loss: 0.84
+Client 0 | Local Epoch 3| Acc: 77.0, Loss: 0.82, ASR: 2.3, Backdoor Loss: 0.86
+Client 0 | Local Epoch 4| Acc: 77.0, Loss: 0.84, ASR: 2.6, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.0, Loss: 0.85, ASR: 2.7, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.5, Loss: 1.15, ASR: 1.0, Backdoor Loss: 1.30
+Client 1 | Local Epoch 2| Acc: 66.1, Loss: 1.12, ASR: 0.9, Backdoor Loss: 1.22
+Client 1 | Local Epoch 3| Acc: 65.4, Loss: 1.11, ASR: 0.8, Backdoor Loss: 1.31
+Client 1 | Local Epoch 4| Acc: 66.1, Loss: 1.14, ASR: 0.9, Backdoor Loss: 1.34
+Client 1 | Local Epoch 5| Acc: 66.0, Loss: 1.14, ASR: 1.0, Backdoor Loss: 1.27
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.6, Loss: 0.95, ASR: 0.8, Backdoor Loss: 0.97
+Client 2 | Local Epoch 2| Acc: 76.0, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.02
+Client 2 | Local Epoch 3| Acc: 75.6, Loss: 1.02, ASR: 0.6, Backdoor Loss: 1.04
+Client 2 | Local Epoch 4| Acc: 75.4, Loss: 1.03, ASR: 0.8, Backdoor Loss: 1.08
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.05, ASR: 0.8, Backdoor Loss: 1.08
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.6, Loss: 0.67, ASR: 0.5, Backdoor Loss: 0.72
+Client 3 | Local Epoch 2| Acc: 79.2, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.76
+Client 3 | Local Epoch 3| Acc: 78.8, Loss: 0.72, ASR: 0.6, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 78.6, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.80
+Client 3 | Local Epoch 5| Acc: 78.6, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.3, Loss: 0.93, ASR: 0.9, Backdoor Loss: 0.97
+Client 4 | Local Epoch 2| Acc: 72.2, Loss: 0.95, ASR: 0.7, Backdoor Loss: 0.95
+Client 4 | Local Epoch 3| Acc: 71.7, Loss: 0.96, ASR: 0.6, Backdoor Loss: 0.95
+Client 4 | Local Epoch 4| Acc: 73.1, Loss: 0.95, ASR: 0.9, Backdoor Loss: 0.97
+Client 4 | Local Epoch 5| Acc: 72.2, Loss: 1.00, ASR: 0.7, Backdoor Loss: 0.98
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 79.1, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.83
+Client 5 | Local Epoch 2| Acc: 78.2, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.87
+Client 5 | Local Epoch 3| Acc: 78.0, Loss: 0.80, ASR: 0.5, Backdoor Loss: 0.90
+Client 5 | Local Epoch 4| Acc: 77.8, Loss: 0.81, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.6, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.92
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.2, Loss: 1.11, ASR: 0.9, Backdoor Loss: 1.27
+Client 6 | Local Epoch 2| Acc: 67.0, Loss: 1.13, ASR: 1.3, Backdoor Loss: 1.20
+Client 6 | Local Epoch 3| Acc: 66.5, Loss: 1.11, ASR: 0.8, Backdoor Loss: 1.24
+Client 6 | Local Epoch 4| Acc: 66.0, Loss: 1.15, ASR: 0.6, Backdoor Loss: 1.24
+Client 6 | Local Epoch 5| Acc: 65.3, Loss: 1.16, ASR: 0.9, Backdoor Loss: 1.28
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.1, Loss: 1.10, ASR: 0.2, Backdoor Loss: 1.13
+Client 7 | Local Epoch 2| Acc: 72.0, Loss: 1.15, ASR: 0.3, Backdoor Loss: 1.16
+Client 7 | Local Epoch 3| Acc: 72.0, Loss: 1.22, ASR: 0.2, Backdoor Loss: 1.19
+Client 7 | Local Epoch 4| Acc: 71.9, Loss: 1.24, ASR: 0.2, Backdoor Loss: 1.26
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.32, ASR: 0.1, Backdoor Loss: 1.26
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.0, Loss: 0.64, ASR: 0.6, Backdoor Loss: 0.69
+Client 8 | Local Epoch 2| Acc: 80.0, Loss: 0.65, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 79.6, Loss: 0.66, ASR: 0.7, Backdoor Loss: 0.71
+Client 8 | Local Epoch 4| Acc: 79.4, Loss: 0.67, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 5| Acc: 79.5, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.2, Loss: 0.94, ASR: 1.0, Backdoor Loss: 0.96
+Client 9 | Local Epoch 2| Acc: 72.2, Loss: 0.95, ASR: 0.7, Backdoor Loss: 0.97
+Client 9 | Local Epoch 3| Acc: 71.7, Loss: 0.98, ASR: 0.9, Backdoor Loss: 1.05
+Client 9 | Local Epoch 4| Acc: 72.4, Loss: 0.96, ASR: 1.0, Backdoor Loss: 1.04
+Client 9 | Local Epoch 5| Acc: 72.5, Loss: 1.00, ASR: 0.8, Backdoor Loss: 1.03
+--------------客户端 0 推理----------------
+Client 0 | Epoch 6 | desired_margin: 0.35
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 6| Acc: 80.38, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 6| Acc: 70.46, ASR: 0.82 , Artificial ASR: 0.00
+Client 2 | Epoch 6| Acc: 78.76, ASR: 1.00 , Artificial ASR: 5.54
+Client 3 | Epoch 6| Acc: 81.64, ASR: 0.56 , Artificial ASR: 0.00
+Client 4 | Epoch 6| Acc: 75.19, ASR: 0.87 , Artificial ASR: 0.00
+Client 5 | Epoch 6| Acc: 80.41, ASR: 0.49 , Artificial ASR: 0.00
+Client 6 | Epoch 6| Acc: 70.52, ASR: 0.80 , Artificial ASR: 0.00
+Client 7 | Epoch 6| Acc: 77.86, ASR: 0.31 , Artificial ASR: 0.53
+Client 8 | Epoch 6| Acc: 81.36, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 6| Acc: 74.96, ASR: 0.82 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 7/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.7, Loss: 0.77, ASR: 1.4, Backdoor Loss: 0.81
+Client 0 | Local Epoch 2| Acc: 77.5, Loss: 0.80, ASR: 1.9, Backdoor Loss: 0.84
+Client 0 | Local Epoch 3| Acc: 77.2, Loss: 0.82, ASR: 2.3, Backdoor Loss: 0.86
+Client 0 | Local Epoch 4| Acc: 77.3, Loss: 0.83, ASR: 2.4, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.2, Loss: 0.84, ASR: 2.6, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.0, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.32
+Client 1 | Local Epoch 2| Acc: 66.3, Loss: 1.15, ASR: 1.0, Backdoor Loss: 1.33
+Client 1 | Local Epoch 3| Acc: 65.9, Loss: 1.13, ASR: 0.9, Backdoor Loss: 1.29
+Client 1 | Local Epoch 4| Acc: 65.6, Loss: 1.15, ASR: 0.8, Backdoor Loss: 1.32
+Client 1 | Local Epoch 5| Acc: 65.9, Loss: 1.13, ASR: 1.1, Backdoor Loss: 1.32
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.6, Loss: 1.00, ASR: 0.9, Backdoor Loss: 1.03
+Client 2 | Local Epoch 2| Acc: 75.7, Loss: 1.04, ASR: 0.8, Backdoor Loss: 1.09
+Client 2 | Local Epoch 3| Acc: 75.1, Loss: 1.05, ASR: 0.9, Backdoor Loss: 1.11
+Client 2 | Local Epoch 4| Acc: 75.9, Loss: 1.07, ASR: 0.8, Backdoor Loss: 1.10
+Client 2 | Local Epoch 5| Acc: 75.9, Loss: 1.10, ASR: 0.7, Backdoor Loss: 1.12
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.67, ASR: 0.5, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.0, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.76
+Client 3 | Local Epoch 3| Acc: 78.8, Loss: 0.72, ASR: 0.5, Backdoor Loss: 0.78
+Client 3 | Local Epoch 4| Acc: 78.6, Loss: 0.73, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 5| Acc: 78.4, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.81
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.9, Loss: 0.91, ASR: 0.7, Backdoor Loss: 0.93
+Client 4 | Local Epoch 2| Acc: 72.3, Loss: 0.95, ASR: 0.8, Backdoor Loss: 0.97
+Client 4 | Local Epoch 3| Acc: 72.6, Loss: 0.93, ASR: 0.6, Backdoor Loss: 0.95
+Client 4 | Local Epoch 4| Acc: 71.7, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 5| Acc: 72.3, Loss: 1.01, ASR: 0.9, Backdoor Loss: 1.04
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.83
+Client 5 | Local Epoch 2| Acc: 78.4, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.87
+Client 5 | Local Epoch 3| Acc: 78.1, Loss: 0.80, ASR: 0.5, Backdoor Loss: 0.89
+Client 5 | Local Epoch 4| Acc: 77.8, Loss: 0.82, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.6, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.93
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.2, Loss: 1.13, ASR: 1.3, Backdoor Loss: 1.28
+Client 6 | Local Epoch 2| Acc: 66.6, Loss: 1.15, ASR: 0.7, Backdoor Loss: 1.24
+Client 6 | Local Epoch 3| Acc: 66.1, Loss: 1.13, ASR: 0.8, Backdoor Loss: 1.21
+Client 6 | Local Epoch 4| Acc: 65.6, Loss: 1.15, ASR: 0.6, Backdoor Loss: 1.26
+Client 6 | Local Epoch 5| Acc: 65.6, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.23
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 73.0, Loss: 1.09, ASR: 0.2, Backdoor Loss: 1.12
+Client 7 | Local Epoch 2| Acc: 72.3, Loss: 1.19, ASR: 0.1, Backdoor Loss: 1.24
+Client 7 | Local Epoch 3| Acc: 72.9, Loss: 1.22, ASR: 0.2, Backdoor Loss: 1.24
+Client 7 | Local Epoch 4| Acc: 72.3, Loss: 1.27, ASR: 0.2, Backdoor Loss: 1.28
+Client 7 | Local Epoch 5| Acc: 72.0, Loss: 1.33, ASR: 0.2, Backdoor Loss: 1.34
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.64, ASR: 0.6, Backdoor Loss: 0.68
+Client 8 | Local Epoch 2| Acc: 79.7, Loss: 0.65, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 79.7, Loss: 0.66, ASR: 0.7, Backdoor Loss: 0.71
+Client 8 | Local Epoch 4| Acc: 79.3, Loss: 0.67, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 5| Acc: 79.4, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.2, Loss: 0.93, ASR: 0.9, Backdoor Loss: 0.94
+Client 9 | Local Epoch 2| Acc: 72.5, Loss: 0.95, ASR: 1.1, Backdoor Loss: 0.97
+Client 9 | Local Epoch 3| Acc: 72.2, Loss: 0.97, ASR: 0.7, Backdoor Loss: 0.97
+Client 9 | Local Epoch 4| Acc: 72.3, Loss: 0.99, ASR: 0.7, Backdoor Loss: 0.99
+Client 9 | Local Epoch 5| Acc: 72.7, Loss: 0.98, ASR: 0.9, Backdoor Loss: 1.03
+--------------客户端 0 推理----------------
+Client 0 | Epoch 7 | desired_margin: 0.39999999999999997
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 7| Acc: 80.43, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 7| Acc: 71.06, ASR: 0.85 , Artificial ASR: 0.00
+Client 2 | Epoch 7| Acc: 78.01, ASR: 0.85 , Artificial ASR: 1.31
+Client 3 | Epoch 7| Acc: 81.56, ASR: 0.54 , Artificial ASR: 0.00
+Client 4 | Epoch 7| Acc: 74.73, ASR: 0.77 , Artificial ASR: 0.00
+Client 5 | Epoch 7| Acc: 80.51, ASR: 0.44 , Artificial ASR: 0.00
+Client 6 | Epoch 7| Acc: 70.47, ASR: 0.49 , Artificial ASR: 0.00
+Client 7 | Epoch 7| Acc: 77.97, ASR: 0.28 , Artificial ASR: 0.53
+Client 8 | Epoch 7| Acc: 81.41, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 7| Acc: 75.27, ASR: 0.74 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 8/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 77.9, Loss: 0.77, ASR: 1.4, Backdoor Loss: 0.81
+Client 0 | Local Epoch 2| Acc: 77.6, Loss: 0.80, ASR: 1.8, Backdoor Loss: 0.84
+Client 0 | Local Epoch 3| Acc: 77.4, Loss: 0.82, ASR: 2.1, Backdoor Loss: 0.86
+Client 0 | Local Epoch 4| Acc: 77.3, Loss: 0.83, ASR: 2.3, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.3, Loss: 0.84, ASR: 2.4, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.8, Loss: 1.14, ASR: 1.1, Backdoor Loss: 1.35
+Client 1 | Local Epoch 2| Acc: 66.8, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.34
+Client 1 | Local Epoch 3| Acc: 66.7, Loss: 1.13, ASR: 1.2, Backdoor Loss: 1.30
+Client 1 | Local Epoch 4| Acc: 66.1, Loss: 1.13, ASR: 1.1, Backdoor Loss: 1.37
+Client 1 | Local Epoch 5| Acc: 66.4, Loss: 1.13, ASR: 1.1, Backdoor Loss: 1.37
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 76.1, Loss: 1.01, ASR: 0.9, Backdoor Loss: 1.05
+Client 2 | Local Epoch 2| Acc: 75.8, Loss: 1.04, ASR: 0.8, Backdoor Loss: 1.08
+Client 2 | Local Epoch 3| Acc: 74.9, Loss: 1.08, ASR: 0.8, Backdoor Loss: 1.13
+Client 2 | Local Epoch 4| Acc: 75.7, Loss: 1.06, ASR: 0.8, Backdoor Loss: 1.12
+Client 2 | Local Epoch 5| Acc: 75.5, Loss: 1.08, ASR: 0.8, Backdoor Loss: 1.15
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.68, ASR: 0.4, Backdoor Loss: 0.72
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.76
+Client 3 | Local Epoch 3| Acc: 79.1, Loss: 0.72, ASR: 0.4, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 78.6, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 5| Acc: 78.6, Loss: 0.75, ASR: 0.3, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.8, Loss: 0.94, ASR: 0.6, Backdoor Loss: 0.96
+Client 4 | Local Epoch 2| Acc: 72.4, Loss: 0.93, ASR: 0.9, Backdoor Loss: 0.96
+Client 4 | Local Epoch 3| Acc: 72.6, Loss: 0.97, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 4| Acc: 72.4, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.00
+Client 4 | Local Epoch 5| Acc: 71.7, Loss: 0.99, ASR: 0.9, Backdoor Loss: 1.01
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.84
+Client 5 | Local Epoch 2| Acc: 78.2, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.88
+Client 5 | Local Epoch 3| Acc: 77.9, Loss: 0.80, ASR: 0.5, Backdoor Loss: 0.90
+Client 5 | Local Epoch 4| Acc: 77.8, Loss: 0.81, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.5, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.92
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.2, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.26
+Client 6 | Local Epoch 2| Acc: 66.5, Loss: 1.14, ASR: 1.1, Backdoor Loss: 1.25
+Client 6 | Local Epoch 3| Acc: 66.0, Loss: 1.15, ASR: 1.0, Backdoor Loss: 1.28
+Client 6 | Local Epoch 4| Acc: 66.3, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.27
+Client 6 | Local Epoch 5| Acc: 65.1, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.29
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.9, Loss: 1.11, ASR: 0.3, Backdoor Loss: 1.15
+Client 7 | Local Epoch 2| Acc: 72.3, Loss: 1.21, ASR: 0.2, Backdoor Loss: 1.23
+Client 7 | Local Epoch 3| Acc: 72.2, Loss: 1.28, ASR: 0.2, Backdoor Loss: 1.29
+Client 7 | Local Epoch 4| Acc: 71.6, Loss: 1.32, ASR: 0.2, Backdoor Loss: 1.37
+Client 7 | Local Epoch 5| Acc: 71.7, Loss: 1.32, ASR: 0.1, Backdoor Loss: 1.37
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.1, Loss: 0.65, ASR: 0.6, Backdoor Loss: 0.69
+Client 8 | Local Epoch 2| Acc: 80.0, Loss: 0.66, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 79.7, Loss: 0.67, ASR: 0.6, Backdoor Loss: 0.71
+Client 8 | Local Epoch 4| Acc: 79.5, Loss: 0.67, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.6, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.96
+Client 9 | Local Epoch 2| Acc: 72.8, Loss: 0.97, ASR: 1.0, Backdoor Loss: 0.97
+Client 9 | Local Epoch 3| Acc: 71.6, Loss: 0.99, ASR: 0.5, Backdoor Loss: 1.01
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 0.96, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 5| Acc: 72.8, Loss: 0.98, ASR: 0.9, Backdoor Loss: 1.05
+--------------客户端 0 推理----------------
+Client 0 | Epoch 8 | desired_margin: 0.44999999999999996
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 8| Acc: 80.49, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 8| Acc: 71.27, ASR: 1.23 , Artificial ASR: 0.00
+Client 2 | Epoch 8| Acc: 77.89, ASR: 0.77 , Artificial ASR: 2.00
+Client 3 | Epoch 8| Acc: 81.51, ASR: 0.56 , Artificial ASR: 0.00
+Client 4 | Epoch 8| Acc: 74.43, ASR: 0.85 , Artificial ASR: 0.00
+Client 5 | Epoch 8| Acc: 80.61, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 8| Acc: 70.77, ASR: 1.31 , Artificial ASR: 0.00
+Client 7 | Epoch 8| Acc: 78.25, ASR: 0.74 , Artificial ASR: 0.69
+Client 8 | Epoch 8| Acc: 81.46, ASR: 0.56 , Artificial ASR: 0.00
+Client 9 | Epoch 8| Acc: 75.12, ASR: 0.90 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 9/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.1, Loss: 0.78, ASR: 1.3, Backdoor Loss: 0.81
+Client 0 | Local Epoch 2| Acc: 77.7, Loss: 0.80, ASR: 1.7, Backdoor Loss: 0.84
+Client 0 | Local Epoch 3| Acc: 77.4, Loss: 0.82, ASR: 1.8, Backdoor Loss: 0.86
+Client 0 | Local Epoch 4| Acc: 77.5, Loss: 0.84, ASR: 2.2, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.4, Loss: 0.85, ASR: 2.3, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.5, Loss: 1.16, ASR: 1.0, Backdoor Loss: 1.26
+Client 1 | Local Epoch 2| Acc: 66.1, Loss: 1.14, ASR: 1.0, Backdoor Loss: 1.27
+Client 1 | Local Epoch 3| Acc: 66.3, Loss: 1.14, ASR: 1.0, Backdoor Loss: 1.31
+Client 1 | Local Epoch 4| Acc: 67.0, Loss: 1.13, ASR: 0.6, Backdoor Loss: 1.28
+Client 1 | Local Epoch 5| Acc: 65.1, Loss: 1.15, ASR: 0.7, Backdoor Loss: 1.38
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.5, Loss: 1.01, ASR: 0.8, Backdoor Loss: 1.08
+Client 2 | Local Epoch 2| Acc: 75.9, Loss: 1.04, ASR: 0.9, Backdoor Loss: 1.11
+Client 2 | Local Epoch 3| Acc: 76.0, Loss: 1.06, ASR: 0.7, Backdoor Loss: 1.15
+Client 2 | Local Epoch 4| Acc: 75.7, Loss: 1.11, ASR: 0.7, Backdoor Loss: 1.17
+Client 2 | Local Epoch 5| Acc: 76.4, Loss: 1.11, ASR: 0.9, Backdoor Loss: 1.16
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.68, ASR: 0.5, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.4, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.76
+Client 3 | Local Epoch 3| Acc: 79.3, Loss: 0.72, ASR: 0.4, Backdoor Loss: 0.78
+Client 3 | Local Epoch 4| Acc: 78.8, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 5| Acc: 78.6, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.81
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.3, Loss: 0.94, ASR: 0.8, Backdoor Loss: 0.94
+Client 4 | Local Epoch 2| Acc: 73.0, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 3| Acc: 72.4, Loss: 0.97, ASR: 0.6, Backdoor Loss: 0.96
+Client 4 | Local Epoch 4| Acc: 71.7, Loss: 1.02, ASR: 0.5, Backdoor Loss: 1.01
+Client 4 | Local Epoch 5| Acc: 72.6, Loss: 1.00, ASR: 0.5, Backdoor Loss: 0.98
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.83
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.88
+Client 5 | Local Epoch 3| Acc: 77.9, Loss: 0.81, ASR: 0.6, Backdoor Loss: 0.89
+Client 5 | Local Epoch 4| Acc: 77.7, Loss: 0.82, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.7, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.93
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.1, Loss: 1.13, ASR: 0.9, Backdoor Loss: 1.22
+Client 6 | Local Epoch 2| Acc: 67.6, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.26
+Client 6 | Local Epoch 3| Acc: 67.0, Loss: 1.11, ASR: 1.3, Backdoor Loss: 1.24
+Client 6 | Local Epoch 4| Acc: 65.5, Loss: 1.15, ASR: 0.8, Backdoor Loss: 1.28
+Client 6 | Local Epoch 5| Acc: 66.0, Loss: 1.12, ASR: 0.8, Backdoor Loss: 1.25
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.5, Loss: 1.11, ASR: 0.5, Backdoor Loss: 1.22
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.25, ASR: 0.3, Backdoor Loss: 1.32
+Client 7 | Local Epoch 3| Acc: 71.1, Loss: 1.30, ASR: 0.2, Backdoor Loss: 1.34
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.37, ASR: 0.2, Backdoor Loss: 1.38
+Client 7 | Local Epoch 5| Acc: 71.1, Loss: 1.41, ASR: 0.2, Backdoor Loss: 1.44
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.65, ASR: 0.6, Backdoor Loss: 0.69
+Client 8 | Local Epoch 2| Acc: 80.2, Loss: 0.66, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 80.1, Loss: 0.67, ASR: 0.6, Backdoor Loss: 0.71
+Client 8 | Local Epoch 4| Acc: 79.7, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.1, Loss: 0.93, ASR: 0.7, Backdoor Loss: 0.95
+Client 9 | Local Epoch 2| Acc: 73.1, Loss: 0.95, ASR: 0.7, Backdoor Loss: 0.98
+Client 9 | Local Epoch 3| Acc: 72.1, Loss: 0.97, ASR: 0.8, Backdoor Loss: 0.97
+Client 9 | Local Epoch 4| Acc: 72.2, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.00
+Client 9 | Local Epoch 5| Acc: 72.2, Loss: 1.01, ASR: 1.0, Backdoor Loss: 1.02
+--------------客户端 0 推理----------------
+Client 0 | Epoch 9 | desired_margin: 0.49999999999999994
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 9| Acc: 80.41, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 9| Acc: 71.09, ASR: 0.92 , Artificial ASR: 0.00
+Client 2 | Epoch 9| Acc: 78.01, ASR: 0.56 , Artificial ASR: 0.20
+Client 3 | Epoch 9| Acc: 81.46, ASR: 0.56 , Artificial ASR: 0.00
+Client 4 | Epoch 9| Acc: 75.04, ASR: 1.03 , Artificial ASR: 0.00
+Client 5 | Epoch 9| Acc: 80.48, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 9| Acc: 70.34, ASR: 0.95 , Artificial ASR: 0.00
+Client 7 | Epoch 9| Acc: 77.83, ASR: 1.10 , Artificial ASR: 1.74
+Client 8 | Epoch 9| Acc: 81.41, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 9| Acc: 74.55, ASR: 0.69 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 10/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.2, Loss: 0.78, ASR: 1.2, Backdoor Loss: 0.82
+Client 0 | Local Epoch 2| Acc: 77.8, Loss: 0.81, ASR: 1.7, Backdoor Loss: 0.85
+Client 0 | Local Epoch 3| Acc: 77.6, Loss: 0.82, ASR: 1.8, Backdoor Loss: 0.87
+Client 0 | Local Epoch 4| Acc: 77.5, Loss: 0.84, ASR: 1.8, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.6, Loss: 0.85, ASR: 2.1, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.1, Loss: 1.18, ASR: 1.1, Backdoor Loss: 1.33
+Client 1 | Local Epoch 2| Acc: 65.9, Loss: 1.13, ASR: 0.9, Backdoor Loss: 1.28
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.13, ASR: 1.2, Backdoor Loss: 1.37
+Client 1 | Local Epoch 4| Acc: 66.2, Loss: 1.16, ASR: 1.1, Backdoor Loss: 1.32
+Client 1 | Local Epoch 5| Acc: 65.0, Loss: 1.15, ASR: 1.1, Backdoor Loss: 1.35
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.0, Loss: 1.03, ASR: 0.8, Backdoor Loss: 1.11
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.08, ASR: 0.7, Backdoor Loss: 1.14
+Client 2 | Local Epoch 3| Acc: 75.3, Loss: 1.10, ASR: 0.7, Backdoor Loss: 1.18
+Client 2 | Local Epoch 4| Acc: 75.3, Loss: 1.14, ASR: 0.7, Backdoor Loss: 1.23
+Client 2 | Local Epoch 5| Acc: 76.0, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.26
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.68, ASR: 0.4, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.8, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.76
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.73, ASR: 0.4, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 79.0, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 5| Acc: 78.8, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.9, Loss: 0.94, ASR: 0.7, Backdoor Loss: 0.94
+Client 4 | Local Epoch 2| Acc: 72.8, Loss: 0.97, ASR: 0.9, Backdoor Loss: 0.99
+Client 4 | Local Epoch 3| Acc: 72.9, Loss: 0.98, ASR: 0.7, Backdoor Loss: 0.97
+Client 4 | Local Epoch 4| Acc: 72.2, Loss: 0.99, ASR: 0.8, Backdoor Loss: 1.00
+Client 4 | Local Epoch 5| Acc: 72.0, Loss: 0.99, ASR: 0.4, Backdoor Loss: 0.99
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.84
+Client 5 | Local Epoch 2| Acc: 78.3, Loss: 0.79, ASR: 0.5, Backdoor Loss: 0.89
+Client 5 | Local Epoch 3| Acc: 78.0, Loss: 0.81, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 4| Acc: 77.9, Loss: 0.82, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 5| Acc: 77.8, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.93
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.7, Loss: 1.18, ASR: 1.1, Backdoor Loss: 1.30
+Client 6 | Local Epoch 2| Acc: 65.8, Loss: 1.21, ASR: 0.9, Backdoor Loss: 1.35
+Client 6 | Local Epoch 3| Acc: 66.5, Loss: 1.17, ASR: 1.0, Backdoor Loss: 1.31
+Client 6 | Local Epoch 4| Acc: 65.9, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.31
+Client 6 | Local Epoch 5| Acc: 65.7, Loss: 1.18, ASR: 1.2, Backdoor Loss: 1.28
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.8, Loss: 1.18, ASR: 0.1, Backdoor Loss: 1.23
+Client 7 | Local Epoch 2| Acc: 72.0, Loss: 1.28, ASR: 0.2, Backdoor Loss: 1.27
+Client 7 | Local Epoch 3| Acc: 71.2, Loss: 1.33, ASR: 0.3, Backdoor Loss: 1.35
+Client 7 | Local Epoch 4| Acc: 71.3, Loss: 1.39, ASR: 0.2, Backdoor Loss: 1.41
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.41, ASR: 0.3, Backdoor Loss: 1.44
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.3, Loss: 0.65, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 2| Acc: 80.2, Loss: 0.66, ASR: 0.6, Backdoor Loss: 0.70
+Client 8 | Local Epoch 3| Acc: 80.0, Loss: 0.67, ASR: 0.6, Backdoor Loss: 0.72
+Client 8 | Local Epoch 4| Acc: 79.7, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.73
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.73
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.4, Loss: 0.94, ASR: 0.7, Backdoor Loss: 0.96
+Client 9 | Local Epoch 2| Acc: 72.3, Loss: 0.95, ASR: 0.7, Backdoor Loss: 1.00
+Client 9 | Local Epoch 3| Acc: 73.4, Loss: 0.96, ASR: 0.7, Backdoor Loss: 1.00
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 0.98, ASR: 0.9, Backdoor Loss: 1.00
+Client 9 | Local Epoch 5| Acc: 72.7, Loss: 1.01, ASR: 0.7, Backdoor Loss: 1.00
+--------------客户端 0 推理----------------
+Client 0 | Epoch 10 | desired_margin: 0.5499999999999999
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 10| Acc: 80.49, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 10| Acc: 71.06, ASR: 1.34 , Artificial ASR: 0.00
+Client 2 | Epoch 10| Acc: 77.51, ASR: 0.51 , Artificial ASR: 0.00
+Client 3 | Epoch 10| Acc: 81.40, ASR: 0.56 , Artificial ASR: 0.00
+Client 4 | Epoch 10| Acc: 74.57, ASR: 0.92 , Artificial ASR: 0.00
+Client 5 | Epoch 10| Acc: 80.54, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 10| Acc: 71.59, ASR: 0.69 , Artificial ASR: 0.00
+Client 7 | Epoch 10| Acc: 78.23, ASR: 1.03 , Artificial ASR: 8.73
+Client 8 | Epoch 10| Acc: 81.31, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 10| Acc: 75.38, ASR: 0.74 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 11/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.3, Loss: 0.79, ASR: 1.2, Backdoor Loss: 0.82
+Client 0 | Local Epoch 2| Acc: 78.0, Loss: 0.81, ASR: 1.5, Backdoor Loss: 0.85
+Client 0 | Local Epoch 3| Acc: 77.7, Loss: 0.83, ASR: 1.7, Backdoor Loss: 0.87
+Client 0 | Local Epoch 4| Acc: 77.6, Loss: 0.84, ASR: 1.8, Backdoor Loss: 0.88
+Client 0 | Local Epoch 5| Acc: 77.7, Loss: 0.85, ASR: 1.8, Backdoor Loss: 0.89
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 68.2, Loss: 1.16, ASR: 1.0, Backdoor Loss: 1.30
+Client 1 | Local Epoch 2| Acc: 66.5, Loss: 1.15, ASR: 1.0, Backdoor Loss: 1.36
+Client 1 | Local Epoch 3| Acc: 65.4, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.35
+Client 1 | Local Epoch 4| Acc: 65.7, Loss: 1.17, ASR: 1.1, Backdoor Loss: 1.40
+Client 1 | Local Epoch 5| Acc: 66.1, Loss: 1.13, ASR: 1.2, Backdoor Loss: 1.43
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 74.7, Loss: 1.08, ASR: 0.8, Backdoor Loss: 1.14
+Client 2 | Local Epoch 2| Acc: 74.7, Loss: 1.14, ASR: 0.5, Backdoor Loss: 1.22
+Client 2 | Local Epoch 3| Acc: 75.1, Loss: 1.13, ASR: 0.8, Backdoor Loss: 1.23
+Client 2 | Local Epoch 4| Acc: 74.8, Loss: 1.14, ASR: 0.8, Backdoor Loss: 1.27
+Client 2 | Local Epoch 5| Acc: 74.6, Loss: 1.20, ASR: 0.7, Backdoor Loss: 1.33
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.69, ASR: 0.5, Backdoor Loss: 0.73
+Client 3 | Local Epoch 2| Acc: 79.8, Loss: 0.71, ASR: 0.5, Backdoor Loss: 0.77
+Client 3 | Local Epoch 3| Acc: 79.5, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.79
+Client 3 | Local Epoch 4| Acc: 79.2, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.81
+Client 3 | Local Epoch 5| Acc: 79.0, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.3, Loss: 0.97, ASR: 0.8, Backdoor Loss: 0.99
+Client 4 | Local Epoch 2| Acc: 72.8, Loss: 0.98, ASR: 0.6, Backdoor Loss: 0.97
+Client 4 | Local Epoch 3| Acc: 73.1, Loss: 0.98, ASR: 0.9, Backdoor Loss: 0.96
+Client 4 | Local Epoch 4| Acc: 73.8, Loss: 0.97, ASR: 0.6, Backdoor Loss: 0.98
+Client 4 | Local Epoch 5| Acc: 72.3, Loss: 1.00, ASR: 0.6, Backdoor Loss: 1.02
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.85
+Client 5 | Local Epoch 2| Acc: 78.6, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.88
+Client 5 | Local Epoch 3| Acc: 78.0, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.90
+Client 5 | Local Epoch 4| Acc: 77.9, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.92
+Client 5 | Local Epoch 5| Acc: 77.9, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.93
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.5, Loss: 1.17, ASR: 0.6, Backdoor Loss: 1.34
+Client 6 | Local Epoch 2| Acc: 66.4, Loss: 1.20, ASR: 0.6, Backdoor Loss: 1.32
+Client 6 | Local Epoch 3| Acc: 66.1, Loss: 1.19, ASR: 0.8, Backdoor Loss: 1.28
+Client 6 | Local Epoch 4| Acc: 64.9, Loss: 1.20, ASR: 0.9, Backdoor Loss: 1.30
+Client 6 | Local Epoch 5| Acc: 65.9, Loss: 1.20, ASR: 1.2, Backdoor Loss: 1.30
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.4, Loss: 1.18, ASR: 0.3, Backdoor Loss: 1.25
+Client 7 | Local Epoch 2| Acc: 71.7, Loss: 1.31, ASR: 0.2, Backdoor Loss: 1.33
+Client 7 | Local Epoch 3| Acc: 71.9, Loss: 1.38, ASR: 0.2, Backdoor Loss: 1.38
+Client 7 | Local Epoch 4| Acc: 71.7, Loss: 1.44, ASR: 0.2, Backdoor Loss: 1.51
+Client 7 | Local Epoch 5| Acc: 71.8, Loss: 1.53, ASR: 0.3, Backdoor Loss: 1.53
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.4, Loss: 0.66, ASR: 0.5, Backdoor Loss: 0.70
+Client 8 | Local Epoch 2| Acc: 80.3, Loss: 0.67, ASR: 0.6, Backdoor Loss: 0.71
+Client 8 | Local Epoch 3| Acc: 80.0, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.72
+Client 8 | Local Epoch 4| Acc: 79.8, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.73
+Client 8 | Local Epoch 5| Acc: 79.7, Loss: 0.69, ASR: 0.7, Backdoor Loss: 0.74
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.94, ASR: 1.2, Backdoor Loss: 0.96
+Client 9 | Local Epoch 2| Acc: 73.3, Loss: 0.95, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 3| Acc: 72.9, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.01
+Client 9 | Local Epoch 4| Acc: 73.3, Loss: 0.98, ASR: 1.0, Backdoor Loss: 0.99
+Client 9 | Local Epoch 5| Acc: 71.6, Loss: 1.00, ASR: 0.9, Backdoor Loss: 1.01
+--------------客户端 0 推理----------------
+Client 0 | Epoch 11 | desired_margin: 0.6
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 11| Acc: 80.59, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 11| Acc: 71.77, ASR: 1.21 , Artificial ASR: 0.00
+Client 2 | Epoch 11| Acc: 77.64, ASR: 0.62 , Artificial ASR: 0.04
+Client 3 | Epoch 11| Acc: 81.35, ASR: 0.54 , Artificial ASR: 0.00
+Client 4 | Epoch 11| Acc: 75.99, ASR: 0.64 , Artificial ASR: 0.00
+Client 5 | Epoch 11| Acc: 80.45, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 11| Acc: 71.52, ASR: 1.00 , Artificial ASR: 0.00
+Client 7 | Epoch 11| Acc: 78.12, ASR: 1.05 , Artificial ASR: 10.69
+Client 8 | Epoch 11| Acc: 81.44, ASR: 0.54 , Artificial ASR: 0.00
+Client 9 | Epoch 11| Acc: 75.83, ASR: 0.90 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 12/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.3, Loss: 0.79, ASR: 1.2, Backdoor Loss: 0.83
+Client 0 | Local Epoch 2| Acc: 78.0, Loss: 0.82, ASR: 1.5, Backdoor Loss: 0.86
+Client 0 | Local Epoch 3| Acc: 77.8, Loss: 0.83, ASR: 1.7, Backdoor Loss: 0.87
+Client 0 | Local Epoch 4| Acc: 77.7, Loss: 0.85, ASR: 1.7, Backdoor Loss: 0.89
+Client 0 | Local Epoch 5| Acc: 77.6, Loss: 0.86, ASR: 1.8, Backdoor Loss: 0.90
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.4, Loss: 1.21, ASR: 0.9, Backdoor Loss: 1.33
+Client 1 | Local Epoch 2| Acc: 66.1, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.37
+Client 1 | Local Epoch 3| Acc: 65.7, Loss: 1.22, ASR: 1.1, Backdoor Loss: 1.42
+Client 1 | Local Epoch 4| Acc: 66.9, Loss: 1.16, ASR: 1.0, Backdoor Loss: 1.31
+Client 1 | Local Epoch 5| Acc: 65.4, Loss: 1.21, ASR: 0.9, Backdoor Loss: 1.40
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.2, Loss: 1.05, ASR: 0.8, Backdoor Loss: 1.13
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.10, ASR: 1.0, Backdoor Loss: 1.18
+Client 2 | Local Epoch 3| Acc: 74.8, Loss: 1.12, ASR: 0.9, Backdoor Loss: 1.26
+Client 2 | Local Epoch 4| Acc: 75.5, Loss: 1.11, ASR: 1.1, Backdoor Loss: 1.26
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.17, ASR: 1.0, Backdoor Loss: 1.31
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.2, Loss: 0.69, ASR: 0.5, Backdoor Loss: 0.74
+Client 3 | Local Epoch 2| Acc: 79.7, Loss: 0.72, ASR: 0.4, Backdoor Loss: 0.77
+Client 3 | Local Epoch 3| Acc: 79.5, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 4| Acc: 79.3, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.81
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.82
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.9, Loss: 0.95, ASR: 1.0, Backdoor Loss: 0.94
+Client 4 | Local Epoch 2| Acc: 72.9, Loss: 0.97, ASR: 0.5, Backdoor Loss: 0.99
+Client 4 | Local Epoch 3| Acc: 71.9, Loss: 1.00, ASR: 0.8, Backdoor Loss: 0.99
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 0.99, ASR: 0.9, Backdoor Loss: 1.01
+Client 4 | Local Epoch 5| Acc: 73.1, Loss: 0.98, ASR: 0.7, Backdoor Loss: 0.98
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.85
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.88
+Client 5 | Local Epoch 3| Acc: 78.0, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.91
+Client 5 | Local Epoch 4| Acc: 78.0, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.93
+Client 5 | Local Epoch 5| Acc: 78.0, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.94
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.6, Loss: 1.19, ASR: 1.5, Backdoor Loss: 1.30
+Client 6 | Local Epoch 2| Acc: 65.9, Loss: 1.16, ASR: 1.3, Backdoor Loss: 1.38
+Client 6 | Local Epoch 3| Acc: 65.8, Loss: 1.19, ASR: 1.0, Backdoor Loss: 1.35
+Client 6 | Local Epoch 4| Acc: 67.1, Loss: 1.20, ASR: 1.1, Backdoor Loss: 1.31
+Client 6 | Local Epoch 5| Acc: 65.5, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.33
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.0, Loss: 1.23, ASR: 0.3, Backdoor Loss: 1.28
+Client 7 | Local Epoch 2| Acc: 71.7, Loss: 1.33, ASR: 0.4, Backdoor Loss: 1.35
+Client 7 | Local Epoch 3| Acc: 71.1, Loss: 1.41, ASR: 0.2, Backdoor Loss: 1.47
+Client 7 | Local Epoch 4| Acc: 72.1, Loss: 1.49, ASR: 0.3, Backdoor Loss: 1.51
+Client 7 | Local Epoch 5| Acc: 71.1, Loss: 1.53, ASR: 0.2, Backdoor Loss: 1.54
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.3, Loss: 0.67, ASR: 0.5, Backdoor Loss: 0.71
+Client 8 | Local Epoch 2| Acc: 80.3, Loss: 0.67, ASR: 0.6, Backdoor Loss: 0.72
+Client 8 | Local Epoch 3| Acc: 80.2, Loss: 0.68, ASR: 0.6, Backdoor Loss: 0.73
+Client 8 | Local Epoch 4| Acc: 79.9, Loss: 0.69, ASR: 0.7, Backdoor Loss: 0.73
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.70, ASR: 0.7, Backdoor Loss: 0.74
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.3, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.93
+Client 9 | Local Epoch 2| Acc: 72.7, Loss: 0.98, ASR: 0.7, Backdoor Loss: 0.99
+Client 9 | Local Epoch 3| Acc: 72.7, Loss: 0.97, ASR: 0.8, Backdoor Loss: 0.99
+Client 9 | Local Epoch 4| Acc: 71.9, Loss: 1.00, ASR: 0.7, Backdoor Loss: 1.03
+Client 9 | Local Epoch 5| Acc: 72.8, Loss: 1.04, ASR: 0.6, Backdoor Loss: 1.09
+--------------客户端 0 推理----------------
+Client 0 | Epoch 12 | desired_margin: 0.65
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 12| Acc: 80.59, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 12| Acc: 71.34, ASR: 1.39 , Artificial ASR: 0.00
+Client 2 | Epoch 12| Acc: 77.92, ASR: 0.72 , Artificial ASR: 0.16
+Client 3 | Epoch 12| Acc: 81.41, ASR: 0.54 , Artificial ASR: 0.00
+Client 4 | Epoch 12| Acc: 75.91, ASR: 0.69 , Artificial ASR: 0.00
+Client 5 | Epoch 12| Acc: 80.49, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 12| Acc: 71.63, ASR: 1.26 , Artificial ASR: 0.00
+Client 7 | Epoch 12| Acc: 77.84, ASR: 0.51 , Artificial ASR: 11.63
+Client 8 | Epoch 12| Acc: 81.38, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 12| Acc: 74.81, ASR: 0.69 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 13/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.80, ASR: 1.2, Backdoor Loss: 0.83
+Client 0 | Local Epoch 2| Acc: 78.1, Loss: 0.82, ASR: 1.4, Backdoor Loss: 0.86
+Client 0 | Local Epoch 3| Acc: 78.0, Loss: 0.84, ASR: 1.5, Backdoor Loss: 0.88
+Client 0 | Local Epoch 4| Acc: 77.8, Loss: 0.85, ASR: 1.7, Backdoor Loss: 0.89
+Client 0 | Local Epoch 5| Acc: 77.7, Loss: 0.86, ASR: 1.7, Backdoor Loss: 0.90
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.4, Loss: 1.24, ASR: 1.4, Backdoor Loss: 1.41
+Client 1 | Local Epoch 2| Acc: 67.0, Loss: 1.17, ASR: 1.1, Backdoor Loss: 1.36
+Client 1 | Local Epoch 3| Acc: 65.6, Loss: 1.21, ASR: 1.0, Backdoor Loss: 1.39
+Client 1 | Local Epoch 4| Acc: 65.9, Loss: 1.19, ASR: 0.9, Backdoor Loss: 1.36
+Client 1 | Local Epoch 5| Acc: 65.2, Loss: 1.21, ASR: 1.0, Backdoor Loss: 1.37
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.7, Loss: 1.04, ASR: 0.9, Backdoor Loss: 1.13
+Client 2 | Local Epoch 2| Acc: 75.4, Loss: 1.11, ASR: 0.9, Backdoor Loss: 1.19
+Client 2 | Local Epoch 3| Acc: 75.9, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.29
+Client 2 | Local Epoch 4| Acc: 75.8, Loss: 1.20, ASR: 1.1, Backdoor Loss: 1.31
+Client 2 | Local Epoch 5| Acc: 75.5, Loss: 1.20, ASR: 0.9, Backdoor Loss: 1.32
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.0, Loss: 0.70, ASR: 0.4, Backdoor Loss: 0.74
+Client 3 | Local Epoch 2| Acc: 79.9, Loss: 0.72, ASR: 0.4, Backdoor Loss: 0.77
+Client 3 | Local Epoch 3| Acc: 79.7, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 4| Acc: 79.4, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.81
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.83
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.7, Loss: 0.96, ASR: 0.7, Backdoor Loss: 0.97
+Client 4 | Local Epoch 2| Acc: 72.2, Loss: 1.00, ASR: 0.7, Backdoor Loss: 1.01
+Client 4 | Local Epoch 3| Acc: 72.0, Loss: 0.99, ASR: 0.9, Backdoor Loss: 1.03
+Client 4 | Local Epoch 4| Acc: 72.2, Loss: 1.01, ASR: 0.7, Backdoor Loss: 1.03
+Client 4 | Local Epoch 5| Acc: 73.0, Loss: 0.99, ASR: 0.6, Backdoor Loss: 0.98
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.86
+Client 5 | Local Epoch 2| Acc: 78.3, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.89
+Client 5 | Local Epoch 3| Acc: 78.4, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.92
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.93
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.85, ASR: 0.4, Backdoor Loss: 0.95
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.3, Loss: 1.22, ASR: 1.1, Backdoor Loss: 1.34
+Client 6 | Local Epoch 2| Acc: 66.5, Loss: 1.21, ASR: 0.9, Backdoor Loss: 1.33
+Client 6 | Local Epoch 3| Acc: 64.8, Loss: 1.23, ASR: 0.8, Backdoor Loss: 1.35
+Client 6 | Local Epoch 4| Acc: 65.2, Loss: 1.19, ASR: 0.9, Backdoor Loss: 1.32
+Client 6 | Local Epoch 5| Acc: 65.2, Loss: 1.20, ASR: 0.8, Backdoor Loss: 1.35
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.3, Loss: 1.26, ASR: 0.4, Backdoor Loss: 1.31
+Client 7 | Local Epoch 2| Acc: 72.2, Loss: 1.39, ASR: 0.2, Backdoor Loss: 1.43
+Client 7 | Local Epoch 3| Acc: 71.9, Loss: 1.46, ASR: 0.2, Backdoor Loss: 1.50
+Client 7 | Local Epoch 4| Acc: 71.4, Loss: 1.53, ASR: 0.2, Backdoor Loss: 1.51
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.59, ASR: 0.3, Backdoor Loss: 1.61
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.4, Loss: 0.67, ASR: 0.5, Backdoor Loss: 0.71
+Client 8 | Local Epoch 2| Acc: 80.1, Loss: 0.68, ASR: 0.7, Backdoor Loss: 0.72
+Client 8 | Local Epoch 3| Acc: 80.2, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.73
+Client 8 | Local Epoch 4| Acc: 80.2, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.74
+Client 8 | Local Epoch 5| Acc: 80.2, Loss: 0.70, ASR: 0.6, Backdoor Loss: 0.74
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.6, Loss: 0.96, ASR: 1.0, Backdoor Loss: 0.97
+Client 9 | Local Epoch 2| Acc: 72.0, Loss: 0.96, ASR: 0.7, Backdoor Loss: 1.00
+Client 9 | Local Epoch 3| Acc: 73.0, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.01
+Client 9 | Local Epoch 4| Acc: 72.5, Loss: 1.00, ASR: 1.0, Backdoor Loss: 1.03
+Client 9 | Local Epoch 5| Acc: 72.9, Loss: 1.01, ASR: 1.1, Backdoor Loss: 1.03
+--------------客户端 0 推理----------------
+Client 0 | Epoch 13 | desired_margin: 0.7000000000000001
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 13| Acc: 80.45, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 13| Acc: 71.27, ASR: 0.80 , Artificial ASR: 0.00
+Client 2 | Epoch 13| Acc: 77.94, ASR: 0.87 , Artificial ASR: 0.06
+Client 3 | Epoch 13| Acc: 81.43, ASR: 0.54 , Artificial ASR: 0.00
+Client 4 | Epoch 13| Acc: 75.12, ASR: 0.51 , Artificial ASR: 0.00
+Client 5 | Epoch 13| Acc: 80.48, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 13| Acc: 71.06, ASR: 0.95 , Artificial ASR: 0.00
+Client 7 | Epoch 13| Acc: 77.97, ASR: 0.54 , Artificial ASR: 23.07
+Client 8 | Epoch 13| Acc: 81.30, ASR: 0.59 , Artificial ASR: 0.00
+Client 9 | Epoch 13| Acc: 74.88, ASR: 0.56 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 14/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.81, ASR: 1.1, Backdoor Loss: 0.84
+Client 0 | Local Epoch 2| Acc: 78.3, Loss: 0.83, ASR: 1.3, Backdoor Loss: 0.87
+Client 0 | Local Epoch 3| Acc: 78.0, Loss: 0.85, ASR: 1.5, Backdoor Loss: 0.88
+Client 0 | Local Epoch 4| Acc: 77.9, Loss: 0.86, ASR: 1.6, Backdoor Loss: 0.90
+Client 0 | Local Epoch 5| Acc: 77.8, Loss: 0.87, ASR: 1.6, Backdoor Loss: 0.91
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 65.6, Loss: 1.21, ASR: 1.0, Backdoor Loss: 1.29
+Client 1 | Local Epoch 2| Acc: 65.4, Loss: 1.23, ASR: 1.1, Backdoor Loss: 1.34
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.17, ASR: 1.0, Backdoor Loss: 1.36
+Client 1 | Local Epoch 4| Acc: 66.3, Loss: 1.19, ASR: 0.8, Backdoor Loss: 1.37
+Client 1 | Local Epoch 5| Acc: 66.0, Loss: 1.20, ASR: 0.8, Backdoor Loss: 1.42
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.5, Loss: 1.07, ASR: 1.0, Backdoor Loss: 1.15
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.13, ASR: 0.9, Backdoor Loss: 1.22
+Client 2 | Local Epoch 3| Acc: 75.7, Loss: 1.18, ASR: 1.0, Backdoor Loss: 1.27
+Client 2 | Local Epoch 4| Acc: 75.9, Loss: 1.20, ASR: 0.9, Backdoor Loss: 1.31
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.35
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.75
+Client 3 | Local Epoch 2| Acc: 79.8, Loss: 0.73, ASR: 0.3, Backdoor Loss: 0.78
+Client 3 | Local Epoch 3| Acc: 79.9, Loss: 0.74, ASR: 0.3, Backdoor Loss: 0.80
+Client 3 | Local Epoch 4| Acc: 79.5, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.83
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.2, Loss: 1.00, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 2| Acc: 71.7, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.04
+Client 4 | Local Epoch 3| Acc: 72.8, Loss: 1.01, ASR: 0.7, Backdoor Loss: 1.01
+Client 4 | Local Epoch 4| Acc: 72.8, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.02
+Client 4 | Local Epoch 5| Acc: 72.5, Loss: 1.01, ASR: 0.9, Backdoor Loss: 1.03
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 79.0, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.87
+Client 5 | Local Epoch 2| Acc: 78.6, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.91
+Client 5 | Local Epoch 3| Acc: 78.4, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.92
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.94
+Client 5 | Local Epoch 5| Acc: 78.1, Loss: 0.86, ASR: 0.5, Backdoor Loss: 0.95
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 65.7, Loss: 1.24, ASR: 0.7, Backdoor Loss: 1.38
+Client 6 | Local Epoch 2| Acc: 65.5, Loss: 1.26, ASR: 1.0, Backdoor Loss: 1.37
+Client 6 | Local Epoch 3| Acc: 65.2, Loss: 1.27, ASR: 0.6, Backdoor Loss: 1.37
+Client 6 | Local Epoch 4| Acc: 65.2, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.33
+Client 6 | Local Epoch 5| Acc: 65.8, Loss: 1.25, ASR: 0.8, Backdoor Loss: 1.35
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.4, Loss: 1.28, ASR: 0.4, Backdoor Loss: 1.36
+Client 7 | Local Epoch 2| Acc: 71.3, Loss: 1.40, ASR: 0.4, Backdoor Loss: 1.44
+Client 7 | Local Epoch 3| Acc: 71.4, Loss: 1.48, ASR: 0.3, Backdoor Loss: 1.56
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.56, ASR: 0.3, Backdoor Loss: 1.58
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.59, ASR: 0.3, Backdoor Loss: 1.59
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.3, Loss: 0.68, ASR: 0.4, Backdoor Loss: 0.72
+Client 8 | Local Epoch 2| Acc: 80.3, Loss: 0.69, ASR: 0.5, Backdoor Loss: 0.73
+Client 8 | Local Epoch 3| Acc: 80.5, Loss: 0.69, ASR: 0.6, Backdoor Loss: 0.74
+Client 8 | Local Epoch 4| Acc: 80.2, Loss: 0.70, ASR: 0.6, Backdoor Loss: 0.75
+Client 8 | Local Epoch 5| Acc: 80.0, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.75
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.96, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 2| Acc: 73.0, Loss: 0.99, ASR: 1.0, Backdoor Loss: 1.01
+Client 9 | Local Epoch 3| Acc: 73.6, Loss: 1.01, ASR: 1.0, Backdoor Loss: 1.00
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 0.99, ASR: 0.8, Backdoor Loss: 1.03
+Client 9 | Local Epoch 5| Acc: 72.4, Loss: 1.04, ASR: 1.0, Backdoor Loss: 1.06
+--------------客户端 0 推理----------------
+Client 0 | Epoch 14 | desired_margin: 0.7500000000000001
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 14| Acc: 80.48, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 14| Acc: 71.50, ASR: 1.34 , Artificial ASR: 0.00
+Client 2 | Epoch 14| Acc: 78.63, ASR: 0.85 , Artificial ASR: 0.16
+Client 3 | Epoch 14| Acc: 81.53, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 14| Acc: 75.20, ASR: 0.59 , Artificial ASR: 0.00
+Client 5 | Epoch 14| Acc: 80.40, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 14| Acc: 72.29, ASR: 0.82 , Artificial ASR: 0.00
+Client 7 | Epoch 14| Acc: 78.17, ASR: 0.39 , Artificial ASR: 5.09
+Client 8 | Epoch 14| Acc: 81.25, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 14| Acc: 75.76, ASR: 0.54 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 15/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.6, Loss: 0.82, ASR: 1.1, Backdoor Loss: 0.85
+Client 0 | Local Epoch 2| Acc: 78.1, Loss: 0.84, ASR: 1.2, Backdoor Loss: 0.87
+Client 0 | Local Epoch 3| Acc: 78.0, Loss: 0.85, ASR: 1.5, Backdoor Loss: 0.89
+Client 0 | Local Epoch 4| Acc: 78.0, Loss: 0.86, ASR: 1.5, Backdoor Loss: 0.90
+Client 0 | Local Epoch 5| Acc: 77.9, Loss: 0.87, ASR: 1.5, Backdoor Loss: 0.91
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.1, Loss: 1.23, ASR: 0.9, Backdoor Loss: 1.34
+Client 1 | Local Epoch 2| Acc: 67.4, Loss: 1.18, ASR: 1.0, Backdoor Loss: 1.36
+Client 1 | Local Epoch 3| Acc: 66.3, Loss: 1.22, ASR: 1.0, Backdoor Loss: 1.37
+Client 1 | Local Epoch 4| Acc: 66.3, Loss: 1.21, ASR: 0.9, Backdoor Loss: 1.36
+Client 1 | Local Epoch 5| Acc: 65.8, Loss: 1.21, ASR: 1.0, Backdoor Loss: 1.39
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.8, Loss: 1.08, ASR: 1.1, Backdoor Loss: 1.18
+Client 2 | Local Epoch 2| Acc: 75.4, Loss: 1.13, ASR: 1.0, Backdoor Loss: 1.27
+Client 2 | Local Epoch 3| Acc: 75.4, Loss: 1.20, ASR: 1.0, Backdoor Loss: 1.31
+Client 2 | Local Epoch 4| Acc: 74.8, Loss: 1.24, ASR: 0.8, Backdoor Loss: 1.34
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.27, ASR: 1.0, Backdoor Loss: 1.35
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.2, Loss: 0.71, ASR: 0.3, Backdoor Loss: 0.75
+Client 3 | Local Epoch 2| Acc: 80.0, Loss: 0.73, ASR: 0.3, Backdoor Loss: 0.78
+Client 3 | Local Epoch 3| Acc: 79.7, Loss: 0.75, ASR: 0.3, Backdoor Loss: 0.80
+Client 3 | Local Epoch 4| Acc: 79.4, Loss: 0.76, ASR: 0.3, Backdoor Loss: 0.82
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.83
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.6, Loss: 0.98, ASR: 0.9, Backdoor Loss: 0.98
+Client 4 | Local Epoch 2| Acc: 73.7, Loss: 0.99, ASR: 0.4, Backdoor Loss: 0.99
+Client 4 | Local Epoch 3| Acc: 73.1, Loss: 0.98, ASR: 0.7, Backdoor Loss: 0.98
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 1.01, ASR: 0.7, Backdoor Loss: 1.02
+Client 4 | Local Epoch 5| Acc: 72.9, Loss: 1.02, ASR: 0.7, Backdoor Loss: 1.00
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.88
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.91
+Client 5 | Local Epoch 3| Acc: 78.4, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.93
+Client 5 | Local Epoch 4| Acc: 78.2, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 5| Acc: 78.0, Loss: 0.86, ASR: 0.4, Backdoor Loss: 0.96
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.9, Loss: 1.20, ASR: 0.7, Backdoor Loss: 1.40
+Client 6 | Local Epoch 2| Acc: 66.3, Loss: 1.21, ASR: 0.6, Backdoor Loss: 1.39
+Client 6 | Local Epoch 3| Acc: 66.9, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.38
+Client 6 | Local Epoch 4| Acc: 65.5, Loss: 1.24, ASR: 0.7, Backdoor Loss: 1.39
+Client 6 | Local Epoch 5| Acc: 65.5, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.39
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.8, Loss: 1.31, ASR: 0.3, Backdoor Loss: 1.32
+Client 7 | Local Epoch 2| Acc: 71.1, Loss: 1.48, ASR: 0.3, Backdoor Loss: 1.48
+Client 7 | Local Epoch 3| Acc: 71.1, Loss: 1.54, ASR: 0.3, Backdoor Loss: 1.57
+Client 7 | Local Epoch 4| Acc: 71.4, Loss: 1.61, ASR: 0.3, Backdoor Loss: 1.63
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.65, ASR: 0.2, Backdoor Loss: 1.66
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.69, ASR: 0.5, Backdoor Loss: 0.73
+Client 8 | Local Epoch 2| Acc: 80.3, Loss: 0.69, ASR: 0.5, Backdoor Loss: 0.73
+Client 8 | Local Epoch 3| Acc: 80.2, Loss: 0.70, ASR: 0.6, Backdoor Loss: 0.74
+Client 8 | Local Epoch 4| Acc: 80.1, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.75
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.76
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.93, ASR: 1.0, Backdoor Loss: 0.99
+Client 9 | Local Epoch 2| Acc: 73.0, Loss: 0.97, ASR: 0.9, Backdoor Loss: 0.98
+Client 9 | Local Epoch 3| Acc: 72.7, Loss: 0.99, ASR: 1.0, Backdoor Loss: 1.03
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 1.04, ASR: 1.0, Backdoor Loss: 1.06
+Client 9 | Local Epoch 5| Acc: 72.7, Loss: 1.03, ASR: 0.8, Backdoor Loss: 1.05
+--------------客户端 0 推理----------------
+Client 0 | Epoch 15 | desired_margin: 0.8000000000000002
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 15| Acc: 80.59, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 15| Acc: 71.72, ASR: 1.34 , Artificial ASR: 0.00
+Client 2 | Epoch 15| Acc: 78.41, ASR: 0.46 , Artificial ASR: 0.00
+Client 3 | Epoch 15| Acc: 81.35, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 15| Acc: 75.75, ASR: 0.80 , Artificial ASR: 0.00
+Client 5 | Epoch 15| Acc: 80.27, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 15| Acc: 72.17, ASR: 0.74 , Artificial ASR: 0.00
+Client 7 | Epoch 15| Acc: 78.41, ASR: 0.56 , Artificial ASR: 9.15
+Client 8 | Epoch 15| Acc: 81.17, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 15| Acc: 76.19, ASR: 0.56 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 16/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.82, ASR: 1.1, Backdoor Loss: 0.85
+Client 0 | Local Epoch 2| Acc: 78.4, Loss: 0.84, ASR: 1.1, Backdoor Loss: 0.88
+Client 0 | Local Epoch 3| Acc: 78.0, Loss: 0.86, ASR: 1.4, Backdoor Loss: 0.89
+Client 0 | Local Epoch 4| Acc: 77.9, Loss: 0.87, ASR: 1.5, Backdoor Loss: 0.91
+Client 0 | Local Epoch 5| Acc: 78.0, Loss: 0.88, ASR: 1.5, Backdoor Loss: 0.92
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.6, Loss: 1.20, ASR: 1.1, Backdoor Loss: 1.36
+Client 1 | Local Epoch 2| Acc: 66.9, Loss: 1.19, ASR: 1.0, Backdoor Loss: 1.35
+Client 1 | Local Epoch 3| Acc: 66.7, Loss: 1.22, ASR: 1.1, Backdoor Loss: 1.41
+Client 1 | Local Epoch 4| Acc: 66.4, Loss: 1.20, ASR: 1.2, Backdoor Loss: 1.37
+Client 1 | Local Epoch 5| Acc: 66.3, Loss: 1.19, ASR: 1.1, Backdoor Loss: 1.36
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.0, Loss: 1.13, ASR: 0.8, Backdoor Loss: 1.25
+Client 2 | Local Epoch 2| Acc: 75.6, Loss: 1.20, ASR: 1.0, Backdoor Loss: 1.31
+Client 2 | Local Epoch 3| Acc: 75.4, Loss: 1.23, ASR: 1.0, Backdoor Loss: 1.35
+Client 2 | Local Epoch 4| Acc: 75.5, Loss: 1.25, ASR: 0.9, Backdoor Loss: 1.40
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.43
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.72, ASR: 0.3, Backdoor Loss: 0.76
+Client 3 | Local Epoch 2| Acc: 80.1, Loss: 0.74, ASR: 0.3, Backdoor Loss: 0.79
+Client 3 | Local Epoch 3| Acc: 79.6, Loss: 0.75, ASR: 0.3, Backdoor Loss: 0.81
+Client 3 | Local Epoch 4| Acc: 79.4, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.83
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.5, Loss: 1.01, ASR: 0.7, Backdoor Loss: 0.96
+Client 4 | Local Epoch 2| Acc: 72.0, Loss: 1.05, ASR: 0.7, Backdoor Loss: 1.03
+Client 4 | Local Epoch 3| Acc: 72.8, Loss: 0.99, ASR: 0.7, Backdoor Loss: 1.00
+Client 4 | Local Epoch 4| Acc: 72.4, Loss: 0.99, ASR: 0.8, Backdoor Loss: 1.03
+Client 4 | Local Epoch 5| Acc: 73.6, Loss: 1.03, ASR: 0.7, Backdoor Loss: 1.03
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 79.0, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.88
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.91
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.94
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.85, ASR: 0.4, Backdoor Loss: 0.95
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.87, ASR: 0.4, Backdoor Loss: 0.97
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.7, Loss: 1.20, ASR: 1.1, Backdoor Loss: 1.38
+Client 6 | Local Epoch 2| Acc: 65.8, Loss: 1.27, ASR: 1.0, Backdoor Loss: 1.32
+Client 6 | Local Epoch 3| Acc: 66.1, Loss: 1.24, ASR: 0.6, Backdoor Loss: 1.39
+Client 6 | Local Epoch 4| Acc: 65.5, Loss: 1.25, ASR: 0.6, Backdoor Loss: 1.37
+Client 6 | Local Epoch 5| Acc: 64.7, Loss: 1.26, ASR: 0.8, Backdoor Loss: 1.38
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.5, Loss: 1.28, ASR: 0.3, Backdoor Loss: 1.39
+Client 7 | Local Epoch 2| Acc: 71.3, Loss: 1.43, ASR: 0.3, Backdoor Loss: 1.51
+Client 7 | Local Epoch 3| Acc: 70.9, Loss: 1.54, ASR: 0.4, Backdoor Loss: 1.61
+Client 7 | Local Epoch 4| Acc: 70.9, Loss: 1.61, ASR: 0.2, Backdoor Loss: 1.64
+Client 7 | Local Epoch 5| Acc: 71.7, Loss: 1.63, ASR: 0.3, Backdoor Loss: 1.70
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.69, ASR: 0.4, Backdoor Loss: 0.73
+Client 8 | Local Epoch 2| Acc: 80.2, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.74
+Client 8 | Local Epoch 3| Acc: 80.3, Loss: 0.70, ASR: 0.6, Backdoor Loss: 0.75
+Client 8 | Local Epoch 4| Acc: 79.9, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.76
+Client 8 | Local Epoch 5| Acc: 80.0, Loss: 0.72, ASR: 0.7, Backdoor Loss: 0.76
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.7, Loss: 0.97, ASR: 0.8, Backdoor Loss: 0.97
+Client 9 | Local Epoch 2| Acc: 72.7, Loss: 0.99, ASR: 0.7, Backdoor Loss: 1.03
+Client 9 | Local Epoch 3| Acc: 72.8, Loss: 1.02, ASR: 0.8, Backdoor Loss: 1.05
+Client 9 | Local Epoch 4| Acc: 72.4, Loss: 1.01, ASR: 1.0, Backdoor Loss: 1.04
+Client 9 | Local Epoch 5| Acc: 72.0, Loss: 1.03, ASR: 0.9, Backdoor Loss: 1.04
+--------------客户端 0 推理----------------
+Client 0 | Epoch 16 | desired_margin: 0.8500000000000002
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 16| Acc: 80.49, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 16| Acc: 72.06, ASR: 1.26 , Artificial ASR: 0.00
+Client 2 | Epoch 16| Acc: 78.19, ASR: 0.49 , Artificial ASR: 0.10
+Client 3 | Epoch 16| Acc: 81.23, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 16| Acc: 75.24, ASR: 0.72 , Artificial ASR: 0.00
+Client 5 | Epoch 16| Acc: 80.31, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 16| Acc: 72.19, ASR: 0.82 , Artificial ASR: 0.00
+Client 7 | Epoch 16| Acc: 78.40, ASR: 0.64 , Artificial ASR: 13.83
+Client 8 | Epoch 16| Acc: 81.20, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 16| Acc: 75.52, ASR: 0.49 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 17/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.83, ASR: 1.1, Backdoor Loss: 0.86
+Client 0 | Local Epoch 2| Acc: 78.4, Loss: 0.85, ASR: 1.1, Backdoor Loss: 0.88
+Client 0 | Local Epoch 3| Acc: 78.0, Loss: 0.86, ASR: 1.2, Backdoor Loss: 0.90
+Client 0 | Local Epoch 4| Acc: 77.9, Loss: 0.87, ASR: 1.4, Backdoor Loss: 0.91
+Client 0 | Local Epoch 5| Acc: 77.9, Loss: 0.88, ASR: 1.5, Backdoor Loss: 0.92
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.7, Loss: 1.19, ASR: 1.0, Backdoor Loss: 1.39
+Client 1 | Local Epoch 2| Acc: 66.6, Loss: 1.22, ASR: 0.9, Backdoor Loss: 1.37
+Client 1 | Local Epoch 3| Acc: 66.9, Loss: 1.21, ASR: 1.1, Backdoor Loss: 1.40
+Client 1 | Local Epoch 4| Acc: 66.0, Loss: 1.23, ASR: 1.1, Backdoor Loss: 1.44
+Client 1 | Local Epoch 5| Acc: 65.8, Loss: 1.25, ASR: 0.5, Backdoor Loss: 1.42
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.6, Loss: 1.14, ASR: 0.9, Backdoor Loss: 1.24
+Client 2 | Local Epoch 2| Acc: 75.8, Loss: 1.20, ASR: 1.1, Backdoor Loss: 1.36
+Client 2 | Local Epoch 3| Acc: 75.7, Loss: 1.25, ASR: 1.0, Backdoor Loss: 1.37
+Client 2 | Local Epoch 4| Acc: 74.9, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.40
+Client 2 | Local Epoch 5| Acc: 75.6, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.43
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 80.1, Loss: 0.73, ASR: 0.4, Backdoor Loss: 0.76
+Client 3 | Local Epoch 2| Acc: 79.9, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.79
+Client 3 | Local Epoch 3| Acc: 79.6, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.81
+Client 3 | Local Epoch 4| Acc: 79.5, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.84
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.0, Loss: 1.01, ASR: 0.8, Backdoor Loss: 0.99
+Client 4 | Local Epoch 2| Acc: 72.6, Loss: 1.01, ASR: 0.7, Backdoor Loss: 0.99
+Client 4 | Local Epoch 3| Acc: 73.6, Loss: 1.00, ASR: 0.8, Backdoor Loss: 1.02
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 1.02, ASR: 0.9, Backdoor Loss: 1.00
+Client 4 | Local Epoch 5| Acc: 72.5, Loss: 1.02, ASR: 0.7, Backdoor Loss: 1.01
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.89
+Client 5 | Local Epoch 2| Acc: 78.8, Loss: 0.83, ASR: 0.5, Backdoor Loss: 0.92
+Client 5 | Local Epoch 3| Acc: 78.3, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.86, ASR: 0.5, Backdoor Loss: 0.95
+Client 5 | Local Epoch 5| Acc: 78.3, Loss: 0.87, ASR: 0.5, Backdoor Loss: 0.97
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.9, Loss: 1.25, ASR: 1.0, Backdoor Loss: 1.39
+Client 6 | Local Epoch 2| Acc: 66.0, Loss: 1.25, ASR: 0.9, Backdoor Loss: 1.40
+Client 6 | Local Epoch 3| Acc: 67.0, Loss: 1.24, ASR: 0.7, Backdoor Loss: 1.40
+Client 6 | Local Epoch 4| Acc: 67.1, Loss: 1.22, ASR: 0.7, Backdoor Loss: 1.38
+Client 6 | Local Epoch 5| Acc: 65.4, Loss: 1.24, ASR: 1.1, Backdoor Loss: 1.35
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.0, Loss: 1.38, ASR: 0.3, Backdoor Loss: 1.43
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.49, ASR: 0.3, Backdoor Loss: 1.56
+Client 7 | Local Epoch 3| Acc: 71.0, Loss: 1.58, ASR: 0.2, Backdoor Loss: 1.65
+Client 7 | Local Epoch 4| Acc: 70.6, Loss: 1.66, ASR: 0.3, Backdoor Loss: 1.69
+Client 7 | Local Epoch 5| Acc: 70.5, Loss: 1.70, ASR: 0.3, Backdoor Loss: 1.77
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.74
+Client 8 | Local Epoch 2| Acc: 80.3, Loss: 0.70, ASR: 0.5, Backdoor Loss: 0.74
+Client 8 | Local Epoch 3| Acc: 80.3, Loss: 0.71, ASR: 0.6, Backdoor Loss: 0.76
+Client 8 | Local Epoch 4| Acc: 80.3, Loss: 0.72, ASR: 0.6, Backdoor Loss: 0.76
+Client 8 | Local Epoch 5| Acc: 80.1, Loss: 0.72, ASR: 0.6, Backdoor Loss: 0.77
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.1, Loss: 0.99, ASR: 0.8, Backdoor Loss: 1.00
+Client 9 | Local Epoch 2| Acc: 73.6, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.02
+Client 9 | Local Epoch 3| Acc: 73.1, Loss: 1.04, ASR: 1.1, Backdoor Loss: 1.04
+Client 9 | Local Epoch 4| Acc: 72.8, Loss: 1.03, ASR: 1.1, Backdoor Loss: 1.05
+Client 9 | Local Epoch 5| Acc: 72.8, Loss: 1.05, ASR: 1.0, Backdoor Loss: 1.07
+--------------客户端 0 推理----------------
+Client 0 | Epoch 17 | desired_margin: 0.9000000000000002
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 17| Acc: 80.43, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 17| Acc: 72.14, ASR: 1.08 , Artificial ASR: 0.00
+Client 2 | Epoch 17| Acc: 78.02, ASR: 0.51 , Artificial ASR: 0.08
+Client 3 | Epoch 17| Acc: 81.17, ASR: 0.41 , Artificial ASR: 0.00
+Client 4 | Epoch 17| Acc: 75.89, ASR: 0.62 , Artificial ASR: 0.00
+Client 5 | Epoch 17| Acc: 80.31, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 17| Acc: 72.16, ASR: 0.95 , Artificial ASR: 0.00
+Client 7 | Epoch 17| Acc: 78.02, ASR: 0.59 , Artificial ASR: 13.73
+Client 8 | Epoch 17| Acc: 81.05, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 17| Acc: 75.45, ASR: 0.62 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 18/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.4, Loss: 0.84, ASR: 1.0, Backdoor Loss: 0.87
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.86, ASR: 1.1, Backdoor Loss: 0.89
+Client 0 | Local Epoch 3| Acc: 78.3, Loss: 0.87, ASR: 1.1, Backdoor Loss: 0.91
+Client 0 | Local Epoch 4| Acc: 78.0, Loss: 0.88, ASR: 1.3, Backdoor Loss: 0.92
+Client 0 | Local Epoch 5| Acc: 78.0, Loss: 0.89, ASR: 1.4, Backdoor Loss: 0.93
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.3, Loss: 1.24, ASR: 1.0, Backdoor Loss: 1.41
+Client 1 | Local Epoch 2| Acc: 66.7, Loss: 1.25, ASR: 0.9, Backdoor Loss: 1.44
+Client 1 | Local Epoch 3| Acc: 66.3, Loss: 1.23, ASR: 1.0, Backdoor Loss: 1.46
+Client 1 | Local Epoch 4| Acc: 66.1, Loss: 1.22, ASR: 1.0, Backdoor Loss: 1.42
+Client 1 | Local Epoch 5| Acc: 65.8, Loss: 1.24, ASR: 0.8, Backdoor Loss: 1.43
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.5, Loss: 1.14, ASR: 0.9, Backdoor Loss: 1.25
+Client 2 | Local Epoch 2| Acc: 75.6, Loss: 1.25, ASR: 0.7, Backdoor Loss: 1.34
+Client 2 | Local Epoch 3| Acc: 75.3, Loss: 1.29, ASR: 1.0, Backdoor Loss: 1.42
+Client 2 | Local Epoch 4| Acc: 75.3, Loss: 1.32, ASR: 0.7, Backdoor Loss: 1.46
+Client 2 | Local Epoch 5| Acc: 75.3, Loss: 1.36, ASR: 0.9, Backdoor Loss: 1.49
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.73, ASR: 0.3, Backdoor Loss: 0.77
+Client 3 | Local Epoch 2| Acc: 79.7, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.79
+Client 3 | Local Epoch 3| Acc: 79.4, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.81
+Client 3 | Local Epoch 4| Acc: 79.5, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.83
+Client 3 | Local Epoch 5| Acc: 79.1, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.84
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.3, Loss: 0.99, ASR: 0.5, Backdoor Loss: 1.01
+Client 4 | Local Epoch 2| Acc: 73.7, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.05
+Client 4 | Local Epoch 3| Acc: 72.5, Loss: 1.03, ASR: 0.9, Backdoor Loss: 1.05
+Client 4 | Local Epoch 4| Acc: 72.2, Loss: 1.03, ASR: 0.7, Backdoor Loss: 1.04
+Client 4 | Local Epoch 5| Acc: 73.0, Loss: 1.02, ASR: 1.0, Backdoor Loss: 1.06
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.90
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.93
+Client 5 | Local Epoch 3| Acc: 78.2, Loss: 0.86, ASR: 0.4, Backdoor Loss: 0.95
+Client 5 | Local Epoch 4| Acc: 78.2, Loss: 0.87, ASR: 0.5, Backdoor Loss: 0.96
+Client 5 | Local Epoch 5| Acc: 78.4, Loss: 0.88, ASR: 0.3, Backdoor Loss: 0.97
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.3, Loss: 1.30, ASR: 1.1, Backdoor Loss: 1.45
+Client 6 | Local Epoch 2| Acc: 66.0, Loss: 1.30, ASR: 1.1, Backdoor Loss: 1.41
+Client 6 | Local Epoch 3| Acc: 65.9, Loss: 1.28, ASR: 1.0, Backdoor Loss: 1.39
+Client 6 | Local Epoch 4| Acc: 65.6, Loss: 1.31, ASR: 0.8, Backdoor Loss: 1.40
+Client 6 | Local Epoch 5| Acc: 65.1, Loss: 1.32, ASR: 0.8, Backdoor Loss: 1.34
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.0, Loss: 1.36, ASR: 0.3, Backdoor Loss: 1.41
+Client 7 | Local Epoch 2| Acc: 70.9, Loss: 1.52, ASR: 0.2, Backdoor Loss: 1.58
+Client 7 | Local Epoch 3| Acc: 70.9, Loss: 1.61, ASR: 0.3, Backdoor Loss: 1.66
+Client 7 | Local Epoch 4| Acc: 70.7, Loss: 1.70, ASR: 0.3, Backdoor Loss: 1.74
+Client 7 | Local Epoch 5| Acc: 70.4, Loss: 1.74, ASR: 0.2, Backdoor Loss: 1.81
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.1, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.74
+Client 8 | Local Epoch 2| Acc: 79.9, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.75
+Client 8 | Local Epoch 3| Acc: 80.1, Loss: 0.72, ASR: 0.5, Backdoor Loss: 0.76
+Client 8 | Local Epoch 4| Acc: 80.0, Loss: 0.72, ASR: 0.5, Backdoor Loss: 0.77
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.73, ASR: 0.6, Backdoor Loss: 0.78
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.7, Loss: 0.98, ASR: 0.7, Backdoor Loss: 1.01
+Client 9 | Local Epoch 2| Acc: 72.1, Loss: 1.01, ASR: 1.0, Backdoor Loss: 1.02
+Client 9 | Local Epoch 3| Acc: 72.4, Loss: 1.03, ASR: 1.2, Backdoor Loss: 1.02
+Client 9 | Local Epoch 4| Acc: 72.4, Loss: 1.04, ASR: 0.9, Backdoor Loss: 1.03
+Client 9 | Local Epoch 5| Acc: 73.0, Loss: 1.03, ASR: 1.1, Backdoor Loss: 1.07
+--------------客户端 0 推理----------------
+Client 0 | Epoch 18 | desired_margin: 0.9500000000000003
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 18| Acc: 80.36, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 18| Acc: 71.78, ASR: 0.69 , Artificial ASR: 0.00
+Client 2 | Epoch 18| Acc: 78.33, ASR: 0.62 , Artificial ASR: 0.14
+Client 3 | Epoch 18| Acc: 81.12, ASR: 0.44 , Artificial ASR: 0.00
+Client 4 | Epoch 18| Acc: 75.37, ASR: 0.39 , Artificial ASR: 0.00
+Client 5 | Epoch 18| Acc: 80.17, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 18| Acc: 71.54, ASR: 1.34 , Artificial ASR: 0.00
+Client 7 | Epoch 18| Acc: 77.81, ASR: 0.54 , Artificial ASR: 17.76
+Client 8 | Epoch 18| Acc: 80.85, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 18| Acc: 75.24, ASR: 0.51 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 19/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.6, Loss: 0.85, ASR: 1.0, Backdoor Loss: 0.87
+Client 0 | Local Epoch 2| Acc: 78.4, Loss: 0.86, ASR: 1.1, Backdoor Loss: 0.90
+Client 0 | Local Epoch 3| Acc: 78.3, Loss: 0.88, ASR: 1.1, Backdoor Loss: 0.91
+Client 0 | Local Epoch 4| Acc: 78.0, Loss: 0.89, ASR: 1.1, Backdoor Loss: 0.92
+Client 0 | Local Epoch 5| Acc: 77.9, Loss: 0.89, ASR: 1.4, Backdoor Loss: 0.93
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.5, Loss: 1.24, ASR: 1.1, Backdoor Loss: 1.37
+Client 1 | Local Epoch 2| Acc: 66.9, Loss: 1.25, ASR: 1.2, Backdoor Loss: 1.45
+Client 1 | Local Epoch 3| Acc: 66.1, Loss: 1.22, ASR: 1.2, Backdoor Loss: 1.41
+Client 1 | Local Epoch 4| Acc: 67.4, Loss: 1.23, ASR: 1.0, Backdoor Loss: 1.45
+Client 1 | Local Epoch 5| Acc: 66.7, Loss: 1.21, ASR: 1.2, Backdoor Loss: 1.44
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.2, Loss: 1.18, ASR: 1.0, Backdoor Loss: 1.32
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.29, ASR: 0.9, Backdoor Loss: 1.41
+Client 2 | Local Epoch 3| Acc: 75.1, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.44
+Client 2 | Local Epoch 4| Acc: 75.0, Loss: 1.36, ASR: 0.8, Backdoor Loss: 1.51
+Client 2 | Local Epoch 5| Acc: 75.2, Loss: 1.37, ASR: 0.7, Backdoor Loss: 1.49
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.8, Loss: 0.74, ASR: 0.3, Backdoor Loss: 0.77
+Client 3 | Local Epoch 2| Acc: 79.6, Loss: 0.76, ASR: 0.3, Backdoor Loss: 0.80
+Client 3 | Local Epoch 3| Acc: 79.3, Loss: 0.77, ASR: 0.3, Backdoor Loss: 0.82
+Client 3 | Local Epoch 4| Acc: 79.3, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.83
+Client 3 | Local Epoch 5| Acc: 79.1, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.84
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.8, Loss: 1.02, ASR: 0.6, Backdoor Loss: 1.00
+Client 4 | Local Epoch 2| Acc: 73.1, Loss: 1.01, ASR: 0.8, Backdoor Loss: 1.04
+Client 4 | Local Epoch 3| Acc: 73.4, Loss: 1.03, ASR: 0.7, Backdoor Loss: 1.04
+Client 4 | Local Epoch 4| Acc: 73.2, Loss: 1.00, ASR: 0.7, Backdoor Loss: 1.04
+Client 4 | Local Epoch 5| Acc: 73.1, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.00
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.82, ASR: 0.5, Backdoor Loss: 0.91
+Client 5 | Local Epoch 2| Acc: 78.7, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 3| Acc: 78.3, Loss: 0.87, ASR: 0.4, Backdoor Loss: 0.96
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.97
+Client 5 | Local Epoch 5| Acc: 78.3, Loss: 0.89, ASR: 0.4, Backdoor Loss: 0.98
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.0, Loss: 1.30, ASR: 0.9, Backdoor Loss: 1.45
+Client 6 | Local Epoch 2| Acc: 66.0, Loss: 1.29, ASR: 1.0, Backdoor Loss: 1.35
+Client 6 | Local Epoch 3| Acc: 65.4, Loss: 1.30, ASR: 0.9, Backdoor Loss: 1.39
+Client 6 | Local Epoch 4| Acc: 65.9, Loss: 1.28, ASR: 1.0, Backdoor Loss: 1.35
+Client 6 | Local Epoch 5| Acc: 64.9, Loss: 1.28, ASR: 0.7, Backdoor Loss: 1.43
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.6, Loss: 1.38, ASR: 0.4, Backdoor Loss: 1.47
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.50, ASR: 0.2, Backdoor Loss: 1.61
+Client 7 | Local Epoch 3| Acc: 71.7, Loss: 1.60, ASR: 0.3, Backdoor Loss: 1.69
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.67, ASR: 0.3, Backdoor Loss: 1.75
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.69, ASR: 0.3, Backdoor Loss: 1.78
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.1, Loss: 0.71, ASR: 0.4, Backdoor Loss: 0.75
+Client 8 | Local Epoch 2| Acc: 79.8, Loss: 0.72, ASR: 0.3, Backdoor Loss: 0.76
+Client 8 | Local Epoch 3| Acc: 80.0, Loss: 0.72, ASR: 0.5, Backdoor Loss: 0.77
+Client 8 | Local Epoch 4| Acc: 80.0, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.77
+Client 8 | Local Epoch 5| Acc: 80.0, Loss: 0.73, ASR: 0.6, Backdoor Loss: 0.78
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.99, ASR: 0.6, Backdoor Loss: 1.00
+Client 9 | Local Epoch 2| Acc: 72.8, Loss: 1.02, ASR: 0.9, Backdoor Loss: 1.01
+Client 9 | Local Epoch 3| Acc: 73.3, Loss: 0.98, ASR: 0.9, Backdoor Loss: 1.02
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 1.03, ASR: 1.1, Backdoor Loss: 1.08
+Client 9 | Local Epoch 5| Acc: 73.1, Loss: 1.06, ASR: 1.0, Backdoor Loss: 1.08
+--------------客户端 0 推理----------------
+Client 0 | Epoch 19 | desired_margin: 1.0000000000000002
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 19| Acc: 80.28, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 19| Acc: 71.18, ASR: 1.16 , Artificial ASR: 0.00
+Client 2 | Epoch 19| Acc: 77.94, ASR: 0.59 , Artificial ASR: 0.29
+Client 3 | Epoch 19| Acc: 80.97, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 19| Acc: 76.76, ASR: 0.67 , Artificial ASR: 0.00
+Client 5 | Epoch 19| Acc: 80.13, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 19| Acc: 72.16, ASR: 0.74 , Artificial ASR: 0.00
+Client 7 | Epoch 19| Acc: 77.64, ASR: 0.41 , Artificial ASR: 5.05
+Client 8 | Epoch 19| Acc: 80.92, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 19| Acc: 76.04, ASR: 0.46 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 20/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.85, ASR: 1.0, Backdoor Loss: 0.88
+Client 0 | Local Epoch 2| Acc: 78.4, Loss: 0.87, ASR: 1.1, Backdoor Loss: 0.90
+Client 0 | Local Epoch 3| Acc: 78.4, Loss: 0.88, ASR: 1.1, Backdoor Loss: 0.92
+Client 0 | Local Epoch 4| Acc: 78.3, Loss: 0.89, ASR: 1.2, Backdoor Loss: 0.93
+Client 0 | Local Epoch 5| Acc: 78.0, Loss: 0.90, ASR: 1.3, Backdoor Loss: 0.94
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.1, Loss: 1.26, ASR: 1.1, Backdoor Loss: 1.49
+Client 1 | Local Epoch 2| Acc: 65.7, Loss: 1.28, ASR: 1.2, Backdoor Loss: 1.49
+Client 1 | Local Epoch 3| Acc: 66.8, Loss: 1.24, ASR: 1.3, Backdoor Loss: 1.44
+Client 1 | Local Epoch 4| Acc: 66.0, Loss: 1.23, ASR: 1.2, Backdoor Loss: 1.47
+Client 1 | Local Epoch 5| Acc: 66.6, Loss: 1.22, ASR: 1.1, Backdoor Loss: 1.48
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.7, Loss: 1.18, ASR: 0.9, Backdoor Loss: 1.29
+Client 2 | Local Epoch 2| Acc: 75.5, Loss: 1.28, ASR: 0.7, Backdoor Loss: 1.42
+Client 2 | Local Epoch 3| Acc: 75.0, Loss: 1.34, ASR: 0.6, Backdoor Loss: 1.50
+Client 2 | Local Epoch 4| Acc: 75.4, Loss: 1.35, ASR: 0.9, Backdoor Loss: 1.49
+Client 2 | Local Epoch 5| Acc: 75.1, Loss: 1.40, ASR: 0.8, Backdoor Loss: 1.55
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.8, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.78
+Client 3 | Local Epoch 2| Acc: 79.6, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.80
+Client 3 | Local Epoch 3| Acc: 79.4, Loss: 0.77, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 4| Acc: 79.2, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.84
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.85
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.3, Loss: 0.98, ASR: 0.8, Backdoor Loss: 1.01
+Client 4 | Local Epoch 2| Acc: 73.8, Loss: 1.00, ASR: 0.6, Backdoor Loss: 1.04
+Client 4 | Local Epoch 3| Acc: 72.6, Loss: 1.03, ASR: 0.8, Backdoor Loss: 1.08
+Client 4 | Local Epoch 4| Acc: 72.7, Loss: 1.04, ASR: 0.6, Backdoor Loss: 1.04
+Client 4 | Local Epoch 5| Acc: 72.4, Loss: 1.06, ASR: 0.7, Backdoor Loss: 1.06
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.92
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.86, ASR: 0.4, Backdoor Loss: 0.96
+Client 5 | Local Epoch 4| Acc: 78.2, Loss: 0.88, ASR: 0.4, Backdoor Loss: 0.97
+Client 5 | Local Epoch 5| Acc: 78.3, Loss: 0.89, ASR: 0.4, Backdoor Loss: 0.99
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.4, Loss: 1.31, ASR: 1.3, Backdoor Loss: 1.42
+Client 6 | Local Epoch 2| Acc: 67.2, Loss: 1.29, ASR: 1.1, Backdoor Loss: 1.38
+Client 6 | Local Epoch 3| Acc: 65.9, Loss: 1.32, ASR: 0.7, Backdoor Loss: 1.40
+Client 6 | Local Epoch 4| Acc: 65.1, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.44
+Client 6 | Local Epoch 5| Acc: 66.2, Loss: 1.32, ASR: 1.1, Backdoor Loss: 1.45
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.5, Loss: 1.38, ASR: 0.4, Backdoor Loss: 1.45
+Client 7 | Local Epoch 2| Acc: 70.7, Loss: 1.51, ASR: 0.3, Backdoor Loss: 1.58
+Client 7 | Local Epoch 3| Acc: 71.3, Loss: 1.61, ASR: 0.3, Backdoor Loss: 1.67
+Client 7 | Local Epoch 4| Acc: 71.0, Loss: 1.66, ASR: 0.4, Backdoor Loss: 1.75
+Client 7 | Local Epoch 5| Acc: 70.7, Loss: 1.73, ASR: 0.2, Backdoor Loss: 1.79
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.2, Loss: 0.72, ASR: 0.4, Backdoor Loss: 0.76
+Client 8 | Local Epoch 2| Acc: 80.0, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.77
+Client 8 | Local Epoch 3| Acc: 79.8, Loss: 0.73, ASR: 0.5, Backdoor Loss: 0.77
+Client 8 | Local Epoch 4| Acc: 80.0, Loss: 0.73, ASR: 0.6, Backdoor Loss: 0.78
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.79
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.1, Loss: 1.00, ASR: 0.8, Backdoor Loss: 1.03
+Client 9 | Local Epoch 2| Acc: 72.6, Loss: 1.03, ASR: 0.9, Backdoor Loss: 1.01
+Client 9 | Local Epoch 3| Acc: 72.7, Loss: 1.03, ASR: 1.0, Backdoor Loss: 1.03
+Client 9 | Local Epoch 4| Acc: 72.8, Loss: 1.07, ASR: 0.9, Backdoor Loss: 1.10
+Client 9 | Local Epoch 5| Acc: 73.3, Loss: 1.07, ASR: 1.1, Backdoor Loss: 1.04
+--------------客户端 0 推理----------------
+Client 0 | Epoch 20 | desired_margin: 1.0500000000000003
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 20| Acc: 80.27, ASR: 0.64 , Artificial ASR: 0.00
+Client 1 | Epoch 20| Acc: 71.03, ASR: 0.85 , Artificial ASR: 0.00
+Client 2 | Epoch 20| Acc: 77.84, ASR: 0.44 , Artificial ASR: 0.61
+Client 3 | Epoch 20| Acc: 80.94, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 20| Acc: 76.20, ASR: 0.64 , Artificial ASR: 0.00
+Client 5 | Epoch 20| Acc: 80.00, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 20| Acc: 71.47, ASR: 0.41 , Artificial ASR: 0.00
+Client 7 | Epoch 20| Acc: 78.20, ASR: 0.49 , Artificial ASR: 1.72
+Client 8 | Epoch 20| Acc: 80.87, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 20| Acc: 75.94, ASR: 0.41 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 21/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.8, Loss: 0.86, ASR: 1.0, Backdoor Loss: 0.89
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.88, ASR: 1.1, Backdoor Loss: 0.91
+Client 0 | Local Epoch 3| Acc: 78.4, Loss: 0.89, ASR: 1.1, Backdoor Loss: 0.92
+Client 0 | Local Epoch 4| Acc: 78.3, Loss: 0.90, ASR: 1.1, Backdoor Loss: 0.93
+Client 0 | Local Epoch 5| Acc: 78.3, Loss: 0.91, ASR: 1.2, Backdoor Loss: 0.94
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.0, Loss: 1.32, ASR: 0.8, Backdoor Loss: 1.51
+Client 1 | Local Epoch 2| Acc: 66.5, Loss: 1.26, ASR: 0.9, Backdoor Loss: 1.52
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.28, ASR: 1.0, Backdoor Loss: 1.52
+Client 1 | Local Epoch 4| Acc: 65.4, Loss: 1.30, ASR: 0.7, Backdoor Loss: 1.49
+Client 1 | Local Epoch 5| Acc: 65.8, Loss: 1.23, ASR: 1.0, Backdoor Loss: 1.50
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.7, Loss: 1.17, ASR: 0.7, Backdoor Loss: 1.27
+Client 2 | Local Epoch 2| Acc: 75.1, Loss: 1.26, ASR: 0.6, Backdoor Loss: 1.42
+Client 2 | Local Epoch 3| Acc: 75.0, Loss: 1.34, ASR: 0.7, Backdoor Loss: 1.49
+Client 2 | Local Epoch 4| Acc: 75.0, Loss: 1.34, ASR: 0.7, Backdoor Loss: 1.52
+Client 2 | Local Epoch 5| Acc: 75.5, Loss: 1.38, ASR: 0.8, Backdoor Loss: 1.56
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.7, Loss: 0.75, ASR: 0.3, Backdoor Loss: 0.79
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.77, ASR: 0.3, Backdoor Loss: 0.81
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.78, ASR: 0.3, Backdoor Loss: 0.83
+Client 3 | Local Epoch 4| Acc: 79.3, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.84
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.80, ASR: 0.3, Backdoor Loss: 0.85
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.1, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.02
+Client 4 | Local Epoch 2| Acc: 73.1, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.05
+Client 4 | Local Epoch 3| Acc: 72.9, Loss: 1.02, ASR: 0.5, Backdoor Loss: 1.06
+Client 4 | Local Epoch 4| Acc: 73.3, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.05
+Client 4 | Local Epoch 5| Acc: 72.6, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.08
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.92
+Client 5 | Local Epoch 2| Acc: 78.6, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.95
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.87, ASR: 0.5, Backdoor Loss: 0.97
+Client 5 | Local Epoch 4| Acc: 78.1, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.98
+Client 5 | Local Epoch 5| Acc: 78.1, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.99
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.7, Loss: 1.31, ASR: 0.8, Backdoor Loss: 1.38
+Client 6 | Local Epoch 2| Acc: 65.6, Loss: 1.33, ASR: 1.0, Backdoor Loss: 1.42
+Client 6 | Local Epoch 3| Acc: 66.3, Loss: 1.29, ASR: 1.1, Backdoor Loss: 1.44
+Client 6 | Local Epoch 4| Acc: 65.6, Loss: 1.28, ASR: 0.7, Backdoor Loss: 1.44
+Client 6 | Local Epoch 5| Acc: 65.9, Loss: 1.27, ASR: 0.7, Backdoor Loss: 1.45
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.3, Loss: 1.34, ASR: 0.3, Backdoor Loss: 1.45
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.51, ASR: 0.3, Backdoor Loss: 1.60
+Client 7 | Local Epoch 3| Acc: 71.4, Loss: 1.62, ASR: 0.3, Backdoor Loss: 1.70
+Client 7 | Local Epoch 4| Acc: 70.7, Loss: 1.71, ASR: 0.3, Backdoor Loss: 1.78
+Client 7 | Local Epoch 5| Acc: 70.8, Loss: 1.74, ASR: 0.4, Backdoor Loss: 1.81
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.0, Loss: 0.73, ASR: 0.4, Backdoor Loss: 0.77
+Client 8 | Local Epoch 2| Acc: 80.1, Loss: 0.73, ASR: 0.4, Backdoor Loss: 0.78
+Client 8 | Local Epoch 3| Acc: 79.7, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.78
+Client 8 | Local Epoch 4| Acc: 79.8, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.79
+Client 8 | Local Epoch 5| Acc: 79.8, Loss: 0.74, ASR: 0.5, Backdoor Loss: 0.79
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.8, Loss: 1.00, ASR: 0.8, Backdoor Loss: 1.03
+Client 9 | Local Epoch 2| Acc: 72.5, Loss: 1.02, ASR: 0.8, Backdoor Loss: 1.05
+Client 9 | Local Epoch 3| Acc: 73.1, Loss: 1.03, ASR: 1.0, Backdoor Loss: 1.03
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 1.05, ASR: 0.7, Backdoor Loss: 1.03
+Client 9 | Local Epoch 5| Acc: 72.5, Loss: 1.06, ASR: 1.1, Backdoor Loss: 1.05
+--------------客户端 0 推理----------------
+Client 0 | Epoch 21 | desired_margin: 1.1000000000000003
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 21| Acc: 80.07, ASR: 0.62 , Artificial ASR: 0.00
+Client 1 | Epoch 21| Acc: 71.44, ASR: 0.69 , Artificial ASR: 0.00
+Client 2 | Epoch 21| Acc: 78.32, ASR: 0.44 , Artificial ASR: 0.08
+Client 3 | Epoch 21| Acc: 80.87, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 21| Acc: 75.66, ASR: 0.56 , Artificial ASR: 0.00
+Client 5 | Epoch 21| Acc: 79.92, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 21| Acc: 71.96, ASR: 0.80 , Artificial ASR: 0.00
+Client 7 | Epoch 21| Acc: 77.84, ASR: 0.67 , Artificial ASR: 10.95
+Client 8 | Epoch 21| Acc: 80.85, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 21| Acc: 76.06, ASR: 0.59 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 22/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.7, Loss: 0.87, ASR: 0.9, Backdoor Loss: 0.89
+Client 0 | Local Epoch 2| Acc: 78.4, Loss: 0.88, ASR: 1.0, Backdoor Loss: 0.91
+Client 0 | Local Epoch 3| Acc: 78.5, Loss: 0.90, ASR: 1.1, Backdoor Loss: 0.93
+Client 0 | Local Epoch 4| Acc: 78.2, Loss: 0.90, ASR: 1.1, Backdoor Loss: 0.94
+Client 0 | Local Epoch 5| Acc: 78.2, Loss: 0.91, ASR: 1.2, Backdoor Loss: 0.95
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 68.0, Loss: 1.31, ASR: 0.9, Backdoor Loss: 1.51
+Client 1 | Local Epoch 2| Acc: 67.2, Loss: 1.27, ASR: 0.7, Backdoor Loss: 1.48
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.28, ASR: 1.1, Backdoor Loss: 1.54
+Client 1 | Local Epoch 4| Acc: 65.8, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.54
+Client 1 | Local Epoch 5| Acc: 65.5, Loss: 1.29, ASR: 1.2, Backdoor Loss: 1.51
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.4, Loss: 1.20, ASR: 0.6, Backdoor Loss: 1.36
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 1.28, ASR: 0.8, Backdoor Loss: 1.44
+Client 2 | Local Epoch 3| Acc: 75.3, Loss: 1.32, ASR: 0.8, Backdoor Loss: 1.50
+Client 2 | Local Epoch 4| Acc: 75.0, Loss: 1.36, ASR: 0.7, Backdoor Loss: 1.55
+Client 2 | Local Epoch 5| Acc: 75.4, Loss: 1.39, ASR: 0.8, Backdoor Loss: 1.58
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.7, Loss: 0.76, ASR: 0.3, Backdoor Loss: 0.79
+Client 3 | Local Epoch 2| Acc: 79.5, Loss: 0.77, ASR: 0.3, Backdoor Loss: 0.81
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.83
+Client 3 | Local Epoch 4| Acc: 79.2, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.86
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.9, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.03
+Client 4 | Local Epoch 2| Acc: 72.3, Loss: 1.03, ASR: 0.6, Backdoor Loss: 1.02
+Client 4 | Local Epoch 3| Acc: 72.6, Loss: 1.09, ASR: 0.5, Backdoor Loss: 1.07
+Client 4 | Local Epoch 4| Acc: 71.7, Loss: 1.07, ASR: 0.5, Backdoor Loss: 1.03
+Client 4 | Local Epoch 5| Acc: 72.7, Loss: 1.06, ASR: 0.6, Backdoor Loss: 1.06
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 79.0, Loss: 0.84, ASR: 0.5, Backdoor Loss: 0.93
+Client 5 | Local Epoch 2| Acc: 78.9, Loss: 0.87, ASR: 0.4, Backdoor Loss: 0.96
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.97
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.99
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.90, ASR: 0.5, Backdoor Loss: 1.00
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.8, Loss: 1.30, ASR: 0.7, Backdoor Loss: 1.43
+Client 6 | Local Epoch 2| Acc: 66.0, Loss: 1.37, ASR: 1.0, Backdoor Loss: 1.47
+Client 6 | Local Epoch 3| Acc: 66.7, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.47
+Client 6 | Local Epoch 4| Acc: 64.6, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.43
+Client 6 | Local Epoch 5| Acc: 64.9, Loss: 1.32, ASR: 0.5, Backdoor Loss: 1.45
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.5, Loss: 1.43, ASR: 0.3, Backdoor Loss: 1.50
+Client 7 | Local Epoch 2| Acc: 71.4, Loss: 1.60, ASR: 0.3, Backdoor Loss: 1.64
+Client 7 | Local Epoch 3| Acc: 71.4, Loss: 1.67, ASR: 0.3, Backdoor Loss: 1.72
+Client 7 | Local Epoch 4| Acc: 70.9, Loss: 1.74, ASR: 0.3, Backdoor Loss: 1.79
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.77, ASR: 0.3, Backdoor Loss: 1.83
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.9, Loss: 0.73, ASR: 0.3, Backdoor Loss: 0.77
+Client 8 | Local Epoch 2| Acc: 79.9, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.78
+Client 8 | Local Epoch 3| Acc: 79.8, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.79
+Client 8 | Local Epoch 4| Acc: 80.0, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 5| Acc: 79.9, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.80
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 0.98, ASR: 1.1, Backdoor Loss: 1.00
+Client 9 | Local Epoch 2| Acc: 72.7, Loss: 1.04, ASR: 1.2, Backdoor Loss: 1.06
+Client 9 | Local Epoch 3| Acc: 73.0, Loss: 1.05, ASR: 1.2, Backdoor Loss: 1.07
+Client 9 | Local Epoch 4| Acc: 72.0, Loss: 1.09, ASR: 1.0, Backdoor Loss: 1.08
+Client 9 | Local Epoch 5| Acc: 74.0, Loss: 1.05, ASR: 0.8, Backdoor Loss: 1.12
+--------------客户端 0 推理----------------
+Client 0 | Epoch 22 | desired_margin: 1.1500000000000004
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 22| Acc: 79.99, ASR: 0.67 , Artificial ASR: 0.00
+Client 1 | Epoch 22| Acc: 70.73, ASR: 0.56 , Artificial ASR: 0.00
+Client 2 | Epoch 22| Acc: 77.73, ASR: 0.49 , Artificial ASR: 0.00
+Client 3 | Epoch 22| Acc: 80.84, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 22| Acc: 75.96, ASR: 0.62 , Artificial ASR: 0.00
+Client 5 | Epoch 22| Acc: 79.79, ASR: 0.39 , Artificial ASR: 0.00
+Client 6 | Epoch 22| Acc: 71.90, ASR: 1.13 , Artificial ASR: 0.00
+Client 7 | Epoch 22| Acc: 76.83, ASR: 0.54 , Artificial ASR: 0.55
+Client 8 | Epoch 22| Acc: 80.76, ASR: 0.54 , Artificial ASR: 0.00
+Client 9 | Epoch 22| Acc: 75.60, ASR: 0.59 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 23/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.7, Loss: 0.87, ASR: 0.9, Backdoor Loss: 0.90
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.89, ASR: 1.0, Backdoor Loss: 0.92
+Client 0 | Local Epoch 3| Acc: 78.7, Loss: 0.90, ASR: 1.1, Backdoor Loss: 0.94
+Client 0 | Local Epoch 4| Acc: 78.3, Loss: 0.91, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 5| Acc: 78.1, Loss: 0.92, ASR: 1.2, Backdoor Loss: 0.95
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.6, Loss: 1.34, ASR: 0.9, Backdoor Loss: 1.56
+Client 1 | Local Epoch 2| Acc: 66.3, Loss: 1.30, ASR: 0.9, Backdoor Loss: 1.46
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.29, ASR: 0.7, Backdoor Loss: 1.51
+Client 1 | Local Epoch 4| Acc: 66.8, Loss: 1.27, ASR: 0.7, Backdoor Loss: 1.49
+Client 1 | Local Epoch 5| Acc: 66.0, Loss: 1.27, ASR: 0.9, Backdoor Loss: 1.47
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.1, Loss: 1.17, ASR: 0.6, Backdoor Loss: 1.33
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 1.29, ASR: 0.8, Backdoor Loss: 1.46
+Client 2 | Local Epoch 3| Acc: 75.1, Loss: 1.32, ASR: 1.0, Backdoor Loss: 1.51
+Client 2 | Local Epoch 4| Acc: 75.0, Loss: 1.35, ASR: 0.7, Backdoor Loss: 1.54
+Client 2 | Local Epoch 5| Acc: 75.2, Loss: 1.39, ASR: 0.8, Backdoor Loss: 1.57
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.9, Loss: 0.76, ASR: 0.3, Backdoor Loss: 0.80
+Client 3 | Local Epoch 2| Acc: 79.5, Loss: 0.78, ASR: 0.3, Backdoor Loss: 0.82
+Client 3 | Local Epoch 3| Acc: 79.3, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.84
+Client 3 | Local Epoch 4| Acc: 79.3, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 5| Acc: 79.1, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.86
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.5, Loss: 1.03, ASR: 0.7, Backdoor Loss: 1.00
+Client 4 | Local Epoch 2| Acc: 72.9, Loss: 1.06, ASR: 0.4, Backdoor Loss: 1.07
+Client 4 | Local Epoch 3| Acc: 72.7, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.05
+Client 4 | Local Epoch 4| Acc: 73.2, Loss: 1.02, ASR: 0.5, Backdoor Loss: 1.07
+Client 4 | Local Epoch 5| Acc: 72.8, Loss: 1.06, ASR: 0.9, Backdoor Loss: 1.06
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.85, ASR: 0.5, Backdoor Loss: 0.93
+Client 5 | Local Epoch 2| Acc: 78.7, Loss: 0.87, ASR: 0.4, Backdoor Loss: 0.96
+Client 5 | Local Epoch 3| Acc: 78.6, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.98
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.99
+Client 5 | Local Epoch 5| Acc: 78.5, Loss: 0.91, ASR: 0.5, Backdoor Loss: 1.00
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.4, Loss: 1.34, ASR: 0.8, Backdoor Loss: 1.44
+Client 6 | Local Epoch 2| Acc: 66.3, Loss: 1.30, ASR: 0.7, Backdoor Loss: 1.43
+Client 6 | Local Epoch 3| Acc: 65.1, Loss: 1.33, ASR: 0.7, Backdoor Loss: 1.45
+Client 6 | Local Epoch 4| Acc: 65.5, Loss: 1.31, ASR: 0.8, Backdoor Loss: 1.45
+Client 6 | Local Epoch 5| Acc: 65.3, Loss: 1.29, ASR: 0.9, Backdoor Loss: 1.47
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.9, Loss: 1.40, ASR: 0.4, Backdoor Loss: 1.49
+Client 7 | Local Epoch 2| Acc: 72.1, Loss: 1.52, ASR: 0.4, Backdoor Loss: 1.63
+Client 7 | Local Epoch 3| Acc: 71.9, Loss: 1.62, ASR: 0.4, Backdoor Loss: 1.73
+Client 7 | Local Epoch 4| Acc: 71.3, Loss: 1.71, ASR: 0.4, Backdoor Loss: 1.76
+Client 7 | Local Epoch 5| Acc: 71.3, Loss: 1.79, ASR: 0.3, Backdoor Loss: 1.84
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 80.0, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.78
+Client 8 | Local Epoch 2| Acc: 79.8, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.79
+Client 8 | Local Epoch 3| Acc: 79.6, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.79
+Client 8 | Local Epoch 4| Acc: 79.8, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 5| Acc: 79.7, Loss: 0.75, ASR: 0.5, Backdoor Loss: 0.80
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.6, Loss: 1.03, ASR: 1.0, Backdoor Loss: 0.99
+Client 9 | Local Epoch 2| Acc: 73.4, Loss: 1.02, ASR: 0.9, Backdoor Loss: 1.06
+Client 9 | Local Epoch 3| Acc: 73.3, Loss: 1.05, ASR: 0.8, Backdoor Loss: 1.07
+Client 9 | Local Epoch 4| Acc: 73.1, Loss: 1.04, ASR: 0.8, Backdoor Loss: 1.06
+Client 9 | Local Epoch 5| Acc: 73.4, Loss: 1.06, ASR: 1.1, Backdoor Loss: 1.08
+--------------客户端 0 推理----------------
+Client 0 | Epoch 23 | desired_margin: 1.2000000000000004
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 23| Acc: 79.97, ASR: 0.69 , Artificial ASR: 0.00
+Client 1 | Epoch 23| Acc: 73.16, ASR: 0.56 , Artificial ASR: 0.00
+Client 2 | Epoch 23| Acc: 77.35, ASR: 0.56 , Artificial ASR: 0.00
+Client 3 | Epoch 23| Acc: 80.84, ASR: 0.51 , Artificial ASR: 0.00
+Client 4 | Epoch 23| Acc: 75.88, ASR: 0.56 , Artificial ASR: 0.04
+Client 5 | Epoch 23| Acc: 79.69, ASR: 0.39 , Artificial ASR: 0.00
+Client 6 | Epoch 23| Acc: 72.62, ASR: 0.77 , Artificial ASR: 0.00
+Client 7 | Epoch 23| Acc: 78.10, ASR: 0.59 , Artificial ASR: 9.20
+Client 8 | Epoch 23| Acc: 80.64, ASR: 0.56 , Artificial ASR: 0.00
+Client 9 | Epoch 23| Acc: 76.47, ASR: 0.80 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 24/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.5, Loss: 0.88, ASR: 0.9, Backdoor Loss: 0.90
+Client 0 | Local Epoch 2| Acc: 78.6, Loss: 0.89, ASR: 1.0, Backdoor Loss: 0.93
+Client 0 | Local Epoch 3| Acc: 78.5, Loss: 0.91, ASR: 1.1, Backdoor Loss: 0.94
+Client 0 | Local Epoch 4| Acc: 78.5, Loss: 0.91, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 5| Acc: 78.2, Loss: 0.92, ASR: 1.2, Backdoor Loss: 0.96
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.1, Loss: 1.33, ASR: 1.0, Backdoor Loss: 1.51
+Client 1 | Local Epoch 2| Acc: 67.3, Loss: 1.30, ASR: 0.9, Backdoor Loss: 1.47
+Client 1 | Local Epoch 3| Acc: 66.9, Loss: 1.31, ASR: 1.1, Backdoor Loss: 1.50
+Client 1 | Local Epoch 4| Acc: 66.1, Loss: 1.30, ASR: 0.8, Backdoor Loss: 1.55
+Client 1 | Local Epoch 5| Acc: 65.8, Loss: 1.30, ASR: 0.8, Backdoor Loss: 1.47
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.2, Loss: 1.17, ASR: 0.9, Backdoor Loss: 1.30
+Client 2 | Local Epoch 2| Acc: 74.8, Loss: 1.28, ASR: 0.9, Backdoor Loss: 1.48
+Client 2 | Local Epoch 3| Acc: 74.7, Loss: 1.33, ASR: 0.8, Backdoor Loss: 1.56
+Client 2 | Local Epoch 4| Acc: 74.7, Loss: 1.39, ASR: 1.0, Backdoor Loss: 1.63
+Client 2 | Local Epoch 5| Acc: 75.0, Loss: 1.39, ASR: 0.9, Backdoor Loss: 1.60
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.7, Loss: 0.77, ASR: 0.3, Backdoor Loss: 0.80
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.84
+Client 3 | Local Epoch 4| Acc: 79.3, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.87
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.8, Loss: 1.04, ASR: 0.6, Backdoor Loss: 1.04
+Client 4 | Local Epoch 2| Acc: 72.8, Loss: 1.04, ASR: 0.9, Backdoor Loss: 1.01
+Client 4 | Local Epoch 3| Acc: 73.3, Loss: 1.04, ASR: 0.4, Backdoor Loss: 1.07
+Client 4 | Local Epoch 4| Acc: 73.8, Loss: 1.04, ASR: 0.6, Backdoor Loss: 1.05
+Client 4 | Local Epoch 5| Acc: 73.1, Loss: 1.06, ASR: 0.5, Backdoor Loss: 1.07
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 79.0, Loss: 0.86, ASR: 0.5, Backdoor Loss: 0.94
+Client 5 | Local Epoch 2| Acc: 78.7, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.97
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.98
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.90, ASR: 0.4, Backdoor Loss: 0.99
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.91, ASR: 0.5, Backdoor Loss: 1.00
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.6, Loss: 1.31, ASR: 0.9, Backdoor Loss: 1.44
+Client 6 | Local Epoch 2| Acc: 66.4, Loss: 1.35, ASR: 0.8, Backdoor Loss: 1.51
+Client 6 | Local Epoch 3| Acc: 66.9, Loss: 1.35, ASR: 0.6, Backdoor Loss: 1.50
+Client 6 | Local Epoch 4| Acc: 65.9, Loss: 1.32, ASR: 0.8, Backdoor Loss: 1.47
+Client 6 | Local Epoch 5| Acc: 65.8, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.48
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.4, Loss: 1.40, ASR: 0.4, Backdoor Loss: 1.51
+Client 7 | Local Epoch 2| Acc: 71.6, Loss: 1.52, ASR: 0.3, Backdoor Loss: 1.60
+Client 7 | Local Epoch 3| Acc: 71.5, Loss: 1.64, ASR: 0.4, Backdoor Loss: 1.70
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.71, ASR: 0.4, Backdoor Loss: 1.79
+Client 7 | Local Epoch 5| Acc: 71.1, Loss: 1.78, ASR: 0.4, Backdoor Loss: 1.86
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.8, Loss: 0.74, ASR: 0.4, Backdoor Loss: 0.78
+Client 8 | Local Epoch 2| Acc: 79.7, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.79
+Client 8 | Local Epoch 3| Acc: 79.7, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.80
+Client 8 | Local Epoch 4| Acc: 79.7, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.81
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.9, Loss: 1.06, ASR: 1.0, Backdoor Loss: 1.06
+Client 9 | Local Epoch 2| Acc: 73.5, Loss: 1.01, ASR: 0.8, Backdoor Loss: 1.05
+Client 9 | Local Epoch 3| Acc: 73.4, Loss: 1.04, ASR: 0.8, Backdoor Loss: 1.04
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 1.09, ASR: 1.0, Backdoor Loss: 1.07
+Client 9 | Local Epoch 5| Acc: 72.8, Loss: 1.06, ASR: 1.1, Backdoor Loss: 1.10
+--------------客户端 0 推理----------------
+Client 0 | Epoch 24 | desired_margin: 1.2500000000000004
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 24| Acc: 79.94, ASR: 0.72 , Artificial ASR: 0.00
+Client 1 | Epoch 24| Acc: 71.39, ASR: 0.90 , Artificial ASR: 0.00
+Client 2 | Epoch 24| Acc: 77.17, ASR: 0.23 , Artificial ASR: 0.02
+Client 3 | Epoch 24| Acc: 80.72, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 24| Acc: 75.40, ASR: 0.44 , Artificial ASR: 0.00
+Client 5 | Epoch 24| Acc: 79.59, ASR: 0.39 , Artificial ASR: 0.00
+Client 6 | Epoch 24| Acc: 72.08, ASR: 0.72 , Artificial ASR: 0.00
+Client 7 | Epoch 24| Acc: 77.74, ASR: 0.62 , Artificial ASR: 4.90
+Client 8 | Epoch 24| Acc: 80.61, ASR: 0.54 , Artificial ASR: 0.00
+Client 9 | Epoch 24| Acc: 75.78, ASR: 0.72 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 25/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.6, Loss: 0.89, ASR: 0.9, Backdoor Loss: 0.91
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.90, ASR: 1.0, Backdoor Loss: 0.93
+Client 0 | Local Epoch 3| Acc: 78.6, Loss: 0.91, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 4| Acc: 78.4, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.96
+Client 0 | Local Epoch 5| Acc: 78.3, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.97
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 67.1, Loss: 1.37, ASR: 1.0, Backdoor Loss: 1.51
+Client 1 | Local Epoch 2| Acc: 65.3, Loss: 1.39, ASR: 1.0, Backdoor Loss: 1.56
+Client 1 | Local Epoch 3| Acc: 66.0, Loss: 1.32, ASR: 1.0, Backdoor Loss: 1.54
+Client 1 | Local Epoch 4| Acc: 65.2, Loss: 1.37, ASR: 1.1, Backdoor Loss: 1.56
+Client 1 | Local Epoch 5| Acc: 66.3, Loss: 1.33, ASR: 1.1, Backdoor Loss: 1.50
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 74.6, Loss: 1.22, ASR: 0.7, Backdoor Loss: 1.34
+Client 2 | Local Epoch 2| Acc: 74.9, Loss: 1.33, ASR: 0.9, Backdoor Loss: 1.55
+Client 2 | Local Epoch 3| Acc: 74.7, Loss: 1.37, ASR: 0.8, Backdoor Loss: 1.57
+Client 2 | Local Epoch 4| Acc: 75.0, Loss: 1.40, ASR: 0.7, Backdoor Loss: 1.62
+Client 2 | Local Epoch 5| Acc: 74.8, Loss: 1.41, ASR: 0.7, Backdoor Loss: 1.64
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.8, Loss: 0.77, ASR: 0.3, Backdoor Loss: 0.81
+Client 3 | Local Epoch 2| Acc: 79.4, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.83
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.84
+Client 3 | Local Epoch 4| Acc: 79.2, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.86
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.87
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.1, Loss: 1.05, ASR: 0.7, Backdoor Loss: 1.06
+Client 4 | Local Epoch 2| Acc: 73.1, Loss: 1.05, ASR: 0.7, Backdoor Loss: 1.08
+Client 4 | Local Epoch 3| Acc: 72.0, Loss: 1.09, ASR: 0.9, Backdoor Loss: 1.03
+Client 4 | Local Epoch 4| Acc: 71.8, Loss: 1.08, ASR: 1.0, Backdoor Loss: 1.09
+Client 4 | Local Epoch 5| Acc: 72.0, Loss: 1.11, ASR: 0.6, Backdoor Loss: 1.08
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.86, ASR: 0.5, Backdoor Loss: 0.95
+Client 5 | Local Epoch 2| Acc: 78.8, Loss: 0.88, ASR: 0.6, Backdoor Loss: 0.97
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.89, ASR: 0.4, Backdoor Loss: 0.99
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.90, ASR: 0.6, Backdoor Loss: 1.00
+Client 5 | Local Epoch 5| Acc: 78.4, Loss: 0.91, ASR: 0.6, Backdoor Loss: 1.01
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.0, Loss: 1.37, ASR: 1.2, Backdoor Loss: 1.51
+Client 6 | Local Epoch 2| Acc: 67.1, Loss: 1.30, ASR: 0.8, Backdoor Loss: 1.49
+Client 6 | Local Epoch 3| Acc: 65.6, Loss: 1.30, ASR: 0.6, Backdoor Loss: 1.51
+Client 6 | Local Epoch 4| Acc: 65.8, Loss: 1.29, ASR: 0.7, Backdoor Loss: 1.52
+Client 6 | Local Epoch 5| Acc: 65.6, Loss: 1.30, ASR: 1.0, Backdoor Loss: 1.47
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.9, Loss: 1.39, ASR: 0.4, Backdoor Loss: 1.52
+Client 7 | Local Epoch 2| Acc: 71.6, Loss: 1.57, ASR: 0.3, Backdoor Loss: 1.63
+Client 7 | Local Epoch 3| Acc: 71.6, Loss: 1.61, ASR: 0.4, Backdoor Loss: 1.70
+Client 7 | Local Epoch 4| Acc: 71.4, Loss: 1.68, ASR: 0.4, Backdoor Loss: 1.80
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.76, ASR: 0.3, Backdoor Loss: 1.83
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.9, Loss: 0.75, ASR: 0.4, Backdoor Loss: 0.79
+Client 8 | Local Epoch 2| Acc: 79.7, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 3| Acc: 79.5, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.81
+Client 8 | Local Epoch 4| Acc: 79.8, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.81
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.5, Loss: 1.00, ASR: 0.8, Backdoor Loss: 1.08
+Client 9 | Local Epoch 2| Acc: 73.8, Loss: 1.02, ASR: 0.7, Backdoor Loss: 1.04
+Client 9 | Local Epoch 3| Acc: 72.5, Loss: 1.07, ASR: 1.1, Backdoor Loss: 1.13
+Client 9 | Local Epoch 4| Acc: 72.7, Loss: 1.08, ASR: 1.1, Backdoor Loss: 1.12
+Client 9 | Local Epoch 5| Acc: 73.0, Loss: 1.10, ASR: 1.0, Backdoor Loss: 1.12
+--------------客户端 0 推理----------------
+Client 0 | Epoch 25 | desired_margin: 1.3000000000000005
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 25| Acc: 79.94, ASR: 0.69 , Artificial ASR: 0.00
+Client 1 | Epoch 25| Acc: 72.62, ASR: 0.82 , Artificial ASR: 0.00
+Client 2 | Epoch 25| Acc: 77.48, ASR: 0.54 , Artificial ASR: 0.02
+Client 3 | Epoch 25| Acc: 80.76, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 25| Acc: 76.30, ASR: 0.64 , Artificial ASR: 0.00
+Client 5 | Epoch 25| Acc: 79.53, ASR: 0.36 , Artificial ASR: 0.00
+Client 6 | Epoch 25| Acc: 71.98, ASR: 0.64 , Artificial ASR: 0.00
+Client 7 | Epoch 25| Acc: 77.86, ASR: 0.51 , Artificial ASR: 3.35
+Client 8 | Epoch 25| Acc: 80.49, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 25| Acc: 76.09, ASR: 0.46 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 26/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.7, Loss: 0.89, ASR: 0.9, Backdoor Loss: 0.92
+Client 0 | Local Epoch 2| Acc: 78.6, Loss: 0.90, ASR: 1.1, Backdoor Loss: 0.94
+Client 0 | Local Epoch 3| Acc: 78.5, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 4| Acc: 78.4, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.96
+Client 0 | Local Epoch 5| Acc: 78.3, Loss: 0.93, ASR: 1.3, Backdoor Loss: 0.97
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.7, Loss: 1.34, ASR: 1.0, Backdoor Loss: 1.53
+Client 1 | Local Epoch 2| Acc: 66.6, Loss: 1.31, ASR: 1.2, Backdoor Loss: 1.49
+Client 1 | Local Epoch 3| Acc: 66.4, Loss: 1.36, ASR: 1.2, Backdoor Loss: 1.63
+Client 1 | Local Epoch 4| Acc: 66.1, Loss: 1.33, ASR: 1.0, Backdoor Loss: 1.58
+Client 1 | Local Epoch 5| Acc: 65.9, Loss: 1.32, ASR: 1.1, Backdoor Loss: 1.55
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.3, Loss: 1.21, ASR: 0.6, Backdoor Loss: 1.34
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.53
+Client 2 | Local Epoch 3| Acc: 75.3, Loss: 1.37, ASR: 0.7, Backdoor Loss: 1.61
+Client 2 | Local Epoch 4| Acc: 75.3, Loss: 1.41, ASR: 0.8, Backdoor Loss: 1.61
+Client 2 | Local Epoch 5| Acc: 75.1, Loss: 1.45, ASR: 0.8, Backdoor Loss: 1.66
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.6, Loss: 0.78, ASR: 0.4, Backdoor Loss: 0.82
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.79, ASR: 0.4, Backdoor Loss: 0.83
+Client 3 | Local Epoch 3| Acc: 79.3, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 4| Acc: 79.1, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.87
+Client 3 | Local Epoch 5| Acc: 79.2, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.87
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.4, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.06
+Client 4 | Local Epoch 2| Acc: 73.3, Loss: 1.03, ASR: 0.5, Backdoor Loss: 1.09
+Client 4 | Local Epoch 3| Acc: 73.5, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.08
+Client 4 | Local Epoch 4| Acc: 72.5, Loss: 1.07, ASR: 0.8, Backdoor Loss: 1.09
+Client 4 | Local Epoch 5| Acc: 72.5, Loss: 1.08, ASR: 0.5, Backdoor Loss: 1.11
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.87, ASR: 0.4, Backdoor Loss: 0.95
+Client 5 | Local Epoch 2| Acc: 78.5, Loss: 0.89, ASR: 0.4, Backdoor Loss: 0.98
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.90, ASR: 0.6, Backdoor Loss: 1.00
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.91, ASR: 0.5, Backdoor Loss: 1.01
+Client 5 | Local Epoch 5| Acc: 78.5, Loss: 0.92, ASR: 0.6, Backdoor Loss: 1.01
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.3, Loss: 1.32, ASR: 0.5, Backdoor Loss: 1.44
+Client 6 | Local Epoch 2| Acc: 66.2, Loss: 1.37, ASR: 0.7, Backdoor Loss: 1.52
+Client 6 | Local Epoch 3| Acc: 66.0, Loss: 1.34, ASR: 0.7, Backdoor Loss: 1.54
+Client 6 | Local Epoch 4| Acc: 65.5, Loss: 1.40, ASR: 0.6, Backdoor Loss: 1.49
+Client 6 | Local Epoch 5| Acc: 64.9, Loss: 1.37, ASR: 0.7, Backdoor Loss: 1.48
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.7, Loss: 1.42, ASR: 0.5, Backdoor Loss: 1.55
+Client 7 | Local Epoch 2| Acc: 71.3, Loss: 1.55, ASR: 0.3, Backdoor Loss: 1.67
+Client 7 | Local Epoch 3| Acc: 71.6, Loss: 1.64, ASR: 0.3, Backdoor Loss: 1.76
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.74, ASR: 0.3, Backdoor Loss: 1.85
+Client 7 | Local Epoch 5| Acc: 71.3, Loss: 1.75, ASR: 0.4, Backdoor Loss: 1.87
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.8, Loss: 0.76, ASR: 0.4, Backdoor Loss: 0.80
+Client 8 | Local Epoch 2| Acc: 79.6, Loss: 0.76, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 3| Acc: 79.5, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.81
+Client 8 | Local Epoch 4| Acc: 79.5, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.2, Loss: 1.06, ASR: 0.9, Backdoor Loss: 1.06
+Client 9 | Local Epoch 2| Acc: 71.8, Loss: 1.07, ASR: 0.8, Backdoor Loss: 1.06
+Client 9 | Local Epoch 3| Acc: 73.0, Loss: 1.09, ASR: 1.0, Backdoor Loss: 1.10
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 1.09, ASR: 1.2, Backdoor Loss: 1.13
+Client 9 | Local Epoch 5| Acc: 72.7, Loss: 1.08, ASR: 1.1, Backdoor Loss: 1.10
+--------------客户端 0 推理----------------
+Client 0 | Epoch 26 | desired_margin: 1.3500000000000005
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 26| Acc: 79.87, ASR: 0.69 , Artificial ASR: 0.00
+Client 1 | Epoch 26| Acc: 71.00, ASR: 0.59 , Artificial ASR: 0.00
+Client 2 | Epoch 26| Acc: 77.81, ASR: 0.33 , Artificial ASR: 0.06
+Client 3 | Epoch 26| Acc: 80.63, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 26| Acc: 75.35, ASR: 0.56 , Artificial ASR: 0.00
+Client 5 | Epoch 26| Acc: 79.58, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 26| Acc: 72.11, ASR: 0.64 , Artificial ASR: 0.00
+Client 7 | Epoch 26| Acc: 78.22, ASR: 0.51 , Artificial ASR: 4.17
+Client 8 | Epoch 26| Acc: 80.38, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 26| Acc: 75.50, ASR: 0.56 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 27/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.7, Loss: 0.90, ASR: 0.9, Backdoor Loss: 0.92
+Client 0 | Local Epoch 2| Acc: 78.6, Loss: 0.91, ASR: 1.1, Backdoor Loss: 0.94
+Client 0 | Local Epoch 3| Acc: 78.5, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.96
+Client 0 | Local Epoch 4| Acc: 78.5, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.97
+Client 0 | Local Epoch 5| Acc: 78.3, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.98
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.1, Loss: 1.37, ASR: 0.9, Backdoor Loss: 1.52
+Client 1 | Local Epoch 2| Acc: 66.0, Loss: 1.35, ASR: 1.0, Backdoor Loss: 1.61
+Client 1 | Local Epoch 3| Acc: 65.4, Loss: 1.32, ASR: 1.6, Backdoor Loss: 1.56
+Client 1 | Local Epoch 4| Acc: 64.8, Loss: 1.33, ASR: 1.1, Backdoor Loss: 1.60
+Client 1 | Local Epoch 5| Acc: 66.0, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.53
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.1, Loss: 1.20, ASR: 0.6, Backdoor Loss: 1.33
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 1.31, ASR: 0.7, Backdoor Loss: 1.48
+Client 2 | Local Epoch 3| Acc: 75.0, Loss: 1.35, ASR: 0.7, Backdoor Loss: 1.54
+Client 2 | Local Epoch 4| Acc: 75.4, Loss: 1.41, ASR: 0.8, Backdoor Loss: 1.57
+Client 2 | Local Epoch 5| Acc: 74.4, Loss: 1.45, ASR: 0.7, Backdoor Loss: 1.65
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.6, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.82
+Client 3 | Local Epoch 2| Acc: 79.4, Loss: 0.80, ASR: 0.3, Backdoor Loss: 0.84
+Client 3 | Local Epoch 3| Acc: 79.1, Loss: 0.81, ASR: 0.3, Backdoor Loss: 0.85
+Client 3 | Local Epoch 4| Acc: 79.0, Loss: 0.82, ASR: 0.3, Backdoor Loss: 0.86
+Client 3 | Local Epoch 5| Acc: 79.3, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.87
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.5, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.06
+Client 4 | Local Epoch 2| Acc: 72.7, Loss: 1.08, ASR: 0.7, Backdoor Loss: 1.05
+Client 4 | Local Epoch 3| Acc: 72.9, Loss: 1.09, ASR: 0.6, Backdoor Loss: 1.04
+Client 4 | Local Epoch 4| Acc: 72.0, Loss: 1.11, ASR: 0.8, Backdoor Loss: 1.09
+Client 4 | Local Epoch 5| Acc: 72.6, Loss: 1.11, ASR: 0.5, Backdoor Loss: 1.09
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.96
+Client 5 | Local Epoch 2| Acc: 78.8, Loss: 0.89, ASR: 0.4, Backdoor Loss: 0.98
+Client 5 | Local Epoch 3| Acc: 78.3, Loss: 0.91, ASR: 0.5, Backdoor Loss: 1.00
+Client 5 | Local Epoch 4| Acc: 78.2, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.02
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.02
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 66.8, Loss: 1.37, ASR: 0.6, Backdoor Loss: 1.51
+Client 6 | Local Epoch 2| Acc: 66.8, Loss: 1.35, ASR: 0.6, Backdoor Loss: 1.45
+Client 6 | Local Epoch 3| Acc: 65.5, Loss: 1.37, ASR: 0.7, Backdoor Loss: 1.50
+Client 6 | Local Epoch 4| Acc: 66.1, Loss: 1.34, ASR: 0.7, Backdoor Loss: 1.46
+Client 6 | Local Epoch 5| Acc: 65.6, Loss: 1.35, ASR: 0.9, Backdoor Loss: 1.50
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 72.0, Loss: 1.42, ASR: 0.4, Backdoor Loss: 1.54
+Client 7 | Local Epoch 2| Acc: 71.8, Loss: 1.59, ASR: 0.4, Backdoor Loss: 1.73
+Client 7 | Local Epoch 3| Acc: 71.4, Loss: 1.65, ASR: 0.4, Backdoor Loss: 1.79
+Client 7 | Local Epoch 4| Acc: 71.0, Loss: 1.73, ASR: 0.3, Backdoor Loss: 1.82
+Client 7 | Local Epoch 5| Acc: 70.9, Loss: 1.80, ASR: 0.3, Backdoor Loss: 1.89
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.6, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.80
+Client 8 | Local Epoch 2| Acc: 79.5, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.81
+Client 8 | Local Epoch 3| Acc: 79.5, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 4| Acc: 79.2, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 5| Acc: 79.3, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.83
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.6, Loss: 1.03, ASR: 1.0, Backdoor Loss: 1.09
+Client 9 | Local Epoch 2| Acc: 73.6, Loss: 1.05, ASR: 0.8, Backdoor Loss: 1.12
+Client 9 | Local Epoch 3| Acc: 73.9, Loss: 1.05, ASR: 1.1, Backdoor Loss: 1.10
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 1.07, ASR: 1.0, Backdoor Loss: 1.11
+Client 9 | Local Epoch 5| Acc: 72.8, Loss: 1.10, ASR: 0.9, Backdoor Loss: 1.17
+--------------客户端 0 推理----------------
+Client 0 | Epoch 27 | desired_margin: 1.4000000000000006
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 27| Acc: 79.72, ASR: 0.72 , Artificial ASR: 0.00
+Client 1 | Epoch 27| Acc: 71.63, ASR: 1.03 , Artificial ASR: 0.00
+Client 2 | Epoch 27| Acc: 77.96, ASR: 0.77 , Artificial ASR: 0.06
+Client 3 | Epoch 27| Acc: 80.51, ASR: 0.49 , Artificial ASR: 0.00
+Client 4 | Epoch 27| Acc: 75.53, ASR: 0.49 , Artificial ASR: 0.00
+Client 5 | Epoch 27| Acc: 79.38, ASR: 0.39 , Artificial ASR: 0.00
+Client 6 | Epoch 27| Acc: 72.68, ASR: 0.67 , Artificial ASR: 0.00
+Client 7 | Epoch 27| Acc: 78.27, ASR: 0.59 , Artificial ASR: 5.99
+Client 8 | Epoch 27| Acc: 80.33, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 27| Acc: 75.48, ASR: 0.46 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 28/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.8, Loss: 0.90, ASR: 0.9, Backdoor Loss: 0.93
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 3| Acc: 78.5, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.96
+Client 0 | Local Epoch 4| Acc: 78.5, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.97
+Client 0 | Local Epoch 5| Acc: 78.4, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.98
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.7, Loss: 1.36, ASR: 0.9, Backdoor Loss: 1.51
+Client 1 | Local Epoch 2| Acc: 66.1, Loss: 1.39, ASR: 1.2, Backdoor Loss: 1.57
+Client 1 | Local Epoch 3| Acc: 66.9, Loss: 1.33, ASR: 1.0, Backdoor Loss: 1.57
+Client 1 | Local Epoch 4| Acc: 65.9, Loss: 1.35, ASR: 0.9, Backdoor Loss: 1.59
+Client 1 | Local Epoch 5| Acc: 66.3, Loss: 1.29, ASR: 1.1, Backdoor Loss: 1.48
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.1, Loss: 1.22, ASR: 0.6, Backdoor Loss: 1.41
+Client 2 | Local Epoch 2| Acc: 74.9, Loss: 1.31, ASR: 0.8, Backdoor Loss: 1.49
+Client 2 | Local Epoch 3| Acc: 74.9, Loss: 1.36, ASR: 0.7, Backdoor Loss: 1.56
+Client 2 | Local Epoch 4| Acc: 75.4, Loss: 1.39, ASR: 0.8, Backdoor Loss: 1.59
+Client 2 | Local Epoch 5| Acc: 74.7, Loss: 1.47, ASR: 0.8, Backdoor Loss: 1.67
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.5, Loss: 0.79, ASR: 0.3, Backdoor Loss: 0.83
+Client 3 | Local Epoch 2| Acc: 79.4, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.84
+Client 3 | Local Epoch 3| Acc: 79.2, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.86
+Client 3 | Local Epoch 4| Acc: 79.1, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.87
+Client 3 | Local Epoch 5| Acc: 79.0, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.88
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.1, Loss: 1.09, ASR: 0.5, Backdoor Loss: 1.06
+Client 4 | Local Epoch 2| Acc: 72.6, Loss: 1.10, ASR: 0.8, Backdoor Loss: 1.09
+Client 4 | Local Epoch 3| Acc: 73.0, Loss: 1.11, ASR: 0.7, Backdoor Loss: 1.09
+Client 4 | Local Epoch 4| Acc: 72.8, Loss: 1.09, ASR: 0.4, Backdoor Loss: 1.13
+Client 4 | Local Epoch 5| Acc: 72.3, Loss: 1.07, ASR: 0.5, Backdoor Loss: 1.10
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.9, Loss: 0.88, ASR: 0.5, Backdoor Loss: 0.96
+Client 5 | Local Epoch 2| Acc: 78.7, Loss: 0.90, ASR: 0.5, Backdoor Loss: 0.99
+Client 5 | Local Epoch 3| Acc: 78.7, Loss: 0.91, ASR: 0.5, Backdoor Loss: 1.00
+Client 5 | Local Epoch 4| Acc: 78.3, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.02
+Client 5 | Local Epoch 5| Acc: 78.4, Loss: 0.93, ASR: 0.5, Backdoor Loss: 1.03
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.1, Loss: 1.35, ASR: 0.6, Backdoor Loss: 1.48
+Client 6 | Local Epoch 2| Acc: 66.8, Loss: 1.39, ASR: 0.9, Backdoor Loss: 1.56
+Client 6 | Local Epoch 3| Acc: 67.0, Loss: 1.35, ASR: 0.8, Backdoor Loss: 1.49
+Client 6 | Local Epoch 4| Acc: 66.1, Loss: 1.36, ASR: 0.8, Backdoor Loss: 1.51
+Client 6 | Local Epoch 5| Acc: 65.6, Loss: 1.34, ASR: 0.7, Backdoor Loss: 1.43
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.7, Loss: 1.49, ASR: 0.4, Backdoor Loss: 1.56
+Client 7 | Local Epoch 2| Acc: 71.6, Loss: 1.60, ASR: 0.3, Backdoor Loss: 1.68
+Client 7 | Local Epoch 3| Acc: 71.0, Loss: 1.70, ASR: 0.4, Backdoor Loss: 1.78
+Client 7 | Local Epoch 4| Acc: 71.1, Loss: 1.77, ASR: 0.3, Backdoor Loss: 1.85
+Client 7 | Local Epoch 5| Acc: 71.2, Loss: 1.78, ASR: 0.3, Backdoor Loss: 1.91
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.8, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.81
+Client 8 | Local Epoch 2| Acc: 79.6, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 3| Acc: 79.5, Loss: 0.77, ASR: 0.5, Backdoor Loss: 0.83
+Client 8 | Local Epoch 4| Acc: 79.4, Loss: 0.78, ASR: 0.6, Backdoor Loss: 0.83
+Client 8 | Local Epoch 5| Acc: 79.5, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.83
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 72.6, Loss: 1.07, ASR: 1.0, Backdoor Loss: 1.09
+Client 9 | Local Epoch 2| Acc: 73.9, Loss: 1.04, ASR: 1.2, Backdoor Loss: 1.11
+Client 9 | Local Epoch 3| Acc: 72.8, Loss: 1.09, ASR: 0.9, Backdoor Loss: 1.14
+Client 9 | Local Epoch 4| Acc: 72.8, Loss: 1.10, ASR: 1.0, Backdoor Loss: 1.07
+Client 9 | Local Epoch 5| Acc: 72.0, Loss: 1.14, ASR: 1.1, Backdoor Loss: 1.14
+--------------客户端 0 推理----------------
+Client 0 | Epoch 28 | desired_margin: 1.4500000000000006
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 28| Acc: 79.59, ASR: 0.72 , Artificial ASR: 0.00
+Client 1 | Epoch 28| Acc: 71.88, ASR: 1.26 , Artificial ASR: 0.00
+Client 2 | Epoch 28| Acc: 78.53, ASR: 0.56 , Artificial ASR: 0.04
+Client 3 | Epoch 28| Acc: 80.46, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 28| Acc: 75.60, ASR: 0.74 , Artificial ASR: 0.00
+Client 5 | Epoch 28| Acc: 79.38, ASR: 0.41 , Artificial ASR: 0.00
+Client 6 | Epoch 28| Acc: 72.42, ASR: 1.13 , Artificial ASR: 0.00
+Client 7 | Epoch 28| Acc: 77.99, ASR: 0.74 , Artificial ASR: 6.80
+Client 8 | Epoch 28| Acc: 80.25, ASR: 0.49 , Artificial ASR: 0.00
+Client 9 | Epoch 28| Acc: 75.78, ASR: 0.74 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 29/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.7, Loss: 0.91, ASR: 1.0, Backdoor Loss: 0.94
+Client 0 | Local Epoch 2| Acc: 78.5, Loss: 0.92, ASR: 1.1, Backdoor Loss: 0.95
+Client 0 | Local Epoch 3| Acc: 78.6, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.97
+Client 0 | Local Epoch 4| Acc: 78.6, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.98
+Client 0 | Local Epoch 5| Acc: 78.4, Loss: 0.95, ASR: 1.2, Backdoor Loss: 0.99
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.4, Loss: 1.39, ASR: 1.0, Backdoor Loss: 1.58
+Client 1 | Local Epoch 2| Acc: 65.8, Loss: 1.34, ASR: 1.2, Backdoor Loss: 1.47
+Client 1 | Local Epoch 3| Acc: 65.9, Loss: 1.35, ASR: 1.1, Backdoor Loss: 1.58
+Client 1 | Local Epoch 4| Acc: 66.0, Loss: 1.30, ASR: 0.9, Backdoor Loss: 1.54
+Client 1 | Local Epoch 5| Acc: 66.1, Loss: 1.34, ASR: 0.8, Backdoor Loss: 1.57
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.1, Loss: 1.25, ASR: 0.6, Backdoor Loss: 1.44
+Client 2 | Local Epoch 2| Acc: 75.2, Loss: 1.36, ASR: 0.8, Backdoor Loss: 1.55
+Client 2 | Local Epoch 3| Acc: 75.6, Loss: 1.38, ASR: 0.9, Backdoor Loss: 1.57
+Client 2 | Local Epoch 4| Acc: 74.9, Loss: 1.41, ASR: 0.9, Backdoor Loss: 1.63
+Client 2 | Local Epoch 5| Acc: 74.8, Loss: 1.48, ASR: 0.9, Backdoor Loss: 1.68
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.4, Loss: 0.80, ASR: 0.3, Backdoor Loss: 0.83
+Client 3 | Local Epoch 2| Acc: 79.3, Loss: 0.81, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 3| Acc: 79.1, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.86
+Client 3 | Local Epoch 4| Acc: 79.0, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.88
+Client 3 | Local Epoch 5| Acc: 78.8, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.88
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 72.2, Loss: 1.10, ASR: 0.4, Backdoor Loss: 1.10
+Client 4 | Local Epoch 2| Acc: 72.3, Loss: 1.10, ASR: 0.8, Backdoor Loss: 1.12
+Client 4 | Local Epoch 3| Acc: 73.8, Loss: 1.10, ASR: 0.6, Backdoor Loss: 1.08
+Client 4 | Local Epoch 4| Acc: 72.9, Loss: 1.11, ASR: 0.7, Backdoor Loss: 1.11
+Client 4 | Local Epoch 5| Acc: 72.8, Loss: 1.13, ASR: 0.6, Backdoor Loss: 1.10
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.7, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.97
+Client 5 | Local Epoch 2| Acc: 78.7, Loss: 0.90, ASR: 0.5, Backdoor Loss: 1.00
+Client 5 | Local Epoch 3| Acc: 78.5, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.01
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.03
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.93, ASR: 0.6, Backdoor Loss: 1.03
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.3, Loss: 1.34, ASR: 1.3, Backdoor Loss: 1.50
+Client 6 | Local Epoch 2| Acc: 66.3, Loss: 1.33, ASR: 0.9, Backdoor Loss: 1.47
+Client 6 | Local Epoch 3| Acc: 66.3, Loss: 1.34, ASR: 0.9, Backdoor Loss: 1.50
+Client 6 | Local Epoch 4| Acc: 66.0, Loss: 1.36, ASR: 0.7, Backdoor Loss: 1.52
+Client 6 | Local Epoch 5| Acc: 65.3, Loss: 1.36, ASR: 0.9, Backdoor Loss: 1.49
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.8, Loss: 1.47, ASR: 0.5, Backdoor Loss: 1.55
+Client 7 | Local Epoch 2| Acc: 71.4, Loss: 1.61, ASR: 0.4, Backdoor Loss: 1.67
+Client 7 | Local Epoch 3| Acc: 71.0, Loss: 1.66, ASR: 0.3, Backdoor Loss: 1.76
+Client 7 | Local Epoch 4| Acc: 71.4, Loss: 1.69, ASR: 0.4, Backdoor Loss: 1.81
+Client 7 | Local Epoch 5| Acc: 71.4, Loss: 1.79, ASR: 0.3, Backdoor Loss: 1.85
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.6, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 2| Acc: 79.6, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 3| Acc: 79.6, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.83
+Client 8 | Local Epoch 4| Acc: 79.5, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.84
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.79, ASR: 0.5, Backdoor Loss: 0.84
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.7, Loss: 1.03, ASR: 0.7, Backdoor Loss: 1.08
+Client 9 | Local Epoch 2| Acc: 73.3, Loss: 1.07, ASR: 0.8, Backdoor Loss: 1.09
+Client 9 | Local Epoch 3| Acc: 72.7, Loss: 1.11, ASR: 1.1, Backdoor Loss: 1.12
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 1.09, ASR: 1.2, Backdoor Loss: 1.14
+Client 9 | Local Epoch 5| Acc: 72.2, Loss: 1.13, ASR: 1.0, Backdoor Loss: 1.15
+--------------客户端 0 推理----------------
+Client 0 | Epoch 29 | desired_margin: 1.5000000000000007
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 29| Acc: 79.58, ASR: 0.80 , Artificial ASR: 0.00
+Client 1 | Epoch 29| Acc: 71.93, ASR: 0.46 , Artificial ASR: 0.00
+Client 2 | Epoch 29| Acc: 77.87, ASR: 0.54 , Artificial ASR: 0.04
+Client 3 | Epoch 29| Acc: 80.38, ASR: 0.46 , Artificial ASR: 0.00
+Client 4 | Epoch 29| Acc: 76.24, ASR: 0.46 , Artificial ASR: 0.00
+Client 5 | Epoch 29| Acc: 79.30, ASR: 0.46 , Artificial ASR: 0.00
+Client 6 | Epoch 29| Acc: 71.59, ASR: 0.67 , Artificial ASR: 0.00
+Client 7 | Epoch 29| Acc: 78.38, ASR: 0.85 , Artificial ASR: 10.87
+Client 8 | Epoch 29| Acc: 80.15, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 29| Acc: 76.04, ASR: 0.72 , Artificial ASR: 0.00
+
+------------------------------------------------------------ Epoch 30/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------
+Client 0 | Local Epoch 1| Acc: 78.9, Loss: 0.91, ASR: 1.0, Backdoor Loss: 0.94
+Client 0 | Local Epoch 2| Acc: 78.6, Loss: 0.93, ASR: 1.1, Backdoor Loss: 0.96
+Client 0 | Local Epoch 3| Acc: 78.6, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.97
+Client 0 | Local Epoch 4| Acc: 78.5, Loss: 0.94, ASR: 1.1, Backdoor Loss: 0.98
+Client 0 | Local Epoch 5| Acc: 78.4, Loss: 0.95, ASR: 1.2, Backdoor Loss: 0.99
+--------------客户端 1 训练----------------
+Client 1 | Local Epoch 1| Acc: 66.9, Loss: 1.35, ASR: 1.2, Backdoor Loss: 1.52
+Client 1 | Local Epoch 2| Acc: 65.7, Loss: 1.40, ASR: 0.8, Backdoor Loss: 1.54
+Client 1 | Local Epoch 3| Acc: 65.7, Loss: 1.34, ASR: 1.1, Backdoor Loss: 1.56
+Client 1 | Local Epoch 4| Acc: 65.5, Loss: 1.36, ASR: 1.0, Backdoor Loss: 1.53
+Client 1 | Local Epoch 5| Acc: 65.6, Loss: 1.32, ASR: 1.1, Backdoor Loss: 1.54
+--------------客户端 2 训练----------------
+Client 2 | Local Epoch 1| Acc: 75.7, Loss: 1.24, ASR: 0.7, Backdoor Loss: 1.39
+Client 2 | Local Epoch 2| Acc: 75.0, Loss: 1.33, ASR: 0.8, Backdoor Loss: 1.52
+Client 2 | Local Epoch 3| Acc: 75.2, Loss: 1.37, ASR: 0.8, Backdoor Loss: 1.57
+Client 2 | Local Epoch 4| Acc: 75.2, Loss: 1.39, ASR: 0.8, Backdoor Loss: 1.61
+Client 2 | Local Epoch 5| Acc: 74.9, Loss: 1.41, ASR: 0.8, Backdoor Loss: 1.63
+--------------客户端 3 训练----------------
+Client 3 | Local Epoch 1| Acc: 79.3, Loss: 0.80, ASR: 0.4, Backdoor Loss: 0.83
+Client 3 | Local Epoch 2| Acc: 79.1, Loss: 0.82, ASR: 0.4, Backdoor Loss: 0.85
+Client 3 | Local Epoch 3| Acc: 79.0, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.86
+Client 3 | Local Epoch 4| Acc: 79.0, Loss: 0.83, ASR: 0.4, Backdoor Loss: 0.87
+Client 3 | Local Epoch 5| Acc: 78.9, Loss: 0.84, ASR: 0.4, Backdoor Loss: 0.88
+--------------客户端 4 训练----------------
+Client 4 | Local Epoch 1| Acc: 73.3, Loss: 1.05, ASR: 0.6, Backdoor Loss: 1.09
+Client 4 | Local Epoch 2| Acc: 73.4, Loss: 1.08, ASR: 0.8, Backdoor Loss: 1.11
+Client 4 | Local Epoch 3| Acc: 73.2, Loss: 1.12, ASR: 0.8, Backdoor Loss: 1.13
+Client 4 | Local Epoch 4| Acc: 72.1, Loss: 1.11, ASR: 0.8, Backdoor Loss: 1.08
+Client 4 | Local Epoch 5| Acc: 73.6, Loss: 1.09, ASR: 0.7, Backdoor Loss: 1.12
+--------------客户端 5 训练----------------
+Client 5 | Local Epoch 1| Acc: 78.8, Loss: 0.89, ASR: 0.5, Backdoor Loss: 0.98
+Client 5 | Local Epoch 2| Acc: 78.6, Loss: 0.91, ASR: 0.4, Backdoor Loss: 1.00
+Client 5 | Local Epoch 3| Acc: 78.3, Loss: 0.92, ASR: 0.5, Backdoor Loss: 1.01
+Client 5 | Local Epoch 4| Acc: 78.4, Loss: 0.93, ASR: 0.5, Backdoor Loss: 1.03
+Client 5 | Local Epoch 5| Acc: 78.2, Loss: 0.94, ASR: 0.5, Backdoor Loss: 1.04
+--------------客户端 6 训练----------------
+Client 6 | Local Epoch 1| Acc: 67.1, Loss: 1.35, ASR: 1.2, Backdoor Loss: 1.59
+Client 6 | Local Epoch 2| Acc: 66.2, Loss: 1.38, ASR: 1.0, Backdoor Loss: 1.53
+Client 6 | Local Epoch 3| Acc: 66.2, Loss: 1.37, ASR: 0.9, Backdoor Loss: 1.49
+Client 6 | Local Epoch 4| Acc: 64.1, Loss: 1.39, ASR: 1.0, Backdoor Loss: 1.56
+Client 6 | Local Epoch 5| Acc: 64.8, Loss: 1.38, ASR: 0.8, Backdoor Loss: 1.53
+--------------客户端 7 训练----------------
+Client 7 | Local Epoch 1| Acc: 71.5, Loss: 1.44, ASR: 0.5, Backdoor Loss: 1.56
+Client 7 | Local Epoch 2| Acc: 70.7, Loss: 1.58, ASR: 0.3, Backdoor Loss: 1.67
+Client 7 | Local Epoch 3| Acc: 70.9, Loss: 1.67, ASR: 0.3, Backdoor Loss: 1.75
+Client 7 | Local Epoch 4| Acc: 70.9, Loss: 1.74, ASR: 0.3, Backdoor Loss: 1.82
+Client 7 | Local Epoch 5| Acc: 70.9, Loss: 1.76, ASR: 0.4, Backdoor Loss: 1.88
+--------------客户端 8 训练----------------
+Client 8 | Local Epoch 1| Acc: 79.6, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.82
+Client 8 | Local Epoch 2| Acc: 79.7, Loss: 0.78, ASR: 0.5, Backdoor Loss: 0.83
+Client 8 | Local Epoch 3| Acc: 79.5, Loss: 0.79, ASR: 0.5, Backdoor Loss: 0.83
+Client 8 | Local Epoch 4| Acc: 79.5, Loss: 0.79, ASR: 0.5, Backdoor Loss: 0.84
+Client 8 | Local Epoch 5| Acc: 79.6, Loss: 0.79, ASR: 0.6, Backdoor Loss: 0.84
+--------------客户端 9 训练----------------
+Client 9 | Local Epoch 1| Acc: 73.1, Loss: 1.04, ASR: 0.7, Backdoor Loss: 1.10
+Client 9 | Local Epoch 2| Acc: 73.0, Loss: 1.07, ASR: 1.1, Backdoor Loss: 1.08
+Client 9 | Local Epoch 3| Acc: 73.0, Loss: 1.10, ASR: 0.9, Backdoor Loss: 1.10
+Client 9 | Local Epoch 4| Acc: 73.2, Loss: 1.09, ASR: 0.8, Backdoor Loss: 1.16
+Client 9 | Local Epoch 5| Acc: 73.4, Loss: 1.11, ASR: 1.1, Backdoor Loss: 1.12
+--------------客户端 0 推理----------------
+Client 0 | Epoch 30 | desired_margin: 1.5500000000000007
+Client 0 | Epoch 30 | Logit Solver Timing | solver: adam | solver_seconds_total: 650.71346 | solver_samples_total: 58000
+Client 0 | Epoch 30 | Logit Deviation | l2_mean: 9.0848617 | cosine_mean: 0.97029054 | selected_samples: 2000 | cosine_samples: 2000
+Client 0 | Epoch 30 | Logit Example | solver: adam | sample_index: 1240 | target: 8 | mode: full | desired_margin: 1.5500000000000007
+  logits_before: [-3.9827330112457275, -2.03275990486145, -5.67412805557251, 1.0777676105499268, -10.134303092956543, -3.5447638034820557, -5.319141387939453, -9.210395812988281, 9.463380813598633, -7.53590202331543]
+  logits_after: [-3.8594770431518555, -1.933769702911377, -4.915447235107422, 0.05668019503355026, -8.931770324707031, -3.213839054107666, -5.875916957855225, -9.416179656982422, -2.7512221336364746, -7.0777459144592285]
+Client 0 | Epoch 30 | Logit Example | solver: adam | sample_index: 2064 | target: 8 | mode: full | desired_margin: 1.5500000000000007
+  logits_before: [-1.2439223527908325, -10.309378623962402, 3.943378448486328, -1.296308994293213, -0.33019816875457764, -2.1615755558013916, -0.09476335346698761, -3.6487698554992676, -2.6727211475372314, -12.051868438720703]
+  logits_after: [-4.193019390106201, -15.574888229370117, 3.5965468883514404, -2.3017332553863525, -1.1338003873825073, -2.267983913421631, 1.1648961305618286, -4.3709211349487305, -3.0372581481933594, -14.85204029083252]
+--------------客户端 1 推理----------------
+--------------客户端 2 推理----------------
+--------------客户端 3 推理----------------
+--------------客户端 4 推理----------------
+--------------客户端 5 推理----------------
+--------------客户端 6 推理----------------
+--------------客户端 7 推理----------------
+--------------客户端 8 推理----------------
+--------------客户端 9 推理----------------
+--------------客户端 0 蒸馏----------------
+--------------客户端 1 蒸馏----------------
+--------------客户端 2 蒸馏----------------
+--------------客户端 3 蒸馏----------------
+--------------客户端 4 蒸馏----------------
+--------------客户端 5 蒸馏----------------
+--------------客户端 6 蒸馏----------------
+--------------客户端 7 蒸馏----------------
+--------------客户端 8 蒸馏----------------
+--------------客户端 9 蒸馏----------------
+--------------客户端测试----------------
+Client 0 | Epoch 30| Acc: 79.50, ASR: 0.82 , Artificial ASR: 0.00
+Client 1 | Epoch 30| Acc: 72.81, ASR: 0.46 , Artificial ASR: 0.00
+Client 2 | Epoch 30| Acc: 77.45, ASR: 0.49 , Artificial ASR: 0.08
+Client 3 | Epoch 30| Acc: 80.31, ASR: 0.44 , Artificial ASR: 0.00
+Client 4 | Epoch 30| Acc: 75.99, ASR: 0.69 , Artificial ASR: 0.00
+Client 5 | Epoch 30| Acc: 79.17, ASR: 0.44 , Artificial ASR: 0.00
+Client 6 | Epoch 30| Acc: 71.78, ASR: 0.56 , Artificial ASR: 0.00
+Client 7 | Epoch 30| Acc: 77.79, ASR: 0.62 , Artificial ASR: 8.28
+Client 8 | Epoch 30| Acc: 80.10, ASR: 0.51 , Artificial ASR: 0.00
+Client 9 | Epoch 30| Acc: 75.35, ASR: 0.54 , Artificial ASR: 0.04
