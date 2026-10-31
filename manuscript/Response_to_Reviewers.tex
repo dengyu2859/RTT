@@ -25,6 +25,8 @@
 \usepackage{caption}  % 提供非浮动表格的标题命令
 % Hyperlinks (generally loaded near the end)
 \usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{float}
 
 % ---------- Colors ----------
 \definecolor{replyblue}{HTML}{16538A}
@@ -480,10 +482,204 @@ Speech Commands & 25.52     & 0.13/86.69    & 88.05/3.60  & 0.17/0.34 \\
 
 \reviewcomment{The contribution of adaptive logits adjustment is not sufficiently isolated.
 The adaptive adjustment mechanism is a central component of RTT. However, the ablation in Table VIII removes feedback while keeping the expected logit difference fixed at its small initial value. This comparison does not establish whether the performance improvement comes from feedback adaptation or simply from using a sufficiently large adjustment magnitude. The authors should compare RTT against carefully tuned fixed-margin strategies, direct target-logit boosting, and non-adaptive optimization under comparable perturbation budgets. The relationship between the final logit deviation, attack success rate, and clean accuracy should also be reported. Since Eq. (17) defines a quadratic optimization objective, the authors could further explain the need for iterative optimization rather than a direct solution.}
-\authorresponse{two}
-\revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
+\authorresponse{We sincerely thank you for your careful review of our manuscript and constructive comments.
+Your suggestions regarding the independent contribution of adaptive logits adjustment and the optimization of Eq.~(17) are insightful and have been highly valuable in improving our manuscript.
+In response to your comments, we have conducted additional comparative experiments to evaluate adaptive logits adjustment and examine the relationships among Final Deviation, ASR, and ACC.
+Furthermore, we have directly derived the optimal solution to Eq.~(17) and accordingly revised the optimization procedure, algorithm description, and computational complexity analysis.
+The detailed revisions and corresponding results are presented below.
 
+\textbf{First, regarding the independent contribution of adaptive logits adjustment.}
+We agree with your observation.
+The original ablation study did not sufficiently distinguish the effects of adaptive feedback and adjustment magnitude on attack performance.
+Following your suggestion, we have conducted additional comparative experiments to further validate the independent contribution of adaptive logits adjustment.
 
+Specifically, we designed three types of comparative experiments on CIFAR-10.
+First, regarding your suggestion to use carefully tuned fixed-margin strategies, we recognize the importance of this comparison.
+However, under our threat model, the attacker cannot know the logits uploaded by other clients in advance, making it difficult to determine an optimal fixed margin before launching the attack.
+Determining such a fixed value would require repeatedly running the complete federated training process and selecting the margin based on the final ASR and ACC, which are unknown before the actual attack.
+Based on this consideration, we instead adopt multiple fixed expected logit differences of different magnitudes while retaining RTT's original logits optimization objective.
+These fixed values cover a range from low attack success rates to near-saturation, including fixed margins that achieve ASR comparable to RTT.
+Therefore, this comparison allows us to systematically examine the effects of fixed-margin magnitude on ASR, ACC, and Final Deviation, and determine whether RTT's performance advantage comes solely from a larger adjustment magnitude.
+Second, Direct boosting retains RTT's global feedback mechanism but removes load balancing and directly increases only the backdoor target logit, thereby evaluating the contribution of load-balanced adjustment.
+Third, Non-adaptive removes global logits feedback and continuously increases the expected logit difference by a predefined step size, allowing us to evaluate the attack performance of non-adaptive adjustment.
+
+Furthermore, we use the average $L_2$ distance between the original and modified logits over natural-trigger samples in the final round as the final logit deviation (Final Deviation).
+
+The additional experimental results show that small fixed margins fail to maintain a clear target-class advantage after aggregation, resulting in low ASR.
+Increasing the fixed margin gradually improves ASR.
+However, once ASR reaches a level comparable to RTT, further increasing the margin does not significantly improve ASR and instead substantially increases Final Deviation.
+In particular, with a fixed margin of 2.0, Fixed-margin achieves an ASR of 83.87\%, nearly identical to RTT's 83.89\%, but its Final Deviation is 10.71, compared with only 8.09 for RTT.
+This demonstrates that fixed-margin strategies require larger logit modifications to achieve comparable attack effectiveness.
+
+For the other two strategies, Direct boosting and Non-adaptive achieve ASRs of 83.16\% and 83.35\%, respectively, while their Final Deviations reach 13.68 and 17.55, both substantially higher than that of RTT.
+Without load balancing, Direct boosting requires larger target-logit modifications, whereas Non-adaptive continuously increases the expected difference without global feedback, resulting in excessive logit modifications.
+These excessive logit modifications cause the uploaded logits to deviate substantially from the original outputs, increasing the risk of anomaly detection.
+
+These results demonstrate that adaptive adjustment does not simply increase the logit difference between the target class and other classes.
+Instead, it dynamically controls the adjustment magnitude based on the actual aggregation feedback.
+Compared with the other strategies, RTT maintains high ASR with a comparatively lower Final Deviation, further validating the necessity of adaptive adjustment.
+
+We have incorporated these additional experiments and the corresponding analysis into the revised manuscript.
+
+\textbf{Second, regarding the optimization of Eq.~(17).}
+Thank you very much for your valuable suggestion.
+You are absolutely correct that Eq.~(17) can be solved directly.
+In our original design, we focused on balancing the bias toward the backdoor target and the magnitude of logit modifications through iterative optimization, thereby overlooking the possibility of a direct solution.
+Following your suggestion, we rederived the optimal solution to this objective and replaced iterative optimization with direct computation, significantly reducing the computational complexity of our algorithm.
+Your suggestion has been highly valuable in improving our method.
+
+Specifically, we define a coefficient vector $\mathbf{a}$, with a value of $1$ for the backdoor target class and $-1/(c-1)$ for all other classes.
+By taking the gradient of Eq.~(17) with respect to the logits to be optimized and setting it to zero, we directly obtain the following optimal solution:
+\begin{equation}
+z_i^{t,*}(x)
+=
+z_i^t(x)
++
+\frac{
+\delta^t-\mathbf{a}^{\top}z_i^t(x)
+}{
+\lambda+\frac{c}{c-1}
+}\mathbf{a}.
+\end{equation}
+
+This solution jointly accounts for the expected logit difference and Euclidean-distance regularization, adjusting the target-class and non-target-class logits through the load-balanced strategy.
+
+Based on this derivation, we have incorporated the optimal solution into the revised manuscript and replaced the original $E$-step iterative optimization with direct computation.
+Accordingly, we have updated Algorithm~1 by removing the iterative optimization loop and revised the computational complexity analysis.
+Specifically, the complexity of logits adjustment in each round is reduced from $O(NEc)$ to $O(Nc)$, where $N$ is the number of natural-trigger samples and $c$ is the number of classes.
+Consequently, the additional computational complexity of RTT per round is reduced from $O(Nc+NEc)$ to $O(Nc)$.
+
+Importantly, this modification only changes how the optimization objective in Eq.~(17) is solved.
+It does not alter the natural-trigger construction process, the feedback-based update of the expected logit difference, or the load-balanced logits adjustment objective.
+
+Furthermore, to verify that direct computation and iterative optimization yield comparable attack performance in RTT, we compare the ASR and ACC obtained by the two methods across eight datasets in the main experiments.
+The corresponding results are presented in the following table.
+The results show that the two optimization methods achieve comparable performance, indicating that replacing iterative optimization with direct computation does not significantly affect RTT's attack performance.
+Therefore, we have only revised the optimization procedure and the corresponding algorithm description, while retaining the original experimental results in the manuscript without modifying the other experimental results.
+
+\begin{table}[H]
+\centering
+\caption{Comparison of Iterative Optimization and Direct Solution of the Optimization Objective in RTT. ASR and ACC are reported as the mean over all clients.}
+\label{tab:optimization_comparison}
+\renewcommand\arraystretch{1.0}
+\setlength{\tabcolsep}{12pt}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{Dataset}
+& \multicolumn{2}{c}{Iterative}
+& \multicolumn{2}{c}{Direct Solution} \\
+\cmidrule(lr){2-3}
+\cmidrule(lr){4-5}
+& ASR & ACC & ASR & ACC \\
+\midrule
+GTSRB           & 93.19\% & 81.57\% & 93.75\% & 81.18\% \\
+CIFAR-10        & 83.12\% & 75.82\% & 82.95\% & 75.39\% \\
+Tiny-ImageNet   & 81.90\% & 51.39\% & 82.06\% & 50.74\% \\
+Fashion-MNIST   & 81.95\% & 84.61\% & 82.43\% & 83.02\% \\
+LOAN            & 89.76\% & 78.51\% & 89.03\% & 79.31\% \\
+AG News         & 90.90\% & 85.41\% & 91.13\% & 84.75\% \\
+DBpedia         & 82.51\% & 62.14\% & 82.03\% & 62.66\% \\
+Speech Commands & 88.74\% & 84.36\% & 88.94\% & 83.89\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Through these revisions, we have clarified the mathematical properties of Eq.~(17), provided its direct solution, and updated the algorithm accordingly, resulting in a more precise formulation.
+}
+
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}
+{To further evaluate adaptive logits adjustment, we compare RTT on CIFAR-10 with fixed-margin strategies using different margins (Fixed-margin), direct target-logit boosting without load balancing (Direct boosting), and non-adaptive optimization that removes global logits feedback and linearly increases the expected logit difference (Non-adaptive). 
+Final Deviation measures the average $L_2$ distance between original and modified logits over natural-trigger samples in the final round.
+As shown in Table~\ref{logits_adjustment_comparison}, small fixed margins fail to maintain a clear target-class advantage after aggregation, resulting in low ASR. 
+Increasing the margin raises ASR to a level comparable to RTT, but further increases do not significantly improve ASR and substantially increase Final Deviation. 
+Notably, fixed-margin strategies require a larger Final Deviation than RTT to achieve comparable ASR.
+Without load balancing, Direct boosting requires larger target-logit modifications, while Non-adaptive continuously increases the expected difference without global logits feedback, resulting in excessive logit modifications.
+Excessive logit modifications introduce larger deviations from the original logits without significant ASR gains, potentially increasing the risk of anomaly detection.
+In contrast, RTT maintains high ASR with a comparatively lower Final Deviation, demonstrating the necessity of adaptive adjustment.
+
+\begingroup
+\centering
+\captionof{table}{Comparison of Logits Adjustment Strategies on CIFAR-10.}
+\label{logits_adjustment_comparison}
+\setlength{\tabcolsep}{3pt}
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{lcccc}
+\toprule
+Method & Setting & Final Deviation & ASR & ACC \\
+\midrule
+\multirow{5}{*}{Fixed-margin}
+& $\delta=0.1$ & 2.30 & 22.96\% & 77.03\% \\
+& $\delta=0.5$ & 5.79 & 37.14\% & 76.51\% \\
+& $\delta=1.0$ & 7.06 & 63.30\% & 77.02\% \\
+& $\delta=2.0$ & 10.71 & 83.87\% & 76.31\% \\
+& $\delta=4.0$ & 15.69 & 84.13\% & 76.18\% \\
+\midrule
+Direct boosting & Adaptive & 13.68 & 83.16\% & 77.94\% \\
+Non-adaptive & Increasing & 17.55 & 83.35\% & 75.27\% \\
+\midrule
+RTT & $\delta^t\in[0.1,1.50]$ & 8.09 & 83.89\% & 77.26\% \\
+\bottomrule
+\end{tabular}
+\par
+\endgroup
+}
+
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}
+{After obtaining the expected difference $\delta^t$, we design an optimization objective to adjust the logits of natural-trigger samples.
+To avoid introducing anomalies by directly amplifying the backdoor target logit, we adopt a load-balanced adjustment strategy.
+Specifically, for a sample $x\in\mathcal{D}_{\mathrm{nat}}$, let $z=[s_1,\dots,s_{y_b},\dots,s_c]$ denote the logits to be optimized, where $z_i^t(x)$ denotes the original logits, $s_y$ denotes the class-$y$ logit score, and $c$ denotes the total number of classes.
+
+We then define $d_i^t(z)$ as the difference between the backdoor target logit and the average logit of the other classes, as given in Eq.~\ref{eq:avg_logit_difference}.
+This difference measures the bias of the backdoor target class relative to the other classes.
+It guides the optimization to distribute the expected difference \(\delta^t\) across all classes, rather than only amplifying the target-class logit.
+\begin{equation}
+d_i^t(z)
+=
+s_{y_b}
+-
+\frac{1}{c-1}
+\sum_{y\neq y_b}s_y.
+\label{eq:avg_logit_difference}
+\end{equation}
+
+The corresponding objective is defined as follows:
+\begin{equation}
+\mathcal{L}_i^t(z)
+=
+\left(\delta^t-d_i^t(z)\right)^2
++
+\lambda\left\|z-z_i^t(x)\right\|_2^2.
+\label{eq:logits_adjustment_loss}
+\end{equation}
+
+The first term drives the logit difference toward the expected difference \(\delta^t\), thereby strengthening the bias of natural-trigger samples toward the backdoor target.
+The second term is Euclidean-distance regularization.
+It constrains the deviation of the optimized logits from the original logits $z_i^t(x)$, preventing excessive modifications.
+
+Since the objective in Eq.~\ref{eq:logits_adjustment_loss} is strictly convex for $\lambda>0$, it admits a unique closed-form minimizer.
+Let $\mathbf{a}\in\mathbb{R}^c$ be a coefficient vector, where $a_{y_b}=1$ and $a_y=-1/(c-1)$ for $y\neq y_b$. 
+By setting the gradient of Eq.~\ref{eq:logits_adjustment_loss} to zero, the optimal adjusted logits are obtained as
+\begin{equation}
+z_i^{t,*}(x)
+=
+z_i^t(x)
++
+\frac{
+\delta^t-\mathbf{a}^{\top}z_i^t(x)
+}{
+\lambda+\frac{c}{c-1}
+}\mathbf{a}.
+\label{eq:closed_form_logits}
+\end{equation}
+
+The final adjusted logits are obtained as $\widetilde{z}_i^t(x)=z_i^{t,*}(x)$.
+}
+
+\revisedtext{Section II-B, Page [X], Lines [XX--XX]}
+{Compute $z_i^{t,*}(x)$ for all $x\in\mathcal{D}_{\mathrm{nat}}$ using the closed-form solution in Eq.~\ref{eq:closed_form_logits}.
+
+$\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t \leftarrow\{z_i^{t,*}(x)\mid x\in\mathcal{D}_{\mathrm{nat}}\}$.
+}
 
 \reviewcomment{The fairness and interpretation of baseline comparisons need improvement.
 Table IV compares RTT with conventional backdoor attacks and KD-FL poisoning methods. However, ManipulatingKD and FDLA primarily aim to degrade overall model performance rather than establish a targeted backdoor. Their low ASR therefore does not necessarily indicate inferior performance on their original objectives. The comparison with FD-DBA also requires clarification because the attacked model and propagation setting differ. In addition, several accuracy results deserve further explanation. For example, on DBpedia, the clean accuracy varies substantially between the no-attack setting, Edge-case, and FD-DBA. The authors should clarify how the baseline methods were adapted, whether their objectives and evaluation protocols are comparable, and whether hyperparameters were tuned consistently. Results for benign clients should be reported separately from those for malicious clients, preferably with per-architecture statistics.}
