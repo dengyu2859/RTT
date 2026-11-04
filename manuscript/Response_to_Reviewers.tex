@@ -27,6 +27,7 @@
 \usepackage{hyperref}
 \usepackage{multirow}
 \usepackage{float}
+\usepackage{graphicx}
 
 % ---------- Colors ----------
 \definecolor{replyblue}{HTML}{16538A}
@@ -683,7 +684,97 @@ $\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t \leftarrow\{z_i^{t,*}(x)\mid x\in\ma
 
 \reviewcomment{The fairness and interpretation of baseline comparisons need improvement.
 Table IV compares RTT with conventional backdoor attacks and KD-FL poisoning methods. However, ManipulatingKD and FDLA primarily aim to degrade overall model performance rather than establish a targeted backdoor. Their low ASR therefore does not necessarily indicate inferior performance on their original objectives. The comparison with FD-DBA also requires clarification because the attacked model and propagation setting differ. In addition, several accuracy results deserve further explanation. For example, on DBpedia, the clean accuracy varies substantially between the no-attack setting, Edge-case, and FD-DBA. The authors should clarify how the baseline methods were adapted, whether their objectives and evaluation protocols are comparable, and whether hyperparameters were tuned consistently. Results for benign clients should be reported separately from those for malicious clients, preferably with per-architecture statistics.}
-\authorresponse{three}
+
+\authorresponse{We sincerely thank you for your careful review of our manuscript and constructive comments. 
+Your suggestions have helped us improve the fairness of baseline comparisons and the interpretation of experimental results, thereby enhancing the rigor and reliability of our experimental evaluation. 
+Furthermore, the additional client-level experiments provide stronger evidence of RTT's effectiveness in propagating backdoor associations to heterogeneous benign clients. 
+These improvements have further enhanced the overall quality of our manuscript. 
+In response to your comments, we have made the following revisions.
+
+\textbf{(1) Fairness and interpretation of baseline comparisons.}
+
+We have divided the baseline methods into three categories and clarified the selection rationale for each category in the \textbf{Experimental Setup (Baselines)} section of the revised manuscript to improve the fairness of baseline comparisons.
+We have also revised the analysis in the \textbf{Experimental Results (Baselines)} section to interpret the results according to the respective attack objectives and mechanisms.
+
+For trigger-optimized backdoor attacks, SADBA, Edge-case, and Bad-PFL exhibit relatively low ASR. 
+These methods adjust triggers to resemble the natural semantic features of local training samples, but the public distillation dataset does not necessarily contain the corresponding trigger features, making it difficult for the uploaded logits to exhibit a stable bias toward the backdoor target class and limiting backdoor propagation.
+In contrast, RTT directly constructs natural triggers from the public distillation dataset and combines them with target-directed logits adjustment, allowing trigger--target associations to propagate stably during knowledge distillation.
+Therefore, this comparison aims to evaluate the effectiveness of different trigger construction strategies under KD-FL.
+
+For logits-manipulation-based poisoning attacks, ManipulatingKD and FDLA significantly reduce model ACC, achieving their original untargeted poisoning objectives.
+However, due to the lack of target-directed logits adjustment and trigger design, these methods exhibit low ASR.
+In contrast, RTT performs target-directed adjustment on the uploaded logits of natural-trigger samples, achieving high ASR while maintaining ACC close to the no-attack setting.
+This demonstrates that RTT's logits adjustment can effectively establish targeted backdoor associations without significantly degrading normal classification performance.
+Therefore, we include ManipulatingKD and FDLA to compare the attack effectiveness and impact on ACC of different logits manipulation strategies, rather than to rank methods with different attack objectives solely by ASR.
+We acknowledge the effectiveness of ManipulatingKD and FDLA in achieving their original untargeted poisoning objectives, and their low ASR does not indicate inferior performance on these objectives.
+
+\textbf{(2) Comparison between FD-DBA and RTT.}
+
+To address your concern regarding the differences in attacked models and propagation settings, we have further clarified the knowledge propagation processes of FD-DBA and RTT and added the corresponding adaptation details in the \textbf{Experimental Setup (Baselines)} section of the revised manuscript.
+
+As illustrated in Fig.~\ref{fig:fddba_rtt_comparison}, both FD-DBA and RTT propagate backdoor associations through malicious-client logits uploads, server-side aggregation, and knowledge distillation.
+Both methods can attack models with different architectures, but they differ mainly in the location and number of attacked models. 
+FD-DBA targets a single server-maintained global model, whereas RTT simultaneously targets multiple heterogeneous client models. 
+When RTT involves only one client, the two methods are essentially the same.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{FDDBA_RTT_Distillation_Comparison.png}
+\caption{Comparison of the knowledge distillation frameworks of FD-DBA and RTT.}
+\label{fig:fddba_rtt_comparison}
+\end{figure}
+
+Based on this relationship, to ensure a fair comparison, we only change FD-DBA's attack targets from the server-maintained global model to multiple heterogeneous client models, while preserving its original attack design and all other training and knowledge propagation procedures.
+We then evaluate ASR and ACC on the same client models.
+
+Under the unified evaluation setting, FD-DBA achieves a certain degree of backdoor effectiveness. 
+However, the discrepancy between substitute-model distillation and the actual knowledge distillation process, together with the indirect propagation of backdoor associations, weakens its propagation effectiveness. 
+In contrast, RTT directly reconstructs trigger--target associations during actual knowledge distillation, achieving higher ASR.
+
+\textbf{(3) Abnormal accuracy results on DBpedia.}
+
+We sincerely thank you for pointing out the abnormal ACC differences among the no-attack setting, Edge-case, and FD-DBA on DBpedia. 
+After carefully examining the experimental records, we confirmed that these errors resulted from an oversight during the recording of experimental results, which led to incorrect ACC values for Edge-case and FD-DBA. 
+We sincerely apologize for these errors.
+
+We have corrected the corresponding values and updated \textbf{Table IV} in the \textbf{Experimental Results (Baselines)} section of the revised manuscript. 
+Furthermore, we have thoroughly checked the other experimental results and confirmed that no similar errors remain. 
+We sincerely appreciate your careful review and valuable reminder.
+
+\textbf{(4) Baseline adaptation, attack objectives, evaluation protocols, and hyperparameter tuning.}
+
+We have further clarified the adaptation procedures, attack objectives, evaluation protocols, and hyperparameter tuning settings of the baseline methods under KD-FL in the \textbf{Experimental Setup (Baselines)} section of the revised manuscript.
+
+For SADBA, Edge-case, and Bad-PFL, we retain their original trigger designs and local backdoor training procedures, replacing parameter uploads with logits uploads under the KD-FL protocol, and evaluate ASR using their respective triggers. 
+For ManipulatingKD and FDLA, we preserve their original logits manipulation strategies, evaluate ASR using RTT's natural trigger conditions, and assess their original untargeted poisoning effectiveness through ACC. 
+FD-DBA is adapted as described in Point (2), retaining its original attack design while unifying the distillation targets and evaluation models.
+
+Regarding the comparability of attack objectives and evaluation protocols, we assign different roles to ASR and ACC according to the attack objectives of each method.
+For SADBA, Edge-case, Bad-PFL, FD-DBA, and RTT, ASR is used to evaluate backdoor attack effectiveness, while ACC measures normal classification performance, as preserving normal classification performance is also an important requirement of backdoor attacks.
+For ManipulatingKD and FDLA, ACC is used to evaluate their original untargeted poisoning effectiveness and compare the impact of different logits manipulation strategies on ACC.
+ASR serves as a supplementary metric to examine whether they can establish targeted backdoor associations, rather than to evaluate the achievement of their original attack objectives.
+
+To ensure the comparability of experimental results, all methods use the same non-IID data settings, malicious client ratio, logits aggregation, and knowledge distillation settings, with ASR and ACC evaluated on the same client models.
+
+For hyperparameter tuning, each baseline retains the trigger structures, attack loss functions, and logits manipulation strategies specified in its original paper. 
+Attack-specific parameters, such as poisoning ratios, trigger strengths, and optimization constraints, are further tuned under consistent KD-FL training settings.
+
+\textbf{(5) Attack performance of benign and malicious clients.}
+
+Thank you for this suggestion. 
+In Fig.~3 of the original manuscript, we reported the ASR and ACC of RTT across all clients on eight datasets using means and standard deviations. 
+The solid lines represent the mean values across all clients, while the shaded regions indicate the standard deviations. 
+These results provide an overall view of RTT's attack effectiveness across heterogeneous clients. 
+However, we also recognize that this presentation is insufficient to distinguish the attack performance of benign and malicious clients or to show the results for individual model architectures.
+
+Therefore, we have added a client-level analysis on CIFAR-10 in the \textbf{Experimental Results (Client-Level Attack Performance)} section of the revised manuscript. 
+Specifically, we report the ASR and ACC of all 20 clients, including 18 benign clients and 2 malicious clients. 
+Different markers are used to distinguish benign and malicious clients, and the results are grouped by five model architectures: ResNet-18, AlexNet, VGG-11, DenseNet-121, and CNN-3.
+
+The results show that both benign and malicious clients achieve high ASR, demonstrating that trigger--target associations can be effectively propagated to benign clients with different model architectures through logits aggregation and knowledge distillation. 
+The variations in ASR and ACC across clients are mainly attributed to differences in model architectures and local data distributions.
+}
+
 \revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
 
 
@@ -691,7 +782,13 @@ Table IV compares RTT with conventional backdoor attacks and KD-FL poisoning met
 \reviewcomment{ The stealthiness and practical effectiveness of RTT are insufficiently characterized.
 RTT avoids modifying the server-maintained distillation dataset and introduces regularization to limit malicious logit deviations. However, these properties alone do not establish that the attack is difficult to detect. Table V reports ASR under several defense methods but does not provide corresponding clean accuracy, detection statistics, or measurements of malicious logit deviations. These results would help support the claimed robustness against defenses. Furthermore, Fig. 5 shows visibly modified explicit-trigger samples. The authors should specify how the random response direction is converted into an input-space trigger, including its magnitude, normalization, and injection procedure. Quantitative measures of trigger visibility and additional evaluation under constrained trigger magnitudes would improve the practical assessment.
 }
-\authorresponse{four}
+\authorresponse{We sincerely thank you for your careful review of our manuscript and constructive comments.
+Your suggestions have helped us improve the fairness of baseline comparisons, the evaluation of different attack objectives, and the analysis of experimental results, thereby enhancing the rigor and comparability of our experimental evaluation.
+They have also provided stronger experimental evidence supporting RTT's effectiveness in propagating backdoor associations to heterogeneous benign clients.
+In response, we have further clarified the adaptation of baseline methods to KD-FL, the evaluation protocols for different attack objectives, and the hyperparameter tuning procedures.
+We have also corrected several experimental results on DBpedia and added a client-level attack performance analysis.
+The detailed revisions are presented below.
+}
 \revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
 
 % Add more comment/response pairs as needed:
