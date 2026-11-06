@@ -1,0 +1,147 @@
+防御分支使用说明
+
+选择方式（src/configs/<数据集>.yaml）：
+  aggregation: mean          # 原有流程，保持原有行为
+  aggregation: FedTGD        # 客户端整体筛选适配版，非原文精确复现
+  aggregation: RLA           # 按提供的四步流程，原始 logits 谱聚类余弦加权
+  aggregation: ExpGuard      # 客户端整体加权，持久指数权重，聚合原始 logits
+  aggregation: SelectiveFD   # 仅服务器侧筛选；也接受 Selective-FD
+
+原有 FedDF、DaFKD、Trimmed、AFA、Krum 分支保留。
+恶意客户端的本地训练、上传 logits 的生成/修改和攻击优化函数均未修改。
+defenses.py 不使用恶意客户端名单、攻击目标、触发区域、beta、投毒索引或测试标签。
+
+实现与适配
+
+1. FedTGD（principle_adaptation_client_filter_raw_logits_v2）
+   完整原论文的筛选规则未获得；本分支是客户端整体筛选适配版，不宣称精确复现论文。
+   每轮先对所有客户端的完整公共数据集 logits 做 softmax，仅用于判断客户端差异。
+   客户端 i、j 的距离：d_ij = sqrt(mean_x sum_c (p_i(x,c)-p_j(x,c))^2)。
+   这等于展开完整预测矩阵后的欧氏距离除以 sqrt(公共样本数)，避免距离随样本数增长。
+   保留公共样本和类别位置，不能用类别均值替代，否则不同样本上的偏差可能相互抵消。
+   用完整 N×N 客户端距离矩阵做一次 DBSCAN，选择客户端最多的非噪声簇。
+   对候选客户端的每个样本做 top-k 稀疏化，保留原类别位置；将所有样本视作一个整体，
+   计算完整稀疏预测矩阵之间的余弦相似度，取最大平均相似度客户端为锚点。
+   仅保留与该锚点相似度不低于 cosine_threshold 的客户端，锚点自身始终保留。
+   最终每轮只有一个长度为 N 的客户端保留掩码：客户端所有样本一起保留或一起排除。
+   对入选客户端上传的完整原始 logits 等权平均，不平均概率，不删除公共样本行。
+   DBSCAN 全部判为噪声时保留全部客户端、平均原始 logits，日志注明此回退。
+   按客户端 ID 排序处理同规模簇和锚点同分，不读取攻击身份，不消耗训练随机数。
+   分块只减少计算内存，距离与余弦仍覆盖完整公共数据集，不产生分块或逐样本名单。
+   eps=0.5、min_samples=5、top_k=3、cosine_threshold=0.5 保持现有参数，不按 ASR 调参。
+   eps/min_samples 来源于 sklearn 默认；top_k/余弦阈值是通用起始值，非经核实的论文默认。
+   日志输出保留/排除客户端 ID、保留数量、锚点及是否触发全噪声回退；每轮重新筛选。
+   参考：https://doi.org/10.1109/ICDCS60910.2024.00086
+
+2. ExpGuard（EG+Filter_client_history_raw_logits_v2）
+   每个公共样本分别中心化所有客户端的概率，计算最大方差方向投影的绝对值；
+   在所有公共样本上求均值，得到每个客户端的异常分数。
+   先遍历完整公共数据集（分块只是节省内存），每个客户端本轮只有一个分数 s_i^t。
+   w_i^t = w_i^(t-1)*exp(-eta*s_i^t) / sum_j w_j^(t-1)*exp(-eta*s_j^t)。
+   初始等权，实际通过 log(w_i) <- log(w_i) - eta * score_i 和 softmax 稳定计算。
+   对相同历史权重，当前异常分数越大，更新后的权重越小。
+   同一客户端本轮全部公共样本、全部类别共用这一个权重：
+   z_bar^t(x) = sum_i w_i^t z_i^t(x)，直接加权原始 logits，不平均 softmax 概率。
+   概率仅用于计算异常分数；每轮日志输出各客户端的分数和最终权重。
+   评分与历史更新沿用原 EG+Filter 逻辑；原始 logits 聚合是本次要求的明确适配。
+   使用对数权重避免长训练时连乘下溢；跨轮保留权重，不每轮重置。
+   使用 N×N Gram 矩阵代替 C×C 协方差矩阵，投影在非退化主方向下数学等价。
+   eta=1.0 对应论文算法中的 exp(-score)，没有针对本项目调整。
+   分数使用作者实现中的平均绝对投影，而不是所有样本距离的未归一化总和。
+   参考：https://github.com/ZIB-IOL/FedDistill/blob/main/byzantine/defences.py
+         https://github.com/ZIB-IOL/FedDistill/blob/main/utilities.py
+
+3. SelectiveFD（server_only_L1_filter_v2）
+   按要求只保留服务器侧筛选，是 SelectiveFD 的仅服务器筛选消融版本，不是完整双选择器。
+   删除客户端本地密度估计、输入特征提取、校准和上传掩码，不读取任何客户端私有数据。
+   所有客户端对所有公共样本的预测都参与聚合；先按 probability_temperature 转为概率，
+   对每个样本等权平均全部客户端概率，随后计算 ambiguity = 2*(1-max_probability)。
+   ambiguity <= server_threshold 的样本用于蒸馏，超过阈值的样本排除。
+   server_threshold=1.0（最大聚合概率至少 0.5）沿用原值，没有针对攻击效果调整。
+   被拒绝样本从蒸馏子集中移除；全部拒绝则跳过该轮蒸馏，仍正常本地训练和测试。
+   仅保留 YAML defense.selective_fd.server_threshold；已删除的客户端侧参数从默认 YAML 移除。
+   旧配置中的 max_local_samples/basis_size/uniform_samples/validation_fraction/
+   client_quantile/regularization 为兼容性而接受，但忽略并在启用 SelectiveFD 时提示。
+   新运行的有效参数和实现版本会写入配置，清楚区分旧双选择器结果。
+   参考：https://arxiv.org/html/2304.01731v3（只使用其服务器侧模糊度筛选思想）
+
+4. RLA（user_spec_raw_mean_spectral_cosine_v1）
+   按用户提供的四步算法实现，未获得独立核实的原论文/作者源码，不宣称逐行复现论文。
+   收到 z_i，形状为公共样本数 M × 类别数 C，代表向量 r_i = mean_x z_i(x)，形状 C。
+   此处“每个类别”指 logits 的类别维，不按真实标签或预测标签分组样本。
+   对代表向量做谱聚类，亲和矩阵 A_ij = (1 + cosine(r_i,r_j))/2，主对角设为 1。
+   使用 sklearn SpectralClustering(precomputed, kmeans, n_init=10)，默认两个簇。
+   随机种子沿用 seed，但使用独立随机状态，不消耗训练随机数；先按客户端 ID 排序。
+   取客户端数最多的簇为参考群体，中心 c 为这些客户端原始代表向量的算术均值。
+   簇同样大小时取排序后的客户端 ID 集合字典序最小者；不读取攻击身份。
+   权重 w_i = max(cosine(r_i,c),0) / sum_j max(cosine(r_j,c),0)。
+   加权所有客户端的原始 logits：z_bar(x) = sum_i w_i z_i(x)，不硬性删除簇外客户端。
+   负余弦截为零是避免负聚合权重的明确实现约定，并非经核实的论文设置。
+   零向量余弦按零处理；总正相似度为零时回退等权，运行日志会记录。
+   代表方向完全相同时视作单簇；单客户端直接使用自己；簇数超过客户端数时截断。
+   簇数等于客户端数时直接使用单元素簇；聚类警告保留在每轮日志中，不静默隐藏。
+   rla.n_clusters=2 是区分参考群体和异常群体的通用设置，没有按 ASR/ACC 选择。
+   每轮重算权重，无跨轮指数累积；日志输出簇分配、参考客户端和全部客户端权重。
+
+蒸馏接口
+
+SelectiveFD 先按 probability_temperature=1.0 把收到的 logits 转为概率。
+defense-only 蒸馏直接使用这些聚合概率作为 KL 目标，不再次对目标做 softmax。
+学生温度、temperature**2 系数、SGD、学习率、动量、蒸馏轮数沿用原配置。
+被拒绝样本真正从蒸馏子集中去除；全部拒绝则跳过该轮蒸馏，仍正常本地训练和测试。
+原攻击需要按完整公共数据索引读取 global_logits，因此反馈缓存始终保持完整行数：
+通过筛选的行更新为 log(聚合概率)，拒绝行保留上一轮反馈，首次拒绝行为均匀概率。
+这些占位反馈从不作为拒绝样本的蒸馏目标。这里是保持攻击接口不变的明确适配。
+上述 SelectiveFD 分支使用概率知识，旧分支仍使用原始聚合 logits 及原蒸馏实现。
+RLA、ExpGuard、FedTGD 均聚合原始 logits；FedTGD 是筛选后等权平均，另两者为客户端加权；
+RLA 忽略 defense.probability_temperature，ExpGuard/FedTGD 分别只在评分/筛选时使用该温度；
+将 softmax(z_bar/temperature) 作为蒸馏目标，与原始 logits 温度蒸馏一致。
+这三种防御的完整 global_logits 反馈直接使用 z_bar，不改成 log 概率，不改变其尺度。
+RLA、ExpGuard、FedTGD 均保留全部公共样本行；FedTGD 排除的是整客户端对聚合的贡献。
+
+默认 aggregation 值不会自动更改。所有防御参数可在 YAML 的 defense 字典中修改。
+实际运行会记录实现版本、有效参数、保留样本/客户端数量或客户端权重。
+聚合与筛选决策不包含根据攻击成效自动调参、搜索最优防御强度或读取攻击标签的逻辑。
+
+每轮 KD-FL 后的检测诊断（仅打印）
+
+独立模块 defense_reporting.py 在该轮所有客户端蒸馏与测试完成后读取已产生的结果。
+不重新推理、计算触发器、聚合、训练或更新权重。只有当前启用方法的诊断会输出。
+恶意名单和天然触发参照仅传给报告模块，defenses.py 仍不读取这些真值。
+
+FedTGD：被过滤视为检测为恶意；TPR=被过滤恶意客户端数/恶意客户端数，
+FPR=被过滤良性客户端数/良性客户端数。输出全部被过滤客户端 ID（包含误报）。
+最后一轮额外输出累计 TPR/FPR，先跨轮累加 TP/FN/FP/TN 再相除，非“至少命中过一次”的比例。
+attack: 0 时所有实际客户端均为良性；没有恶意/良性客户端时，对应分母为零，指标为 N/A。
+
+RLA/ExpGuard：输出本轮已经用于聚合的每个客户端权重，沿用实际客户端 ID 顺序，
+不重新计算权重，也不通过阈值将权重解释为恶意判定。
+
+SelectiveFD（也接受 Selective-FD）：根据服务器接受掩码，
+TFR=被拒绝的天然触发公共样本数/天然触发公共样本数，
+NFR=被拒绝的非触发公共样本数/非触发公共样本数。
+复用本次 Following_Nature 攻击初始化得到的 poisoned_indices（公共蒸馏集相对索引）；
+不使用模型测试集、不检查样本是否已经被修改、不重新抽取 K 或计算 alpha。
+每个公共样本每轮计数一次，不按客户端数量重复计数；包括尚未调整 logits 的第一轮。
+最后一轮既有当轮 TFR/NFR，也额外输出所有轮次过滤数/对应样本数之和的累计 TFR/NFR。
+某类样本数为零时该指标为 N/A；非 Following_Nature 或关闭攻击时没有天然触发参照，
+TFR/NFR 均为 N/A，并打印 trigger_reference: unavailable，不把未知样本强行当作非触发样本。
+
+集中输出位置
+
+每轮客户端测试全部结束后，统一打印“第 t 轮结果汇总”区块。
+推理、聚合及蒸馏调用产生的诊断先暂存为当轮文本，测试后按原产生顺序输出：
+desired_margin、逐样本平均 L2/余弦、最后一轮求解器计时/两条 logits 示例、聚合说明及蒸馏跳过信息。
+随后打印当前防御的 TPR/FPR、客户端权重或 TFR/NFR，最后一轮包含累计指标。
+各项计算仍在原来的位置执行，不重新计算；只缓存文本，每轮清空，不保存 logits 张量。
+训练进度和客户端测试 ACC/ASR 正常输出；无诊断内容的轮次不额外创建空汇总区块。
+日志字段保持不变，已有实验结果汇总脚本继续兼容。
+
+Logit Deviation 当前统计口径
+
+每轮、每个恶意客户端，对本轮选中进行 logits 调整的样本分别比较自身调整前后完整类别向量。
+l2_mean = mean_x ||z_after(x)-z_before(x)||_2，先逐样本求欧氏距离再平均。
+cosine_mean 为逐样本余弦的均值，任一向量为零的样本不参与余弦均值，但仍参与 L2 均值。
+selected_samples/cosine_samples 分别记录 L2/余弦的样本数；无有效样本时对应指标为 N/A。
+不再展平所有样本形成整体向量；计算后仍统一在该轮所有客户端测试完成后输出。
+既有整体指标日志保留原含义，实验结果汇总脚本同时兼容两种口径，不自动改写历史缓存。

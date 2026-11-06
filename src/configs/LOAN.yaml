@@ -23,6 +23,7 @@ distill_lr: 0.001
 distill_ep: 5
 distill_num: 0.6
 distill_momentum: 0.9
+# 可选 mean、FedDF、DaFKD、Trimmed、AFA、Krum、FedTGD、ExpGuard、SelectiveFD、RLA
 aggregation: mean
 S: 8
 beta: 0.2
@@ -36,3 +37,20 @@ up_margin_step: 20       # 每次增加的差距
 down_margin_step: 25     # 每次减少的差距
 seed: 20250927
 input_dim: 36
+
+# 新增防御参数；仅 aggregation 选择对应防御时生效。
+# FedTGD/SelectiveFD 的适配说明见 src/defense_notes.txt。
+defense:
+  probability_temperature: 1.0
+  chunk_size: 256
+  fedtgd:
+    top_k: 3
+    eps: 0.5
+    min_samples: 5
+    cosine_threshold: 0.5
+  rla:
+    n_clusters: 2  # 谱聚类簇数；最大簇用于估计良性中心
+  expguard:
+    eta: 1.0
+  selective_fd:
+    server_threshold: 1.0

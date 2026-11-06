@@ -1,3 +1,5 @@
+import contextlib
+import io
 import torch
 import yaml
 import argparse
@@ -18,6 +20,8 @@ import os
 import logging
 from datetime import datetime
 from attack_artifacts import save_attack_artifacts
+from defenses import DEFENSE_METHODS, DefenseAggregator, distill_defended
+from defense_reporting import DefenseReporter
 
 
 def setup_logging(log_path):
@@ -166,6 +170,22 @@ def FL(args):
         score_tensor = torch.tensor(clients_score, device=args.device)
         weights = F.softmax(score_tensor, dim=0)
 
+    defense = None
+    defense_reporter = None
+    if args.aggregation in DEFENSE_METHODS:
+        defense = DefenseAggregator(args, [client.id for client in clients])
+        # Ground truth is passed ONLY to the reporting module, never to aggregation.
+        natural_reference = (poisoned_indices if args.attack and args.attack_type == 'Following_Nature'
+                             else None)
+        defense_reporter = DefenseReporter(
+            args, [client.id for client in clients], natural_reference, len(distill_dataset))
+        if getattr(args, 'output_dir', None):
+            os.makedirs(args.output_dir, exist_ok=True)
+            defense_config = vars(args).copy()
+            defense_config['device'] = str(args.device)
+            with open(os.path.join(args.output_dir, 'config.yaml'), 'w', encoding='utf-8') as f:
+                yaml.safe_dump(defense_config, f, allow_unicode=True, sort_keys=False)
+
     # 3.开始训练
     print("\nStart training......\n")
     client_ids = client_datasets.keys()
@@ -176,6 +196,7 @@ def FL(args):
     separator = "-" * 60
     for epoch in range(1, args.epochs + 1):                # 训练轮次
         print(f"\n{separator} Epoch {epoch}/{args.epochs} {separator}")
+        round_output = io.StringIO()
 
         # 3.1 客户端本地训练
         for client in clients:
@@ -186,33 +207,42 @@ def FL(args):
         logits_s = []
         for client in clients:
             print(f"--------------客户端 {client.id} 推理----------------")
-            logits = client.local_predict_logits(distill_dataset, epoch, verbose=False)
+            with contextlib.redirect_stdout(round_output):
+                logits = client.local_predict_logits(distill_dataset, epoch, verbose=False)
             logits_s.append(logits)
 
         # 均值聚合
-        if args.aggregation == 'mean' or args.aggregation == 'FedDF':
-            avg_logits = torch.stack(logits_s, dim=0).mean(dim=0)
-        elif args.aggregation == 'Trimmed':
-            logits_tensor = torch.stack(logits_s, dim=0)
-            avg_logits = utils.trimmed_mean(logits_tensor, trim_ratio=0.1, dim=0)
-        elif args.aggregation == 'AFA':
-            avg_logits = utils.afa_aggregate(logits_s)
-        elif args.aggregation == 'Krum':
-            avg_logits = utils.multi_krum_aggregate(logits_s, f=1)
-        elif args.aggregation == "DaFKD":
-            for i in range(len(logits_s)):
-                for j in range(len(logits_s[i])):
-                    a = logits_s[i][j]
-                    a = a.to(args.device)
-                    logits_s[i][j] = a * weights[i][j]
-            avg_logits = torch.stack(logits_s, dim=0).sum(dim=0)
-            # avg_logits = torch.stack(logits_s, dim=0).mean(dim=0)
+        with contextlib.redirect_stdout(round_output):
+            if defense is not None:
+                defense_result = defense.aggregate(logits_s, epoch, [client.id for client in clients])
+                avg_logits = defense_result.feedback_logits
+            elif args.aggregation == 'mean' or args.aggregation == 'FedDF':
+                avg_logits = torch.stack(logits_s, dim=0).mean(dim=0)
+            elif args.aggregation == 'Trimmed':
+                logits_tensor = torch.stack(logits_s, dim=0)
+                avg_logits = utils.trimmed_mean(logits_tensor, trim_ratio=0.1, dim=0)
+            elif args.aggregation == 'AFA':
+                avg_logits = utils.afa_aggregate(logits_s)
+            elif args.aggregation == 'Krum':
+                avg_logits = utils.multi_krum_aggregate(logits_s, f=1)
+            elif args.aggregation == "DaFKD":
+                for i in range(len(logits_s)):
+                    for j in range(len(logits_s[i])):
+                        a = logits_s[i][j]
+                        a = a.to(args.device)
+                        logits_s[i][j] = a * weights[i][j]
+                avg_logits = torch.stack(logits_s, dim=0).sum(dim=0)
+                # avg_logits = torch.stack(logits_s, dim=0).mean(dim=0)
 
 
         # 3.3 客户端蒸馏
         for client in clients:
             print(f"--------------客户端 {client.id} 蒸馏----------------")
-            client.local_distill(distill_dataset, avg_logits, epoch, verbose=False)
+            with contextlib.redirect_stdout(round_output):
+                if defense is not None:
+                    distill_defended(client, distill_dataset, defense_result, epoch)
+                else:
+                    client.local_distill(distill_dataset, avg_logits, epoch, verbose=False)
 
         # 3.4 测试
         print(f"--------------客户端测试----------------")
@@ -238,6 +268,17 @@ def FL(args):
             client_ai_asr_history[client.id].append(artificial_asr)
             print(f"Client {client.id} | Epoch {epoch}| Acc: {acc:.2f}, ASR: {asr:.2f} , Artificial ASR: {artificial_asr:.2f}")
 
+        # Keep attack/aggregation diagnostics together after every client's test result.
+        round_text = round_output.getvalue()
+        round_output.close()
+        if round_text or defense_reporter is not None:
+            print(f"\n--------------第 {epoch} 轮结果汇总----------------")
+            if round_text:
+                print(round_text, end="")
+            if defense_reporter is not None:
+                defense_reporter.report_round(epoch, defense, defense_result, final=(epoch == args.epochs))
+            print("--------------本轮汇总结束----------------")
+
     if getattr(args, 'output_dir', None):
         # save_final_models(clients, model_name, args, trigger_files)
         # Keep experiment configuration while client model saving is disabled.
@@ -250,8 +291,9 @@ def FL(args):
 
 
 if __name__ == '__main__':
+    5
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/CIFAR10.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/ImageNet.yaml', required=False)
     parser.add_argument('--clean-baseline', action='store_true', help='Disable all poisoning and malicious clients')
     parser.add_argument('--output-dir', help='Directory for final client models and plots; logs go to stdout')
     parser.add_argument('--gpu', type=int, help='Override the GPU in the YAML; -1 selects CPU')

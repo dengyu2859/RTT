@@ -3,9 +3,10 @@
 默认输出代码中 DATA 保存的结果，不读取日志。
 --from-logs 重新读取；--refresh-cache 重新读取并更新本文件中的 DATA。
 ACC/ASR 使用最后一轮正式测试中所有客户端的均值和样本标准差。
-只汇总最后一轮修改前后 logits 的平均 L2 距离和平均余弦相似度。
-L2 先逐样本求向量距离再平均；余弦先逐样本计算再平均，排除任一向量为零的样本。
-多个恶意客户端分别按 selected_samples/cosine_samples 加权。
+训练日志现在逐轮记录；本脚本仍只汇总最后一轮。
+整体格式（兼容已有日志）：选中 logits 整体展开计算 L2/余弦，各恶意客户端分别显示。
+逐样本均值格式（当前训练输出）：先逐样本计算再平均，多客户端按对应样本数加权。
+缓存保留原指标语义，逐样本均值与整体距离/余弦不互相转换。
 旧日志或缓存只有 MSE 时，新指标显示 N/A，不从 MSE 换算。
 """
 
@@ -39,7 +40,7 @@ EXPERIMENT_DIRECTORIES = {
 # 已提取的实验结果，可以直接修改数值；默认运行只使用这里的数据。
 # 新实验完成后运行 --refresh-cache，自动重新提取并更新此数据块。
 # acc_std/asr_std 是同一轮客户端之间的样本标准差，并非多次运行标准差。
-# 缓存保存最后一轮 l2_mean/cosine_mean，不保留逐轮 MSE 历史。
+# 缓存仅保留最后一轮；新格式保存 client_deviations，旧格式保存 l2_mean/cosine_mean。
 # 新实验完成后需刷新缓存；旧日志无法还原的新指标显示 N/A。
 DATA = [{'group': 'desired_margin_sensitivity',
   'dataset': 'CIFAR10',
@@ -200,6 +201,39 @@ DEVIATION_RESULT = re.compile(
 )
 
 
+GLOBAL_DEVIATION_RESULT = re.compile(
+    rf"^Client\s+(\d+)\s*\|\s*Epoch\s+(\d+)\s*\|\s*Logit Deviation\s*\|\s*"
+    rf"scope:\s*client_flattened\s*\|\s*l2_global:\s*({OPTIONAL_NUMBER})\s*\|\s*"
+    rf"cosine_global:\s*({OPTIONAL_NUMBER})\s*\|\s*"
+    rf"selected_samples:\s*(\d+)\s*\|\s*logit_elements:\s*(\d+)\s*$",
+    re.MULTILINE,
+)
+
+
+def validate_client_deviations(records, expected_ids):
+    if not isinstance(records, list) or not records:
+        raise ValueError("整体指标缺少客户端记录")
+    ids = []
+    for record in records:
+        cid, count, elements = (record.get(key) for key in ("client_id", "selected_samples", "logit_elements"))
+        if any(type(value) is not int or value < 0 for value in (cid, count, elements)):
+            raise ValueError("整体指标的客户端 ID、样本数或元素数无效")
+        l2, cosine = record.get("l2_global"), record.get("cosine_global")
+        if l2 is not None and (type(l2) not in (int, float) or not math.isfinite(l2) or l2 < 0):
+            raise ValueError("整体 L2 无效")
+        if cosine is not None and (type(cosine) not in (int, float)
+                                   or not math.isfinite(cosine) or not -1 <= cosine <= 1):
+            raise ValueError("整体余弦无效")
+        if ((count > 0) != (l2 is not None) or (count == 0 and elements != 0)
+                or (count > 0 and (elements < count or elements % count != 0))
+                or (count == 0 and cosine is not None)):
+            raise ValueError("整体指标与选中样本数/元素数不一致")
+        # A nonempty all-zero whole vector has undefined cosine, while L2 remains valid.
+        ids.append(cid)
+    if len(ids) != len(set(ids)) or set(ids) != set(expected_ids):
+        raise ValueError("整体指标客户端重复或与恶意客户端配置不一致")
+
+
 def optional_number(value, minimum=0, maximum=None):
     if value == "N/A":
         return None
@@ -278,9 +312,25 @@ def read_final_result(log_path, config, group, outputs_root):
             raise ValueError(f"{log_path}: 指标与有效样本数不一致")
         deviations[cid] = {"l2_mean": l2, "cosine_mean": cosine,
                            "selected_samples": count, "cosine_samples": cosine_count}
+    global_deviations = {}
+    for cid, epoch, l2, cosine, count, elements in GLOBAL_DEVIATION_RESULT.findall(text):
+        cid, epoch = int(cid), int(epoch)
+        if epoch != expected_epoch:
+            continue
+        if cid in global_deviations:
+            raise ValueError(f"{log_path}: 最后一轮客户端 {cid} 的整体指标重复")
+        global_deviations[cid] = {
+            "client_id": cid, "l2_global": optional_number(l2),
+            "cosine_global": optional_number(cosine, -1, 1),
+            "selected_samples": int(count), "logit_elements": int(elements),
+        }
+    if global_deviations:
+        if deviations:
+            raise ValueError(f"{log_path}: 最后一轮混合了整体指标和逐样本均值")
+        validate_client_deviations(list(global_deviations.values()), malicious)
     if deviations and set(deviations) != set(malicious):
         raise ValueError(f"{log_path}: 最后一轮恶意客户端的 L2/余弦记录不完整")
-    if not deviations and "l2_mean:" in text:
+    if not deviations and not global_deviations and ("l2_mean:" in text or "scope: client_flattened" in text):
         raise ValueError(f"{log_path}: 缺少有效的最后一轮 L2/余弦记录")
     # 旧日志没有原始向量，无法从聚合 MSE 还原平均 L2 或余弦。
     records = list(deviations.values())
@@ -300,7 +350,9 @@ def read_final_result(log_path, config, group, outputs_root):
         "cosine_mean": weighted_deviation(records, "cosine_mean", "cosine_samples"),
         "selected_samples": sum(record["selected_samples"] for record in records) if records else None,
         "cosine_samples": sum(record["cosine_samples"] for record in records) if records else None,
-        "metrics_recorded": bool(deviations),
+        "metrics_recorded": bool(deviations or global_deviations),
+        "deviation_scope": "client_flattened" if global_deviations else "per_sample_mean",
+        "client_deviations": [global_deviations[cid] for cid in sorted(global_deviations)],
         "logit_update_mode": config.get("logit_update_mode", "full"),
         "use_global_feedback": config.get("use_global_feedback", True),
         "adaptive_margin": config.get("adaptive_margin", True),
@@ -370,6 +422,14 @@ def validate_results(data):
         recorded = row.get("metrics_recorded", "l2_mean" in row or "cosine_mean" in row)
         if type(recorded) is not bool:
             raise ValueError("DATA 中 metrics_recorded 必须为布尔值")
+        scope = row.get("deviation_scope", "per_sample_mean")
+        if scope == "client_flattened":
+            if not recorded:
+                raise ValueError("整体指标缓存未标记为已记录")
+            validate_client_deviations(row.get("client_deviations"), row["malicious_clients"])
+            continue
+        if scope != "per_sample_mean":
+            raise ValueError(f"未知指标范围：{scope}")
         for field in ("selected_samples", "cosine_samples"):
             value = row.get(field)
             if value is None and not recorded:
@@ -441,20 +501,31 @@ def print_table(rows):
         grouped[row["dataset"]].append(row)
     for dataset, entries in grouped.items():
         print(f"\n{dataset}：最后一轮实验结果")
-        table = [["实验组", "轮次", "ACC(%)", "ASR(%)", "平均 L2 距离", "平均余弦相似度"]]
+        table = [["实验组", "轮次", "ACC(%)", "ASR(%)", "指标范围", "L2 距离", "余弦相似度"]]
         for row in entries:
+            if row.get("deviation_scope") == "client_flattened":
+                for client in row["client_deviations"]:
+                    table.append([
+                        f"{row['experiment']} / Client {client['client_id']}", str(row["epoch"]),
+                        f"{row['acc_mean']:.2f} ± {row['acc_std']:.2f}",
+                        f"{row['asr_mean']:.2f} ± {row['asr_std']:.2f}", "客户端整体",
+                        format_deviation(client["l2_global"]),
+                        "N/A" if client["cosine_global"] is None else f"{client['cosine_global']:.6f}",
+                    ])
+                continue
             cosine = row.get("cosine_mean")
             table.append([
                 row["experiment"], str(row["epoch"]),
                 f"{row['acc_mean']:.2f} ± {row['acc_std']:.2f}",
                 f"{row['asr_mean']:.2f} ± {row['asr_std']:.2f}",
-                format_deviation(row.get("l2_mean")),
+                "逐样本均值", format_deviation(row.get("l2_mean")),
                 "N/A" if cosine is None else f"{cosine:.6f}",
             ])
         render_table(table)
     print("\nACC/ASR：最后一轮所有客户端均值 ± 客户端间样本标准差。")
-    print("L2/余弦：最后一轮选中样本修改前后 logits 的逐样本指标均值，不进行跨轮平均。")
-    print("多个恶意客户端分别按选中样本数/余弦有效样本数加权；零向量样本不参与余弦平均。")
+    print("L2/余弦仅汇总最后一轮，不进行跨轮平均；训练日志中仍逐轮记录。")
+    print("客户端整体：选中 logits 展平后计算，各恶意客户端分别显示；整个向量为零时余弦为 N/A。")
+    print("逐样本均值：当前训练输出；多客户端按对应样本数加权，零向量样本不参与余弦平均。")
     if any(not row.get("metrics_recorded", "l2_mean" in row or "cosine_mean" in row) for row in rows):
         print("N/A：旧实验未记录 L2/余弦，无法从 MSE 还原；新实验完成后运行 --refresh-cache。")
 

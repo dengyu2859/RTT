@@ -1,0 +1,45 @@
+======================================
+    GPU: 0
+    Dataset: ImageNet
+    Num_classes: 200
+    Model: resnet20
+    Epochs: 30
+    Attack Target: 0
+    Backdoor Target: 8
+    Trigger Pre: 60
+    Pre Model: 1
+    Attack Type: Following_Nature
+    Degree of no-iid (a): 1.0
+    Attack Enabled: 1
+    aggregation: mean
+    Malicious Clients: [0]
+    Clients: 10
+    Local Batch Size: 128
+    Global Batch Size: 64
+    Learning Rate: 0.001
+    Momentum: 0.9
+    Local Epochs: 5
+    Temperature: 3.0
+    Distill LR: 0.001
+    Distill Epochs: 5
+    Distill Number: 0.6
+    Distill Momentum: 0.9
+    S: 12
+    Beta (poison ratio): 0.3
+    Target Prob: 0.95
+    Global Logit Feedback: enabled
+    Margin Mode: adaptive
+    Logit Update Mode: full
+    Logit Solver: adam
+    Initial Desired Margin: 5
+    Up Margin Step: 1
+    Down Margin Step: 1
+    Positions: 20250927
+======================================
+Tiny-ImageNet already exists at /home/a100/code/backdoor/dataset/tiny-imagenet-200
+Tiny-ImageNet already exists at /home/a100/code/backdoor/dataset/tiny-imagenet-200
+
+Start training......
+
+------------------------------------------------------------ Epoch 1/30 ------------------------------------------------------------
+--------------客户端 0 训练----------------

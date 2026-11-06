@@ -166,9 +166,9 @@ class Malicious_client():
                 f"solver: {self.logit_solver} | solver_seconds_total: {self.logit_solver_seconds:.8g} | "
                 f"solver_samples_total: {self.logit_solver_samples}"
             )
-            self._log_logit_deviation(all_logits, modified_logits, epoch)
             if epoch > 1:
                 self._log_logit_examples(all_logits, modified_logits, epoch)
+        self._log_logit_deviation(all_logits, modified_logits, epoch)
         all_logits = modified_logits
 
         return all_logits
@@ -195,20 +195,22 @@ class Malicious_client():
             print(f"  logits_after: {after}")
 
     def _log_logit_deviation(self, original_logits, modified_logits, epoch):
-        """Report final-round per-sample L2 and cosine against original local logits."""
-        indices = [int(idx) for idx in self.poisoned_indices
-                   if 0 <= idx < len(original_logits)]
+        """Report each round's mean per-sample L2/cosine vs original local logits."""
+        indices = list(dict.fromkeys(
+            int(idx) for idx in self.poisoned_indices
+            if 0 <= idx < len(original_logits)))
         l2_mean = cosine_mean = 'N/A'
         cosine_samples = 0
         if indices:
             with torch.no_grad():
                 before = original_logits[indices].detach().double()
                 after = modified_logits[indices].detach().double()
+                # One full class-vector distance per selected sample, then average.
                 l2 = torch.linalg.vector_norm(after - before, ord=2, dim=1)
                 l2_mean = f'{l2.mean().item():.8g}'
                 before_norm = torch.linalg.vector_norm(before, ord=2, dim=1)
                 after_norm = torch.linalg.vector_norm(after, ord=2, dim=1)
-                # 零向量的余弦没有定义；L2 仍统计这些样本。
+                # Cosine is undefined for a sample if either vector is zero.
                 valid = (before_norm > 0) & (after_norm > 0)
                 cosine_samples = int(valid.sum().item())
                 if cosine_samples:
