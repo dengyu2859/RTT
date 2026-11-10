@@ -24,10 +24,11 @@ distill_ep: 5
 distill_num: 0.6
 distill_momentum: 0.9
 # 可选 mean、FedDF、DaFKD、Trimmed、AFA、Krum、FedTGD、ExpGuard、SelectiveFD、RLA
-aggregation: FedTGD   # Krum,mean,AFA,Trim,DaFKD
+aggregation: mean   # Krum,mean,AFA,Trim,DaFKD
 
 S: 8
 beta: 0.3 # 中毒比例
+artificial_trigger_strength: 1.0  # 仅人工触发测试：0 原样；1 覆盖；>1 外推；不裁剪
 target_prob: 0.95
 logit_solver: adam       # adam: 原迭代求解；closed_form: 闭式最优解
 logit_update_mode: full  # full: 优化全部 logits；target_only: 仅优化目标类别

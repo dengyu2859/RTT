@@ -35,6 +35,12 @@
 \definecolor{mutedgray}{HTML}{5B6570}
 \definecolor{contributionpurple}{RGB}{128,0,128}
 
+\usepackage{xcolor}
+\definecolor{reviewer1}{RGB}{255,0,0}
+\definecolor{reviewer2}{RGB}{0,0,255}
+\definecolor{reviewer3}{RGB}{0,150,0}
+\definecolor{share}{RGB}{128,0,128}
+
 % Highlight contribution text in purple.
 % Usage: \contributionhl{...}
 \newcommand{\contributionhl}[1]{\textcolor{contributionpurple}{#1}}
@@ -43,6 +49,9 @@
 \setstretch{1.12}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
+% Start a paragraph with a manual 2em first-line indent.
+% Usage: \manualindent Paragraph text.
+\newcommand{\manualindent}{\par\noindent\hspace*{1.5em}\ignorespaces}
 \setlist[itemize]{leftmargin=2em,itemsep=1pt,topsep=2pt}
 \hypersetup{colorlinks=true,linkcolor=replyblue,urlcolor=replyblue}
 \pagestyle{fancy}
@@ -93,6 +102,7 @@
   {\bfseries\color{headingnavy}Location in the revised manuscript:} #1\par
   \begin{tcolorbox}[
       enhanced,breakable,colback=replyblue!3,colframe=replyblue!18,
+      before upper={\setlength{\parskip}{6pt}},
       borderline west={2.5pt}{0pt}{replyblue},
       boxrule=0.5pt,arc=1mm,left=11pt,right=9pt,top=8pt,bottom=8pt]
     {\bfseries\color{headingnavy}Revised text:}\par
@@ -118,13 +128,36 @@
 
 Dear Editor and Reviewers,
 
-We sincerely thank you for your careful evaluation of our manuscript and for your constructive comments. Your feedback has helped us identify areas for improvement and refine the manuscript. We have carefully revised the manuscript and provide point-by-point responses below. For clarity, each reviewer comment is reproduced in a gray box, our response follows it, and the corresponding revised manuscript text is shown in a blue-accented box when appropriate.
+We sincerely thank you for your careful evaluation of our manuscript and for your constructive comments. 
+Your feedback has helped us identify areas for improvement and refine the manuscript. 
+We have revised the manuscript accordingly and provide point-by-point responses below.
+For clarity, each reviewer comment is reproduced in a gray box, followed by our response. The corresponding revised manuscript text is shown in a blue-accented box when appropriate.
 
-We provide both a clean version and a marked version of the revised manuscript. \textbf{In the marked version, revisions made in response to Reviewer \#1's comments are highlighted in green. Revisions made in response to Reviewer \#2's comments are highlighted in red. Revisions made in response to Reviewer \#3's comments are highlighted in blue.}
+We provide both a clean version and a marked version of the revised manuscript.
+\textbf{In the marked version:}
+\begin{itemize}
+    \item Revisions made in response to Reviewer \#1's comments
+    are highlighted in \textcolor{reviewer1}{\textbf{red}}.
 
-We believe these revisions have improved the clarity and technical quality of the manuscript. We appreciate the opportunity to submit this revised version for further consideration. We welcome any further comments or suggestions and would be happy to provide additional clarification as needed
+    \item Revisions made in response to Reviewer \#2's comments
+    are highlighted in \textcolor{reviewer2}{\textbf{blue}}.
 
-\vspace{1em}
+    \item Revisions made in response to Reviewer \#3's comments
+    are highlighted in \textcolor{reviewer3}{\textbf{green}}.
+
+    \item As some reviewers raised overlapping concerns,
+    revisions addressing comments from multiple reviewers
+    are highlighted in \textcolor{share}{\textbf{purple}}.
+\end{itemize}
+
+In addition, we combined subfigures (a) and (b) of Fig.~7 in the original manuscript into a single figure, now presented as Fig.~8 in the revised manuscript.
+This change improves the visual presentation without altering any experimental data, result descriptions, or analyses.
+The corresponding revision is highlighted in \textcolor{share}{\textbf{purple}} in the marked version.
+
+We believe these revisions have improved the clarity and technical quality of the manuscript.
+We appreciate the opportunity to submit this revised version for further consideration.
+
+\vspace{3em}
 Sincerely,\\
 The Authors
 
@@ -138,148 +171,266 @@ The Authors
     enhanced,breakable,colback=black!3,colframe=black!20,
     boxrule=0.5pt,arc=1.2mm,left=9pt,right=9pt,top=8pt,bottom=8pt]
   {\bfseries Editor's comment:}\quad
-  {\itshape The reviewers agree that the paper is interesting and has technical novelty, but they also identify some major issues that need to be addressed before it can be published. The authors should address those issues raised by the reviewers and submit their revised manuscript for a second round of reviews.}
+  {\itshape The reviewers agree that the paper is interesting and has technical novelty, but they also identify some major issues that need to be addressed before it can be published. 
+  The authors should address those issues raised by the reviewers and submit their revised manuscript for a second round of reviews.}
 \end{tcolorbox}
 
 
-\textbf{\color{replyblue}Response:} We sincerely thank you for your careful consideration of our manuscript and for the opportunity to revise it. We have thoroughly addressed the reviewers’ comments and revised the manuscript accordingly. Detailed point-by-point responses are provided below, describing the revisions made and indicating their locations in the revised manuscript. For ease of reference, the changes are marked in the highlighted version. We appreciate your time and consideration of our revised submission.
+\textbf{\color{replyblue}Response:} We sincerely thank you for your careful consideration of our manuscript and for the opportunity to revise it. 
+We have carefully addressed the reviewers' comments and revised the manuscript accordingly.
+Detailed point-by-point responses are provided below, describing the revisions made and indicating their locations in the revised manuscript. 
+For ease of reference, all changes are highlighted in the marked version.
 
 % ==================== REVIEWER 1 ====================
 \reviewersection{1}
 
 \reviewcomment{The paper attributes the failure of conventional backdoor attacks in KD‑FL to broken trigger‑target associations. However, prior researches such as FD‑DBA also study backdoor attacks for KD‑FL. It is not clearly explained why baselines like FD‑DBA cannot resolve such association breakdown, and whether the core innovation of RTT lies in natural trigger construction or adaptive logit feedback adjustment. In the introduction and related‑work sections, please summarize the root causes of failure for existing approaches using texts or tables.}
-\authorresponse
-{
-We sincerely thank you for your careful review of our manuscript and your constructive suggestions. 
-Your comments have been valuable in improving the quality and clarity of our manuscript, particularly in clarifying the root causes of ineffective backdoor propagation in existing baselines, especially FD-DBA, and highlighting the key innovations of RTT.
 
-In response to your comment, we have revised the Introduction and Related Work sections to explain why trigger–target associations break down in KD-FL.
-Specifically, the Introduction now summarizes the mechanisms of baselines and the reasons why trigger–target associations break down during knowledge distillation, with particular emphasis on FD-DBA.
-The Related Work section provides a more detailed discussion of both these methods and the reasons why trigger–target associations break down in KD-FL.
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestions.
+Your comments have helped us further clarify the root causes of ineffective backdoor propagation in existing methods under KD-FL, deepen our analysis of the breakdown of trigger--target associations during knowledge distillation, and more clearly articulate the core innovation of RTT and its fundamental differences from existing methods.
+These improvements have significantly enhanced the quality of our manuscript and highlighted the novelty of our research.
 
-For conventional FL backdoor attacks, such as SADBA, Edge-case, and Bad-PFL, locally constructed triggers rely on features that may be absent from public distillation data.
-Consequently, the logits generated on these data fail to exhibit a clear bias toward the backdoor target, disrupting the propagation of trigger–target associations during knowledge distillation.
+\manualindent In response to your comment, we have revised the Introduction and Related Work sections to explain why trigger--target associations break down in KD-FL.
+Specifically, the Introduction summarizes the reasons for the breakdown of trigger--target associations in conventional backdoor attacks under KD-FL, thereby strengthening the research motivation and naturally introducing the core idea of RTT.
+The Related Work section further discusses the attack mechanisms and limitations of existing methods and clarifies the differences between RTT and these methods.
+
+\manualindent For conventional FL backdoor attacks, such as SADBA, Edge-case, and Bad-PFL, these methods optimize triggers to mimic the features of local training samples, thereby strengthening trigger--target associations.
+However, these features may be absent from public distillation data, preventing the logits generated on these data from exhibiting a clear bias toward the backdoor target and consequently hindering the propagation of trigger--target associations during knowledge distillation.
 Logit poisoning attacks, including ManipulatingKD and FDLA, manipulate logits to degrade global model accuracy but neither specify backdoor targets nor construct triggers, and therefore cannot establish trigger–target associations.
-FD-DBA locally simulates knowledge distillation to optimize triggers and enhance the propagation of trigger–target associations.
-However, because these triggers are not directly present in the public distillation dataset, the inferred logits fail to consistently favor the backdoor target. 
-The lack of direct target-directed logit adjustment further makes these associations prone to breakdown during actual knowledge distillation.
+FD-DBA employs a local substitute model to simulate knowledge distillation and optimize triggers to enhance the propagation of trigger--target associations.
+However, discrepancies between simulated and actual knowledge distillation, together with the absence of optimized triggers from the public distillation dataset, prevent the logits generated on these data from consistently favoring the backdoor target.
+Consequently, trigger--target associations are prone to breakdown during actual knowledge distillation.
 
-Regarding the innovation of RTT, we have also revised the Introduction and Contributions to clarify the innovation of RTT.
-The core innovation of RTT lies in directly reconstructing trigger–target associations during the actual knowledge distillation process, rather than relying on associations established through local training and indirectly propagated through knowledge exchange. 
+\manualindent Regarding the innovation of RTT, we have also revised the Introduction and Contributions to clarify the innovation of RTT.
+The core innovation of RTT lies in directly reconstructing trigger–target associations during the knowledge distillation process, rather than relying on associations established through local training and indirectly propagated through knowledge exchange. 
 Such indirect propagation is vulnerable to association breakdown when the trigger features are absent from public distillation data. 
-To realize this strategy, we introduce two complementary technical innovations.
-Natural Trigger Construction exploits intrinsic features of public distillation data to construct triggers without modifying the dataset, while global feedback-based Adaptive Logit Adjustment uses global feedback to adjust logits toward the backdoor target, reinforcing trigger–target associations during knowledge distillation. 
-Together, these techniques enable RTT to directly establish and maintain trigger–target associations throughout the knowledge exchange process.
-}
-\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Paste the exact revised sentence(s) or paragraph from your manuscript here.]}
+To realize this strategy, we introduce two technical innovations.
+Natural Trigger Construction defines trigger conditions in public distillation data through local feature responses, allowing public samples that satisfy these conditions to serve directly as natural triggers, thereby overcoming the difficulty of propagating triggers through clean public data.
+Global feedback-based Adaptive Logit Adjustment selectively adjusts the logits of natural-trigger samples toward the backdoor target based on feedback from aggregated logits, directly establishing trigger--target associations during actual knowledge distillation.
+Together, these two innovations enable RTT to directly reconstruct and maintain trigger--target associations during knowledge distillation without modifying public distillation data or relying on the indirect propagation of locally established backdoor associations.}
+
+\revisedtext{Section I. Introduction, Page 2}{\manualindent Some FL backdoor attacks optimize triggers to mimic local sample features. However, these features may be absent from public distillation data, preventing logits from establishing stable trigger--target associations [13] [14] [15].
+Although ManipulatingKD [16] and FDLA [17] manipulate logits, their manipulations lack a specific backdoor target and do not involve trigger construction, resulting in the absence of trigger--target associations.
+Among backdoor attacks specifically designed for KD-FL, FD-DBA [18] optimizes triggers by locally simulating knowledge distillation to enhance the propagation of trigger--target associations. 
+However, since these triggers are absent from the public distillation dataset, the logits generated on this dataset fail to consistently favor the backdoor target, leading to the breakdown of trigger--target associations during actual knowledge distillation.
+
+\manualindent Based on the above analysis, the key to implementing a backdoor attack lies in directly reconstructing the association between triggers and the backdoor target during knowledge distillation.}
+
+\revisedtext{Section I. Introduction, Page 2, Para. "Contributions"}{\begin{itemize}
+  \item We analyze the failure of conventional FL backdoor attacks to propagate trigger--target associations in KD-FL.
+  To address this limitation, we propose a novel attack strategy that directly reconstructs these associations during knowledge distillation without modifying the server-provided distillation dataset.
+
+  \item To implement the above strategy, we propose two technical innovations, Natural Trigger Construction and global feedback-based Adaptive Logit Adjustment.
+  Natural Trigger Construction enables triggers to exist directly in public distillation data and participate in knowledge distillation, addressing the difficulty of trigger propagation.
+  Adaptive Logit Adjustment leverages global feedback to directly establish trigger--target associations and enable their stable propagation during knowledge distillation.
+\end{itemize}}
+
+\revisedtext{Section II-B. Backdoor Attacks in KD-FL, Page 2}{\manualindent Backdoor attacks in FL establish trigger--target associations through local poisoned training and propagate them via parameter aggregation [31] [32].
+In KD-FL, clients exchange logits on clean distillation data without injected triggers, disrupting conventional backdoor propagation.
+To improve the propagation of trigger-target associations, SADBA [13] and IBA [35] design triggers that better align with the semantic characteristics of samples.
+Edge-case [14] directly exploits tail-class samples as triggers, while Bad-PFL [15] constructs triggers using features of target-class samples.
+These methods exploit intrinsic features of local samples to align triggers with sample semantics, thereby enhancing the stability of backdoor associations.
+However, feature discrepancies between local and public distillation samples prevent the model from producing logits consistently biased toward the backdoor target, leading to the breakdown of trigger--target associations during knowledge distillation.
+
+\manualindent For backdoor attacks specifically designed for KD-FL, Fed-EBD [36] propagates backdoor associations by injecting triggers into public distillation data. However, attackers typically cannot modify such data, limiting its practical applicability.
+FD-DBA [18] employs a local substitute model to simulate knowledge distillation and optimize triggers to adapt them to the distillation process.
+However, the optimized triggers are not directly present in the public distillation dataset, causing the inferred logits to exhibit insufficient bias toward the backdoor target. This weak target bias, coupled with the lack of direct target-directed logit adjustment, makes trigger–target associations prone to breakdown during knowledge distillation.
+
+\manualindent These methods primarily focus on optimizing triggers to align with intrinsic sample features or adapt to knowledge distillation, thereby strengthening trigger--target associations.
+In contrast, RTT no longer relies on indirect trigger optimization. 
+Instead, it defines trigger conditions through local feature responses, allowing public distillation samples that satisfy these conditions to serve as natural triggers and directly participate in knowledge distillation.}
+
+\revisedtext{Section II-B. Poisoning Attacks in KD-FL, Page 3}{\manualindent Unlike conventional FL, which exchanges model parameters, KD-FL exchanges logits for federated training, prompting some poisoning attacks to shift toward logit manipulation.
+ManipulatingKD [16] constructs malicious logits through constrained optimization to disrupt knowledge distillation.
+FDLA [17] rearranges logit confidence rankings to induce incorrect class predictions.
+These methods manipulate logits to degrade the global model's accuracy during knowledge distillation. However, they neither specify a backdoor target nor construct triggers, and thus cannot establish trigger–target associations required for targeted backdoor attacks in KD-FL.
+Unlike these untargeted poisoning methods, RTT does not aim to broadly disrupt knowledge distillation.
+Instead, it selectively adjusts the logits of natural-trigger samples toward a predefined backdoor target and adaptively regulates the adjustment magnitude based on feedback from aggregated logits.
+This targeted manipulation establishes and propagates trigger--target associations during knowledge distillation, while leaving the logits of the remaining public samples unchanged.}
 
 \reviewcomment{ In Section II.B, the reviewing should be about backdoor attacks in KD-FL, rather than in conventional FL.}
-\authorresponse{
-We sincerely thank you for your careful review of our manuscript and your constructive suggestions. 
-Your comment has been valuable in improving the quality of our manuscript, particularly by helping us focus the Related Work section on backdoor attacks in KD-FL and provide a more detailed analysis of the limitations of existing approaches in this setting.
 
-In response to your comment, we have revised Section II.B and renamed it “Backdoor Attacks in KD-FL.” 
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestions.
+Your comment has helped us recognize that the original Related Work section did not sufficiently discuss backdoor attacks in KD-FL, prompting us to reorganize this section and focus on the propagation mechanisms of KD-FL backdoor attacks and the limitations of existing methods.
+These revisions have strengthened the relevance of the Related Work section to our research problem and improved the overall quality of our manuscript.
+
+\manualindent In response to your comment, we have revised Section II.B and renamed it “Backdoor Attacks in KD-FL.” 
 The revised section begins with a brief discussion of conventional FL backdoor attacks to explain why their propagation mechanisms are ineffective in KD-FL and to introduce attacks specifically designed for this setting.
 
-We then focus on backdoor attacks specifically designed for KD-FL, including Fed-EBD and FD-DBA, and provide a more detailed discussion of their mechanisms and limitations. 
+\manualindent We then focus on backdoor attacks specifically designed for KD-FL, including Fed-EBD and FD-DBA, and provide a more detailed discussion of their mechanisms and limitations. 
 In particular, we explain Fed-EBD's dependence on poisoning public distillation data and why FD-DBA remains vulnerable to trigger–target association breakdown during actual knowledge distillation. 
 These revisions strengthen the focus of Section II.B on KD-FL backdoor attacks while providing a more comprehensive analysis of the limitations of existing approaches.
-}
-\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Paste the exact revised sentence(s) or paragraph from your manuscript here.]}
+Finally, we further clarify the differences between RTT and existing methods.
+While existing methods primarily optimize triggers to strengthen backdoor associations, RTT directly constructs natural triggers from public distillation data, allowing them to participate in actual knowledge distillation and highlighting the novelty of RTT's trigger construction strategy.}
+
+\revisedtext{Section II-B. Backdoor Attacks in KD-FL, Page 2}{\manualindent Backdoor attacks in FL establish trigger--target associations through local poisoned training and propagate them via parameter aggregation [31] [32].
+In KD-FL, clients exchange logits on clean distillation data without injected triggers, disrupting conventional backdoor propagation.
+To improve the propagation of trigger-target associations, SADBA [13] and IBA [35] design triggers that better align with the semantic characteristics of samples.
+Edge-case [14] directly exploits tail-class samples as triggers, while Bad-PFL [15] constructs triggers using features of target-class samples.
+These methods exploit intrinsic features of local samples to align triggers with sample semantics, thereby enhancing the stability of backdoor associations.
+However, feature discrepancies between local and public distillation samples prevent the model from producing logits consistently biased toward the backdoor target, leading to the breakdown of trigger--target associations during knowledge distillation.
+
+\manualindent For backdoor attacks specifically designed for KD-FL, Fed-EBD [36] propagates backdoor associations by injecting triggers into public distillation data. However, attackers typically cannot modify such data, limiting its practical applicability.
+FD-DBA [18] employs a local substitute model to simulate knowledge distillation and optimize triggers to adapt them to the distillation process.
+However, the optimized triggers are not directly present in the public distillation dataset, causing the inferred logits to exhibit insufficient bias toward the backdoor target. This weak target bias, coupled with the lack of direct target-directed logit adjustment, makes trigger–target associations prone to breakdown during knowledge distillation.
+
+\manualindent These methods primarily focus on optimizing triggers to align with intrinsic sample features or adapt to knowledge distillation, thereby strengthening trigger--target associations.
+In contrast, RTT no longer relies on indirect trigger optimization. 
+Instead, it defines trigger conditions through local feature responses, allowing public distillation samples that satisfy these conditions to serve as natural triggers and directly participate in knowledge distillation.}
 
 \reviewcomment{ How is the \(\Delta\) in Eq.~(15) set or computed?}
 
-\authorresponse{We sincerely thank you for your careful review of our manuscript and your constructive suggestion. 
-Your comment has helped us recognize that, although the original manuscript presented the update equation for adaptive logit adjustment, it did not sufficiently explain the meaning and settings of the adjustment step size \(\Delta\). 
-Your suggestion has helped us further clarify the parameter definitions and settings, providing a clearer and more complete description of the adaptive logit adjustment mechanism and contributing significantly to the overall quality of our manuscript.
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestion.
+Your comment has helped us recognize that the original manuscript presented the update equation for adaptive logit adjustment but did not sufficiently explain the meaning and settings of the adjustment step size $\Delta$.
+Your suggestion has helped us further clarify the parameter definitions and settings, providing a clearer and more complete description of the adaptive logit adjustment mechanism and significantly improving the overall quality of our manuscript.
 
-In response to your comment, we have revised the manuscript to clarify the definition and settings of \(\Delta^+\) and \(\Delta^-\). 
+\manualindent In response to your comment, we have revised the manuscript to clarify the definition and settings of \(\Delta^+\) and \(\Delta^-\). 
 Specifically, we have added an explanation of these parameters immediately after Eq.~(15) and specified their values in the Attack Settings subsection of the Experiments section.
 
-In Eq.~(15), \(\Delta^+\) and \(\Delta^-\) represent the predefined step sizes for increasing and decreasing the expected logit difference \(\delta^t\), respectively. 
-When the average backdoor target probability computed from the previous round's aggregated logits is below the threshold \(\tau\), \(\delta^t\) is increased by \(\Delta^+\) to strengthen the target-directed bias. 
-Otherwise, it is decreased by \(\Delta^-\) to avoid excessive logit adjustment. 
-In our experiments, both \(\Delta^+\) and \(\Delta^-\) are set to 0.05, the initial expected difference \(\delta^0\) is set to 0.1.}
+\manualindent In Eq.~(15), $\Delta^+$ and $\Delta^-$ represent the predefined step sizes for increasing and decreasing the expected logit difference $\delta^t$, respectively.
+When the average backdoor target probability computed from the previous round's aggregated logits is below the threshold $\tau$, $\delta^t$ is increased by $\Delta^+$ to strengthen the target-directed bias.
+Otherwise, it is decreased by $\Delta^-$ to avoid excessive logit adjustment.
+The step sizes $\Delta^+$ and $\Delta^-$ control the magnitude of each update, while the update direction is adaptively determined by feedback from aggregated logits.
+Thus, these parameters regulate the updating process of the expected logit difference rather than the mechanism for establishing trigger--target associations.
+In our experiments, both $\Delta^+$ and $\Delta^-$ are set to 0.05, and the initial expected difference $\delta^0$ is set to 0.1.}
 
 \revisedtext{Section \uppercase\expandafter{\romannumeral 4}-B. Backdoor Target Reconstruction, Page 6}
 {Here, $\Delta^+$ and $\Delta^-$ denote the predefined step sizes for increasing and decreasing $\delta^t$, respectively.}
 
-\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 9, Paragraph: Attack Settings}
-{For the remaining parameters, the initial expected difference $\delta^0$ is set to 0.5, and the fixed adjustment step sizes $\Delta^+$ and $\Delta^-$ are both set to 0.05 throughout training.}
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 9, Para. "Attack Settings"}
+{For the remaining parameters, the initial expected difference $\delta^0$ is set to 0.1, and the fixed adjustment step sizes $\Delta^+$ and $\Delta^-$ are both set to 0.05 throughout training.}
 
 \reviewcomment{In the experiment section, all baselines are backdoor attacks in conventional FL, please add at least one backdoor attack in KD-FL.}
 
-\authorresponse{We sincerely thank you for your careful review of our manuscript and your constructive suggestions. 
-Your comment highlights the importance of comparing RTT with existing backdoor attacks designed for KD-FL and has helped us recognize the need to present the experimental comparisons and the rationale for baseline selection more clearly. 
-Your suggestions have enabled us to improve the presentation of our experimental evaluation, strengthen the credibility of our results, and enhance the overall quality of our manuscript.
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestions.
+Your comment has helped us recognize that the original manuscript did not sufficiently explain the rationale for selecting KD-FL backdoor attack baselines or the purpose of these comparisons.
+Following your suggestion, we have further clarified the classification of baseline methods and their respective comparison objectives, highlighting the comparison between RTT and existing KD-FL backdoor attacks.
+These revisions have improved the clarity and completeness of our experimental evaluation and enhanced the overall quality of our manuscript
 
-Our original experiments already included FD-DBA, a backdoor attack specifically designed for KD-FL. 
-However, the original manuscript did not sufficiently explain the rationale for selecting FD-DBA as a baseline or clearly distinguish among different categories of attack methods. 
+\manualindent Our original manuscript already included FD-DBA, a backdoor attack specifically designed for KD-FL.
+However, the original manuscript did not sufficiently explain the rationale for selecting FD-DBA as a baseline or clearly distinguish among different categories of attack methods.
 In response to your comment, we have revised the Baselines subsection of the Experimental Settings section by organizing the six baseline methods into three categories: trigger-optimized backdoor attacks, logit-manipulation attacks in KD-FL, and KD-FL backdoor attacks. 
 We have further clarified the purpose of including each category in our comparisons. 
 In particular, FD-DBA serves as a representative KD-FL backdoor attack, enabling a direct comparison of RTT with an existing backdoor attack designed for the same setting.
 
-Regarding Fed-EBD, which is discussed in the Related Work section, we did not include it as an experimental baseline because it relies on poisoning public distillation data. 
+\manualindent Regarding Fed-EBD, which is discussed in the Related Work section, we did not include it as an experimental baseline because it relies on poisoning public distillation data. 
 In practical KD-FL scenarios, attackers typically control only local training data and cannot modify the server-maintained public distillation dataset, making such poisoning difficult to implement. 
 Therefore, Fed-EBD falls outside the attacker capabilities assumed in our threat model and was not included in our experimental comparisons.}
 
 \revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 9, Paragraph: Baselines}
-{We compare RTT with six representative state-of-the-art (SOTA) attack methods spanning three categories.
-The first category includes trigger-optimized backdoor attacks, SADBA, Edge-case, and Bad-PFL, which are selected to compare trigger optimization based on the intrinsic semantics of samples with RTT's natural trigger construction.
-The second category represents logit-manipulation attacks in KD-FL, including ManipulatingKD and FDLA, which are selected to compare conventional logit manipulation with RTT's target-directed logit adjustment.
-The third category is represented by FD-DBA, a backdoor attack specifically designed for KD-FL, which is selected to compare its substitute-model distillation and trigger optimization strategy with RTT's direct reconstruction of trigger–target associations during knowledge distillation.}
+{\manualindent We compare RTT with six representative state-of-the-art (SOTA) attack methods spanning three categories.
+The first category includes trigger-optimized backdoor attacks, SADBA [13], Edge-case [14], and Bad-PFL [15], which are selected to compare strategies that optimize triggers to resemble the natural semantic features of local training samples with RTT's strategy of directly constructing natural triggers from the public distillation dataset in terms of attack effectiveness under KD-FL.
+The second category includes untargeted poisoning attacks based on logits manipulation in KD-FL, namely ManipulatingKD [16] and FDLA [17].
+These methods and RTT both manipulate uploaded logits but pursue different attack objectives.
+They are selected to compare the attack effectiveness and impact on ACC of untargeted logits manipulation and RTT's target-directed logits adjustment.
+The third category is represented by FD-DBA [18], a backdoor attack specifically designed for KD-FL, which is selected to compare its strategy of using a substitute model to simulate knowledge distillation and optimize triggers for indirect backdoor propagation with RTT's direct reconstruction of trigger--target associations during knowledge distillation.}
 
 \reviewcomment{ In Table IV, why does the ASR of w/o condition not to be 0, as there is no attack at all in w/o condition.}
 
-\authorresponse{
-We sincerely thank you for your careful review of our manuscript and your constructive suggestions. 
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestions. 
 Your comment has helped us recognize that the original manuscript did not sufficiently explain the ASR evaluation under the no-attack setting, which may have caused confusion among readers. 
 We are deeply grateful for your observation, as it is valuable in improving the presentation of our experimental evaluation and the overall quality of our manuscript.
 
-In response to your comment, we have clarified how ASR is evaluated under the no-attack setting (w/o) in the Baselines subsection of the Experimental Settings section. 
+\manualindent In response to your comment, we have clarified how ASR is evaluated under the no-attack setting (w/o) in the Baselines subsection of the Experimental Settings section. 
 We have further explained why the ASR under this setting is low but nonzero in the Baselines subsection of the Experimental Results section.
 
-We acknowledge that it is intuitive to expect an ASR of zero when no backdoor attack is performed. 
+\manualindent We acknowledge that it is intuitive to expect an ASR of zero when no backdoor attack is performed. 
 However, our experiments do not simply assign an ASR of zero to the no-attack setting. Instead, we adopt a consistent evaluation protocol. 
 Specifically, under the w/o setting, the model is trained using standard KD-FL without any backdoor attack. 
 During evaluation, we calculate ASR using the same test samples with triggers and predefined backdoor target class as in RTT.
 
-The purpose of this design is to compare the effects of triggers with and without backdoor attacks under identical evaluation conditions, thereby verifying that effective backdoor activation results from the attack rather than the triggers themselves. 
+\manualindent The purpose of this design is to compare the effects of triggers with and without backdoor attacks under identical evaluation conditions, thereby verifying that effective backdoor activation results from the attack rather than the triggers themselves. 
 Since the model still makes occasional classification errors during normal inference, a small number of samples are misclassified as the backdoor target class. Consequently, the ASR under w/o is low but not strictly zero. 
 These incorrect predictions reflect normal classification errors rather than successful backdoor activation. Furthermore, the substantial ASR gap between w/o and RTT demonstrates that the triggers effectively activate the backdoor only when the attack is applied.}
 
 \revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 9, Paragraph: Baselines}
-{Its ASR is evaluated using the same test samples with triggers and backdoor target as RTT to verify that backdoor activation results from the attack rather than the triggers alone.}
+{\manualindent We also report the ASR and ACC under the no-attack setting (w/o), where ASR is evaluated on test samples selected using RTT's natural trigger conditions to verify that natural triggers effectively activate the backdoor only after the RTT attack is applied.}
 
-\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-B. Experimental Results, Page 9, Paragraph: Baselines}{Under the no-attack setting (w/o), the nonzero ASR arises from normal classification errors, where a small number of samples are misclassified as the backdoor target. 
-The substantial ASR gap between w/o and RTT demonstrates that the triggers effectively activate the backdoor only when the attack is applied.}
-
-\reviewcomment{ In the experiment section, all baselines are backdoor attacks in conventional FL, please add at least one backdoor attack in KD-FL.}
-
-\authorresponse{
-We sincerely thank you for your careful review of our manuscript and your constructive suggestion. Your comment is valuable in improving the quality of our experimental evaluation. As RTT is specifically designed for KD-FL, comparisons with existing backdoor attacks developed for the same setting are essential for demonstrating the effectiveness of our proposed method.
-
-We acknowledge that the description of baselines in the original manuscript was not sufficiently clear. In fact, our original experiments already included FD-DBA, a backdoor attack specifically designed for KD-FL. In response to your comment, we have revised the Baselines subsection of the Experimental Settings to clarify the categories of the selected methods and explain the reasons for their inclusion. Specifically, we have clarified that FD-DBA is a backdoor attack designed for KD-FL and further explained its relevance as a baseline for evaluating RTT against existing attacks in the same setting.
-
-Regarding Fed-EBD, which is discussed in the Related Work section, we did not include it as an experimental baseline because it relies on poisoning public distillation data. In practical KD-FL scenarios, attackers typically control only local training data and cannot modify the server-maintained public distillation dataset, making such poisoning difficult to implement in practice. Therefore, Fed-EBD does not satisfy the attacker capabilities assumed in our threat model and was not included in our experimental comparisons.
-}
-\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Paste the exact revised sentence(s) or paragraph from your manuscript here.]}
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-B. Experimental Results, Page 9, Paragraph: Baselines}{\manualindent The substantial ASR gap between w/o and RTT demonstrates that natural triggers effectively activate the backdoor only when the attack is applied.
+The nonzero ASR under w/o arises from normal classification errors, where a small number of natural-trigger samples are misclassified as the backdoor target class.}
 
 \reviewcomment{ Does ACC in the experiments evaluate the stealthiness of different attacks? If so, ACC can vary accross the ratio of targeted data in the dataset, which cannot be directly used as the evaluation metric.}
-\authorresponse{
-We sincerely thank you for your careful review of our manuscript and your constructive suggestion. 
-Your comment is valuable in improving the quality of our manuscript. In particular, it helps us clarify the role of ACC in evaluating backdoor attack performance.
 
-In response to your comment, we have revised the Evaluation Metrics subsection of the Experimental Settings to clarify the purpose of ACC. 
-Specifically, we have explained that ACC measures the impact of backdoor attacks on normal classification performance and that preserving normal classification performance is also a fundamental requirement of backdoor attacks.
+\authorresponse{\manualindent We sincerely thank you for your careful review of our manuscript and your constructive suggestions.
+Your comment has helped us recognize that the original manuscript did not sufficiently distinguish the evaluation purposes of ACC and attack stealthiness, and that the experimental analysis of attack stealthiness was not comprehensive enough.
+Following your suggestion, we have further clarified the roles of the evaluation metrics and introduced additional metrics tailored to different defense mechanisms, improving the completeness of our experimental evaluation and the overall quality of our manuscript.
 
-ACC is not used as a direct measure of attack stealthiness. 
-Backdoor attacks aim to induce predictions toward the predefined backdoor target when triggers are present while preserving normal classification performance on clean samples. 
-Therefore, we use ACC to evaluate the impact of backdoor attacks on normal task performance, while ASR measures backdoor attack effectiveness. 
-Regarding attack stealthiness, we evaluate RTT's ability to evade defenses by examining its ASR under different defense methods. 
-As shown in Table V, RTT maintains a high ASR under multiple logit-based defenses, demonstrating its effectiveness in evading the evaluated defense mechanisms and further reflecting its stealthiness from the perspective of defense evasion.
+\manualindent First, we have revised the Evaluation Metrics subsection of the Experimental Settings section to clarify that ACC is not a direct measure of attack stealthiness but instead evaluates the impact of backdoor attacks on normal classification performance.
+Preserving normal classification performance is a key requirement of backdoor attacks, making ACC an important metric for evaluating backdoor attacks.
+
+\manualindent Second, in the original manuscript, we demonstrated RTT's ability to evade existing defenses by showing that it maintains high ASR under different defense methods.
+However, ASR under defense scenarios alone is insufficient to comprehensively evaluate attack stealthiness.
+Therefore, in the revised manuscript, we have introduced additional evaluation metrics tailored to the mechanisms of four defense methods to further assess RTT's stealthiness and defense evasion capabilities.
+
+\manualindent Specifically, RLA and ExpGuard suppress the influence of malicious logits by assigning lower aggregation weights to suspected clients.
+Therefore, we adopt the ratio of the average aggregation weight assigned to malicious clients to that assigned to benign clients ($R_w$) to measure their effectiveness in downweighting malicious clients.
+FedTGD resists attacks by detecting and filtering anomalous clients.
+Accordingly, we use the true positive rate (TPR) to measure the proportion of malicious clients correctly detected.
+Selective-FD prevents malicious knowledge propagation by filtering unreliable distillation samples on the server side.
+Therefore, we adopt the natural-trigger sample filtering rate (TFR) to evaluate its filtering effectiveness.
+In addition, we calculate the average Euclidean distance ($\Delta_z$) between the logits uploaded by malicious clients before and after modification to measure the magnitude of malicious logit adjustments.
+
+\manualindent The experimental results show that RTT maintains high ASR and stable ACC under all four defense methods.
+The $R_w$ values under RLA and ExpGuard are close to 1, indicating that malicious clients are not significantly downweighted.
+FedTGD achieves a TPR of only 0.19\%--6.13\%, indicating that only a small proportion of malicious clients are correctly detected.
+Selective-FD achieves a TFR of only 2.87\%--6.59\%, indicating that most natural-trigger samples are not filtered and can still participate in knowledge distillation.
+These results demonstrate that none of the four defense methods effectively prevents RTT's backdoor propagation.
+
+\manualindent In summary, we have clarified the evaluation purpose of ACC and introduced additional metrics corresponding to the mechanisms of different defenses.
+By examining aggregation weight suppression, malicious client detection, natural-trigger sample filtering, and logit modification magnitude, we provide a more comprehensive evaluation of RTT's attack stealthiness and defense evasion capabilities.
+These revisions have strengthened our experimental evaluation and enhanced the credibility of our results.}
+
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A, Page 9, Para. "Evaluation Metrics"}{We evaluate backdoor attacks using ASR and classification accuracy (ACC).
+ASR measures backdoor attack effectiveness, while ACC measures normal classification performance on non-trigger samples, as preserving such performance is a key requirement of backdoor attacks.
+We further assess attack stealthiness using additional metrics tailored to different defense methods.}
+
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A, Page 10, Para. "Defenses"}{\manualindent We adopt four logits-based defense methods to evaluate RTT's resistance to defenses.
+The evaluation metrics include ASR and ACC, which measure attack effectiveness and normal classification performance, respectively; $\Delta_z$, which measures the magnitude of adjustments to malicious clients' uploaded logits; $R_w$, which denotes the ratio of the average aggregation weight of malicious clients to that of benign clients; and TPR and TFR, which represent the proportion of malicious clients correctly detected by FedTGD and the proportion of natural-trigger samples filtered by Selective-FD, respectively.
+As shown in Table~\ref{defense_asr}, RTT maintains high ASR and normal classification performance under all four defenses. 
+The $R_w$ values are close to 1, indicating that RLA and ExpGuard do not significantly downweight malicious clients. 
+FedTGD achieves a TPR of only 0.19\%--6.13\%, indicating that only a small proportion of malicious clients are detected. Selective-FD achieves a TFR of only 2.87\%--6.59\%, indicating that most natural-trigger samples pass the filtering process and participate in knowledge distillation. 
+These results demonstrate that none of the four defenses effectively prevents backdoor propagation by RTT.
+
+\begingroup
+\centering
+\renewcommand{\thetable}{\Roman{table}}
+\setcounter{table}{5}
+\captionof{table}{Attack performance and detection statistics of RTT under different defense methods across multiple datasets.}
+\label{defense_asr}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5.0pt}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Defense & Metric & Fashion-MNIST & CIFAR-10 & GTSRB & Tiny-ImageNet \\
+\midrule
+\multirow{4}{*}{RLA}
+& ASR        & 81.95\% & 82.15\% & 89.23\% & 80.15\% \\
+& ACC        & 84.02\% & 71.36\% & 78.24\% & 50.28\% \\
+& $\Delta_z$ & 5.45 & 9.79 & 6.79 & 9.05 \\
+& $R_w$      & 1.09 & 1.02 & 1.11 & 0.97 \\
+\midrule
+\multirow{4}{*}{ExpGuard}
+& ASR        & 81.26\% & 83.59\% & 94.10\% & 79.58\% \\
+& ACC        & 80.71\% & 74.23\% & 81.47\% & 49.78\% \\
+& $\Delta_z$ & 5.98 & 9.77 & 6.60 & 9.71 \\
+& $R_w$      & 0.97 & 0.91 & 1.07 & 1.02 \\
+\midrule
+\multirow{4}{*}{FedTGD}
+& ASR        & 79.42\% & 79.89\% & 91.20\% & 78.30\% \\
+& ACC        & 79.56\% & 76.15\% & 79.35\% & 51.74\% \\
+& $\Delta_z$ & 6.12 & 10.45 & 6.96 & 8.14 \\
+& TPR        & 1.89\% & 2.03\% & 6.13\% & 0.19\% \\
+\midrule
+\multirow{4}{*}{Selective-FD}
+& ASR        & 80.15\% & 81.25\% & 89.88\% & 78.27\% \\
+& ACC        & 82.65\% & 68.82\% & 76.92\% & 52.39\% \\
+& $\Delta_z$ & 5.11 & 9.39 & 10.45 & 8.98 \\
+& TFR        & 4.72\% & 6.59\% & 5.23\% & 2.87\% \\
+\bottomrule
+\end{tabular}
+\par
+\endgroup
 }
-\revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Paste the exact revised sentence(s) or paragraph from your manuscript here.]}
 
 % Add \revisedtext{...}{...} here if manuscript text changed.
 
@@ -782,18 +933,31 @@ The variations in ASR and ACC across clients are mainly attributed to difference
 \reviewcomment{ The stealthiness and practical effectiveness of RTT are insufficiently characterized.
 RTT avoids modifying the server-maintained distillation dataset and introduces regularization to limit malicious logit deviations. However, these properties alone do not establish that the attack is difficult to detect. Table V reports ASR under several defense methods but does not provide corresponding clean accuracy, detection statistics, or measurements of malicious logit deviations. These results would help support the claimed robustness against defenses. Furthermore, Fig. 5 shows visibly modified explicit-trigger samples. The authors should specify how the random response direction is converted into an input-space trigger, including its magnitude, normalization, and injection procedure. Quantitative measures of trigger visibility and additional evaluation under constrained trigger magnitudes would improve the practical assessment.
 }
-\authorresponse{We sincerely thank you for your careful review of our manuscript and constructive comments.
-Your suggestions have helped us improve the fairness of baseline comparisons, the evaluation of different attack objectives, and the analysis of experimental results, thereby enhancing the rigor and comparability of our experimental evaluation.
-They have also provided stronger experimental evidence supporting RTT's effectiveness in propagating backdoor associations to heterogeneous benign clients.
-In response, we have further clarified the adaptation of baseline methods to KD-FL, the evaluation protocols for different attack objectives, and the hyperparameter tuning procedures.
-We have also corrected several experimental results on DBpedia and added a client-level attack performance analysis.
-The detailed revisions are presented below.
+
+\authorresponse{We sincerely thank the reviewer for the careful reading of our manuscript and the constructive comments. Your suggestions have helped us further improve the experimental evaluation and result analysis, making the assessment of RTT's performance under defense scenarios and the visibility of explicit triggers more comprehensive and thorough, thereby enhancing the persuasiveness of the experimental results and the credibility of our conclusions. In response to these suggestions, we have expanded the defense experiments and supplemented the explicit-trigger construction procedure, quantitative visibility metrics, and experimental results under different injection magnitudes.
+
+\textbf{First, regarding attack effectiveness and detection statistics under defense mechanisms.}
+We have further extended the experimental evaluation under four defense methods. Specifically, RLA and ExpGuard assign lower aggregation weights to suspected clients. Therefore, we adopt the ratio of the average aggregation weight assigned to malicious clients to that assigned to benign clients ($R_w$) to evaluate their defense effectiveness. FedTGD resists attacks by filtering anomalous clients. Accordingly, we use the true positive rate (TPR) of malicious client detection to measure its detection capability. Selective-FD performs defense by filtering unreliable distillation samples on the server side. Therefore, we adopt the natural-trigger sample filtering rate (TFR) to evaluate its defense effectiveness. In addition, we report classification accuracy (ACC) and the average Euclidean distance ($\Delta_z$) between the logits uploaded by malicious clients before and after modification, which measure normal classification performance and the extent of malicious logit modifications, respectively.
+
+The experimental results demonstrate that RTT maintains high ASR and stable ACC under all four defense methods. The $R_w$ values of RLA and ExpGuard are close to 1, indicating that malicious clients are not significantly downweighted. FedTGD achieves a low TPR, indicating that only a small proportion of malicious clients are detected. Similarly, Selective-FD exhibits a low TFR, indicating that most natural-trigger samples are not filtered and can still participate in knowledge distillation.
+
+These results demonstrate that RTT maintains effective backdoor propagation under these defense mechanisms and exhibits a certain degree of defense evasion capability.
+
+\textbf{Second, regarding explicit-trigger construction, visibility, and injection magnitude.}
+
+RTT establishes the association between triggers and the target class using natural-trigger samples without modifying the original data. In the preceding experiments, we have evaluated RTT's core attack mechanism and its attack effectiveness using natural-trigger samples. We recognize that the explicit triggers shown in the previous version of the manuscript may have caused some misunderstanding. These triggers are manually constructed and injected into images for supplementary experiments, which is also a common trigger design practice in existing federated learning backdoor attacks [1, 2, 3]. Therefore, to further investigate the attack effectiveness of RTT under explicit-trigger injection, we supplement our evaluation with conventional explicit-trigger injection experiments.
+
+Specifically, we directly use the random response direction from RTT's natural trigger construction stage as the explicit trigger. First, we apply L2 normalization to the random direction $\mathbf K$ and then scale it by the injection magnitude $\epsilon$. Subsequently, the resulting vector is reshaped to match the predefined local response region and added to the corresponding location of each test image. We have supplemented this procedure in the \textit{Evaluation Metrics} section of the revised manuscript and updated the explicit-trigger ASR definition based on $\hat{y}(\mathbf{x}+\epsilon\hat{\mathbf K})$.
+
+To further evaluate explicit-trigger visibility and attack effectiveness under different injection magnitudes, we extend the original experiments by considering three injection magnitudes, $\epsilon\in\{0,0.5,1.0\}$, where $0$ indicates no trigger injection, $0.5$ represents half of the original injection magnitude, and $1.0$ corresponds to the original injection magnitude. We also introduce the Structural Similarity Index Measure (SSIM) as a quantitative measure of trigger visibility and report ASR, ACC, and SSIM under different injection magnitudes.
+
+The experimental results demonstrate that ASR is close to zero without explicit trigger injection. When $\epsilon=1.0$, RTT achieves high ASR across all datasets. Even when the injection magnitude is reduced to $0.5$, RTT maintains high attack success rates with reduced trigger visibility. Meanwhile, ACC remains stable across different injection magnitudes. These results demonstrate that RTT remains effective under conventional explicit-trigger injection settings and maintains strong attack effectiveness even when the injection magnitude is reduced.
+
+\noindent [1] Q. Yang, P. Yan, X. Wu, J. Zhang, T. Song, Y. Hua, H. Wang, L. Wang, and H. Guan, "Stealthy Backdoor Attack in Federated Learning via Adaptive Layer-wise Gradient Alignment," in \textit{Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)}, pp. 29163--29172, 2025.
+
+\noindent [2] C. Xie, K. Huang, P.-Y. Chen, and B. Li, "DBA: Distributed Backdoor Attacks against Federated Learning," in \textit{International Conference on Learning Representations (ICLR)}, 2020.
+
+\noindent [3] T. Liu, Y. Zhang, Z. Feng, Z. Yang, C. Xu, D. Man, and W. Yang, "Beyond Traditional Threats: A Persistent Backdoor Attack on Federated Learning," in \textit{Proceedings of the AAAI Conference on Artificial Intelligence}, vol. 38, no. 19, pp. 21359--21367, 2024.
 }
 \revisedtext{Section II-B, Page [X], Lines [XX--XX]}{[Insert the exact new KD-FL backdoor related-work paragraph here, including the relevant citations.]}
-
-% Add more comment/response pairs as needed:
-% \reviewcomment{[Next review comment copied verbatim.]}
-% \authorresponse{[Your point-by-point reply.]}
-% \revisedtext{Section [X], Page [X], Lines [XX--XX]}{[Exact revised text.]}
-
 \end{document}

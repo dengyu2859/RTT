@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import utils
 import copy
+from artificial_trigger_metrics import ArtificialTriggerSSIM
 
 
 def Evaluate(model, datasets, loss_func, args):
@@ -232,6 +233,10 @@ def evaluate_asr(model, testset, K, S, alpha, args):
 
 # 测试人工添加触发器之后的ASR
 def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
+    strength = utils.validate_artificial_trigger_strength(
+        getattr(args, 'artificial_trigger_strength', 1.0))
+    if args.dataset in ['AGNews', 'DBPedia'] and strength not in (0.0, 1.0):
+        raise ValueError('Discrete text token IDs require artificial_trigger_strength 0 or 1')
     model.eval()
     loss_func = nn.CrossEntropyLoss(reduction='none').to(args.device)
 
@@ -257,8 +262,8 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
                 if g < alpha and labels[i] != args.back_target:
                     img = images[i].cpu().clone()
 
-                    # 触发器注入：先白后贴 K
-                    poisoned_img = utils.apply_white_and_paste_K(img, K, S, args)
+                    # 只改变人工注入强度；g/alpha 的样本筛选仍使用原始图像与原始 K。
+                    poisoned_img = utils.apply_K_with_blend(img, K, S, alpha=strength, args=args)
                     poisoned_img = poisoned_img.unsqueeze(0).to(args.device)
 
                     # 后门推理
@@ -281,6 +286,31 @@ def Artificial_evaluate_asr(model, testset, K, S, alpha, args):
     poison_loss = total_poison_loss / max(count_n, 1)
 
     return asr, poison_loss
+
+
+def evaluate_artificial_trigger_ssim(testset, K, S, alpha, args):
+    """Measure the artificial-ASR cohort once, before training, without inference."""
+    strength = utils.validate_artificial_trigger_strength(
+        getattr(args, 'artificial_trigger_strength', 1.0))
+    # The existing FedDF branch replaces the test dataset with GTSRB.
+    dataset = 'GTSRB' if getattr(args, 'aggregation', None) == 'FedDF' else args.dataset
+    stats = ArtificialTriggerSSIM(dataset)
+    if not stats.supported:
+        return stats
+
+    # DataLoader draws a base seed even without shuffling. Keep this extra pass
+    # independent of the training RNG; the image test transforms are deterministic.
+    generator = torch.Generator().manual_seed(0)
+    loader = DataLoader(testset, batch_size=args.local_bs, shuffle=False, generator=generator)
+    with torch.no_grad():
+        for images, labels in loader:
+            g_values = compute_g(images, K, S, args)
+            for i in range(len(labels)):
+                if g_values[i] < alpha and labels[i] != args.back_target:
+                    img = images[i]
+                    triggered = utils.apply_K_with_blend(img, K, S, alpha=strength, args=args)
+                    stats.update(img, triggered)
+    return stats
 
 
 def compute_g(images, K, S, args):

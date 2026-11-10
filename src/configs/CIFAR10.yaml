@@ -28,6 +28,7 @@ aggregation: FedTGD   # Krum,mean,AFA,Trim,DaFKD
 
 S: 28
 beta: 0.4 # 中毒比例
+artificial_trigger_strength: 0.15  # 仅人工触发测试：0 原样；1 覆盖；>1 外推；不裁剪
 target_prob: 0.95
 logit_solver: adam       # adam: 原迭代求解；closed_form: 闭式最优解
 logit_update_mode: full  # full: 优化全部 logits；target_only: 仅优化目标类别

@@ -1,3 +1,4 @@
+import math
 import pathlib
 from datetime import datetime
 import torch
@@ -1048,28 +1049,43 @@ def apply_white_and_paste_K(img, K, S, args=None, white_value=1.0):
     return img
 
 
-def apply_K_with_blend(img, K, S, alpha=0.5):
-    """
-    在右下角 S×S 区域贴上 K，但保持原图底色可见
+def validate_artificial_trigger_strength(strength):
+    """Accept finite nonnegative YAML numbers; allow strengths above one."""
+    if (type(strength) not in (int, float) or not math.isfinite(strength)
+            or strength < 0):
+        raise ValueError('artificial_trigger_strength must be a finite number >= 0')
+    return float(strength)
 
-    Args:
-        img: Tensor, (C,H,W)
-        K: Tensor, (C,S,S) 或 (S,S) 灰度
-        S: 触发区域大小
-        alpha: 融合系数, 越大 K 越明显
-    """
-    img = img.clone()  # 避免修改原图
 
-    # 灰度 K 扩展为 (C,S,S)
-    if K.dim() == 2:
-        K_use = K.unsqueeze(0).expand(img.shape[0], -1, -1)
+def apply_K_with_blend(img, K, S, alpha=0.5, args=None):
+    """Blend/extrapolate artificial triggers in input-tensor space, without clipping.
+
+    Continuous region: x_new = (1-alpha)*x_old + alpha*K. Here alpha is a
+    mixing strength, unrelated to the natural-trigger response threshold.
+    Integer token IDs support only 0 (unchanged) and 1 (original overwrite).
+    """
+    strength = validate_artificial_trigger_strength(alpha)
+    if strength == 0:
+        return img.clone()
+    if not img.is_floating_point():
+        if strength != 1 or img.dim() != 1:
+            raise ValueError('Integer token IDs support artificial_trigger_strength 0 or 1 only')
+        return apply_white_and_paste_K(img, K, S, args)
+    if strength == 1:
+        # Preserve the exact legacy assignment, including its original dtype conversion.
+        return apply_white_and_paste_K(img, K, S, args)
+
+    result = img.clone()
+    if result.dim() == 1:
+        is_text = args is not None and args.dataset in ['AGNews', 'DBPedia']
+        region = result[:S] if is_text else result[-S:]
+        pattern = K
     else:
-        K_use = K
-
-    # 融合覆盖
-    img[:, -S:, -S:] = alpha * K_use + (1 - alpha) * img[:, -S:, -S:]
-
-    return img
+        region = result[:, -S:, -S:]
+        pattern = K.unsqueeze(0) if K.dim() == 2 else K
+    pattern = pattern.to(device=region.device, dtype=region.dtype)
+    region.copy_((1 - strength) * region + strength * pattern)
+    return result
 
 
 def build_adaptive_trigger(input_shape, args, trigger_ratio=0.125, margin_ratio=0.05, value=1.0):

@@ -22,6 +22,7 @@ from datetime import datetime
 from attack_artifacts import save_attack_artifacts
 from defenses import DEFENSE_METHODS, DefenseAggregator, distill_defended
 from defense_reporting import DefenseReporter
+from Test import evaluate_artificial_trigger_ssim
 
 
 def setup_logging(log_path):
@@ -139,6 +140,11 @@ def FL(args):
     else:
         poisoned_indices, alpha, K = [], 0, None
 
+
+    if args.attack and args.attack_type == 'Following_Nature':
+        # K and alpha are fixed; image similarity needs no trained model.
+        ssim_stats = evaluate_artificial_trigger_ssim(test_dataset, K, args.S, alpha, args)
+        print(ssim_stats.summary(getattr(args, 'artificial_trigger_strength', 1.0)))
 
     # 2.定义客户端
     loss_func = nn.CrossEntropyLoss().to(args.device)
@@ -293,7 +299,7 @@ def FL(args):
 if __name__ == '__main__':
     5
     parser = argparse.ArgumentParser()
-    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/ImageNet.yaml', required=False)
+    parser.add_argument('--params', dest='params', default='/home/a100/code/NBA/src/configs/CIFAR10.yaml', required=False)
     parser.add_argument('--clean-baseline', action='store_true', help='Disable all poisoning and malicious clients')
     parser.add_argument('--output-dir', help='Directory for final client models and plots; logs go to stdout')
     parser.add_argument('--gpu', type=int, help='Override the GPU in the YAML; -1 selects CPU')

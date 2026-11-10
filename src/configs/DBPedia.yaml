@@ -27,6 +27,7 @@ distill_momentum: 0.9
 aggregation: FedTGD
 S: 10
 beta: 0.3
+artificial_trigger_strength: 1.0  # 仅人工触发测试：离散 token 仅支持 0 不注入 / 1 覆盖
 target_prob: 0.5
 logit_solver: adam       # adam: 原迭代求解；closed_form: 闭式最优解
 logit_update_mode: full  # full: 优化全部 logits；target_only: 仅优化目标类别
