@@ -53,7 +53,7 @@
 % Usage: \manualindent Paragraph text.
 \newcommand{\manualindent}{\par\noindent\hspace*{1.5em}\ignorespaces}
 \setlist[itemize]{leftmargin=2em,itemsep=1pt,topsep=2pt}
-\hypersetup{colorlinks=true,linkcolor=replyblue,urlcolor=replyblue}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue,filecolor=blue}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{mutedgray}Response to Reviewers}
@@ -73,7 +73,7 @@
   \setcounter{reviewernum}{#1}%
   \setcounter{commentnum}{0}%
   \vspace{0.7em}%
-  {\Large\bfseries\color{headingnavy}Responses to Reviewer \##1\par}%
+  {\Large\bfseries\color{headingnavy}\hypertarget{reviewer:#1}{Responses to Reviewer \##1}\par}%
   \vspace{0.25em}\hrule\vspace{0.85em}%
 }
 
@@ -136,13 +136,13 @@ For clarity, each reviewer comment is reproduced in a gray box, followed by our 
 We provide both a clean version and a marked version of the revised manuscript.
 \textbf{In the marked version:}
 \begin{itemize}
-    \item Revisions made in response to Reviewer \#1's comments
+    \item Revisions made in response to \hyperlink{reviewer:1}{Reviewer \#1}'s comments
     are highlighted in \textcolor{reviewer1}{\textbf{red}}.
 
-    \item Revisions made in response to Reviewer \#2's comments
+    \item Revisions made in response to \hyperlink{reviewer:2}{Reviewer \#2}'s comments
     are highlighted in \textcolor{reviewer2}{\textbf{blue}}.
 
-    \item Revisions made in response to Reviewer \#3's comments
+    \item Revisions made in response to \hyperlink{reviewer:3}{Reviewer \#3}'s comments
     are highlighted in \textcolor{reviewer3}{\textbf{green}}.
 
     \item As some reviewers raised overlapping concerns,
