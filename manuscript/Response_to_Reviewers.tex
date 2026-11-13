@@ -223,7 +223,7 @@ However, since these triggers are absent from the public distillation dataset, t
   Adaptive Logit Adjustment leverages global feedback to directly establish trigger--target associations and enable their stable propagation during knowledge distillation.
 \end{itemize}}
 
-\revisedtext{Section II-B. Backdoor Attacks in KD-FL, Page 2}{\manualindent Backdoor attacks in FL establish trigger--target associations through local poisoned training and propagate them via parameter aggregation [31] [32].
+\revisedtext{Section II-B. Backdoor Attacks in KD-FL, Page 2 \par \noindent \textit{Note:} These revisions also address Reviewer~\#2's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}{\manualindent Backdoor attacks in FL establish trigger--target associations through local poisoned training and propagate them via parameter aggregation [31] [32].
 In KD-FL, clients exchange logits on clean distillation data without injected triggers, disrupting conventional backdoor propagation.
 To improve the propagation of trigger-target associations, SADBA [13] and IBA [35] design triggers that better align with the semantic characteristics of samples.
 Edge-case [14] directly exploits tail-class samples as triggers, while Bad-PFL [15] constructs triggers using features of target-class samples.
@@ -237,7 +237,7 @@ This weak target bias, coupled with the lack of direct target-directed logit adj
 
 \manualindent These methods optimize triggers to align with local sample features or adapt to knowledge distillation, thereby strengthening backdoor associations, but the optimized trigger features may be absent from public distillation data, preventing the effective propagation of trigger--target associations.}
 
-\revisedtext{Section II-B. Poisoning Attacks in KD-FL, Page 3}{\manualindent Unlike conventional FL, which exchanges model parameters, KD-FL exchanges logits for federated training, prompting some poisoning attacks to shift toward logit manipulation.
+\revisedtext{Section II-B. Poisoning Attacks in KD-FL, Page 3 \par \noindent \textit{Note:} These revisions also address Reviewer~\#2's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}{\manualindent Unlike conventional FL, which exchanges model parameters, KD-FL exchanges logits for federated training, prompting some poisoning attacks to shift toward logit manipulation.
 ManipulatingKD [16] constructs malicious logits through constrained optimization to disrupt knowledge distillation.
 FDLA [17] rearranges logit confidence rankings to induce incorrect class predictions.
 These methods manipulate logits to degrade the global model's accuracy during knowledge distillation. 
@@ -310,7 +310,7 @@ In particular, FD-DBA serves as a representative KD-FL backdoor attack, enabling
 In practical KD-FL scenarios, attackers typically control only local training data and cannot modify the server-maintained public distillation dataset, making such poisoning difficult to implement. 
 Therefore, Fed-EBD falls outside the attacker capabilities assumed in our threat model and was not included in our experimental comparisons.}
 
-\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 9, Para. "Baselines"\par
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 8, Para. "Baselines"\par
 \noindent \textit{Note:} These revisions also address Reviewer~\#3's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}
 {\manualindent We compare RTT with six representative state-of-the-art (SOTA) attack methods spanning three categories.
 The first category includes trigger-optimized backdoor attacks, SADBA [13], Edge-case [14], and Bad-PFL [15], which are selected to compare strategies that optimize triggers to resemble the natural semantic features of local training samples with RTT's strategy of directly constructing natural triggers from the public distillation dataset in terms of attack effectiveness under KD-FL.
@@ -336,7 +336,7 @@ During evaluation, we calculate ASR using the same natural-trigger test samples 
 Since the model still makes occasional classification errors during normal inference, a small number of samples are misclassified as the backdoor target class. Consequently, the ASR under w/o is low but not strictly zero. 
 These incorrect predictions reflect normal classification errors rather than successful backdoor activation. Furthermore, the substantial ASR gap between w/o and RTT demonstrates that the triggers effectively activate the backdoor only when the attack is applied.}
 
-\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 8, Para. "Baselines"}
+\revisedtext{Section \uppercase\expandafter{\romannumeral 5}-A. Experimental Setup, Page 8, Para. "Evaluation Metrics."}
 {\manualindent We also report the ASR and ACC under the no-attack setting (w/o), where ASR is evaluated on test samples selected using RTT's natural trigger conditions to verify that natural triggers effectively activate the backdoor only after the RTT attack is applied.}
 
 \revisedtext{Section \uppercase\expandafter{\romannumeral 5}-B. Experimental Results, Page 9, Para. "Baselines"}{\manualindent The substantial ASR gap between w/o and RTT demonstrates that natural triggers effectively activate the backdoor only when the attack is applied.
@@ -468,6 +468,27 @@ Natural Trigger Construction directly constructs natural triggers from public di
 Adaptive Logit Adjustment dynamically regulates the difference between target-class and other-class logits based on aggregation feedback, establishing stable target-directed supervision for these samples. 
 The former determines the trigger conditions and their carriers, while the latter establishes target-class supervision on the same samples, enabling trigger--target associations to be directly established and propagated during knowledge distillation. 
 Therefore, we further clarify that RTT is not a simple combination of existing trigger optimization and logits poisoning techniques, but a unified backdoor propagation mechanism with fundamentally different technical characteristics.}
+
+\revisedtext{Section II-B. Backdoor Attacks in KD-FL, Page 2 \par \noindent \textit{Note:} These revisions also address Reviewer~\#1's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}{\manualindent Backdoor attacks in FL establish trigger--target associations through local poisoned training and propagate them via parameter aggregation [31] [32].
+In KD-FL, clients exchange logits on clean distillation data without injected triggers, disrupting conventional backdoor propagation.
+To improve the propagation of trigger-target associations, SADBA [13] and IBA [35] design triggers that better align with the semantic characteristics of samples.
+Edge-case [14] directly exploits tail-class samples as triggers, while Bad-PFL [15] constructs triggers using features of target-class samples.
+These methods exploit intrinsic features of local samples to align triggers with sample semantics, thereby enhancing the stability of backdoor associations.
+However, feature discrepancies between local and public distillation samples prevent the model from producing logits consistently biased toward the backdoor target, leading to the breakdown of trigger--target associations during knowledge distillation.
+
+\manualindent For backdoor attacks specifically designed for KD-FL, Fed-EBD [36] propagates backdoor associations by injecting triggers into public distillation data. However, attackers typically cannot modify such data, limiting its practical applicability.
+FD-DBA [18] employs a local substitute model to simulate knowledge distillation and optimize triggers to adapt them to the distillation process.
+However, the optimized triggers are not directly present in the public distillation dataset, causing the inferred logits to exhibit insufficient bias toward the backdoor target. 
+This weak target bias, coupled with the lack of direct target-directed logit adjustment, makes trigger–target associations prone to breakdown during knowledge distillation.
+
+\manualindent These methods optimize triggers to align with local sample features or adapt to knowledge distillation, thereby strengthening backdoor associations, but the optimized trigger features may be absent from public distillation data, preventing the effective propagation of trigger--target associations.}
+
+\revisedtext{Section II-B. Poisoning Attacks in KD-FL, Page 3 \par \noindent \textit{Note:} These revisions also address Reviewer~\#1's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}{\manualindent Unlike conventional FL, which exchanges model parameters, KD-FL exchanges logits for federated training, prompting some poisoning attacks to shift toward logit manipulation.
+ManipulatingKD [16] constructs malicious logits through constrained optimization to disrupt knowledge distillation.
+FDLA [17] rearranges logit confidence rankings to induce incorrect class predictions.
+These methods manipulate logits to degrade the global model's accuracy during knowledge distillation. 
+
+\manualindent However, they neither specify a backdoor target nor construct triggers, and thus cannot establish trigger–target associations required for targeted backdoor attacks in KD-FL.}
 
 \revisedtext{Section II-D. Motivation and Positioning, Page 3}{\manualindent As discussed in Related Work and Table II, existing attacks differ in their technical mechanisms and objectives.
 Trigger design methods, including FD-DBA, strengthen backdoor associations by optimizing triggers locally, but fail to address the absence of trigger conditions in public distillation data.
@@ -643,7 +664,7 @@ Combined with the high ASR on natural-trigger samples, these results demonstrate
 
 \revisedtext{Section V-A. Experimental Setup, Page 9, Para. "Evaluation Metrics"\par
 \noindent \textit{Note:} These revisions also address Reviewer~\#2's related comments and are highlighted in the shared color (\textcolor{share}{\textbf{purple}}) in the marked version.}
-{Let $y_b$ denote the backdoor target class.
+{\manualindent Let $y_b$ denote the backdoor target class.
 For each test set $\mathcal{D}^{\mathrm{test}}$, we use the random trigger direction $\mathbf{K}$ determined during training and the trigger threshold $\xi$ determined from the public distillation dataset $\mathcal{D}_d$ to construct two subsets from its independent test set.
 Non-target-class samples satisfying $g(\mathbf{x}) \geq \xi$ form $\mathcal{D}_{\mathrm{nat}}^{\mathrm{test}}$, while the remaining test samples form $\mathcal{D}_{\mathrm{non}}^{\mathrm{test}}$.
 Both $\mathbf{K}$ and $\xi$ remain fixed during testing and are not recalculated using the test data.
@@ -935,7 +956,7 @@ z_i^t(x)
 The final adjusted logits are obtained as $\widetilde{z}_i^t(x)=z_i^{t,*}(x)$.
 }
 
-\revisedtext{Section IV-B. Backdoor Target Reconstruction, Page 6, Para. "Algorithmic"}
+\revisedtext{Section IV-B. Backdoor Target Reconstruction, Page 6, Para. "Algorithm"}
 {19: Compute $z_i^{t,*}(x)$ for all $x\in\mathcal{D}_{\mathrm{nat}}$ using the closed-form solution in Eq.~\ref{eq:closed_form_logits}.
 
 20: $\widetilde{\mathcal{Z}}_{i,\mathrm{nat}}^t \leftarrow\{z_i^{t,*}(x)\mid x\in\mathcal{D}_{\mathrm{nat}}\}$.}
